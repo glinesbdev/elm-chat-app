@@ -1,0 +1,19 @@
+{
+  "name": "elm-chat-app",
+  "version": "1.0.0",
+  "description": "A basic chat app written in Elm",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "elm make src/Main.elm --output public/elm.js && node server.js"
+  },
+  "keywords": [
+    "Elm"
+  ],
+  "author": "Bradyn Glines",
+  "license": "ISC"
+}
