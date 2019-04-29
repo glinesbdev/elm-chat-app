@@ -4327,15 +4327,52 @@ function _Browser_load(url)
 		}
 	}));
 }
+
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
 var author$project$Main$UrlChanged = function (a) {
 	return {$: 'UrlChanged', a: a};
 };
 var author$project$Main$UrlRequested = function (a) {
 	return {$: 'UrlRequested', a: a};
 };
-var author$project$Main$Model = F2(
-	function (key, route) {
-		return {key: key, route: route};
+var author$project$Main$Model = F3(
+	function (key, route, chatName) {
+		return {chatName: chatName, key: key, route: route};
 	});
 var author$project$Main$NotFound = {$: 'NotFound'};
 var author$project$Main$Chat = {$: 'Chat'};
@@ -5938,15 +5975,24 @@ var elm$url$Url$toString = function (url) {
 var author$project$Main$init = F3(
 	function (_n0, url, key) {
 		return _Utils_Tuple2(
-			A2(
+			A3(
 				author$project$Main$Model,
 				key,
 				author$project$Main$urlToRoute(
-					elm$url$Url$toString(url))),
+					elm$url$Url$toString(url)),
+				''),
 			A2(
 				elm$browser$Browser$Navigation$pushUrl,
 				key,
 				elm$url$Url$toString(url)));
+	});
+var author$project$Main$clearChatName = F2(
+	function (route, currentName) {
+		if (route.$ === 'Home') {
+			return '';
+		} else {
+			return currentName;
+		}
 	});
 var elm$browser$Browser$Navigation$load = _Browser_load;
 var elm$core$Platform$Cmd$batch = _Platform_batch;
@@ -5966,55 +6012,80 @@ var elm$url$Url$Builder$toQuery = function (parameters) {
 			A2(elm$core$List$map, elm$url$Url$Builder$toQueryPair, parameters));
 	}
 };
-var elm$url$Url$Builder$relative = F2(
+var elm$url$Url$Builder$absolute = F2(
 	function (pathSegments, parameters) {
-		return _Utils_ap(
-			A2(elm$core$String$join, '/', pathSegments),
-			elm$url$Url$Builder$toQuery(parameters));
+		return '/' + (A2(elm$core$String$join, '/', pathSegments) + elm$url$Url$Builder$toQuery(parameters));
 	});
 var author$project$Main$update = F2(
 	function (msg, model) {
-		if (msg.$ === 'UrlRequested') {
-			var request = msg.a;
-			if (request.$ === 'Internal') {
-				var url = request.a;
+		switch (msg.$) {
+			case 'UrlRequested':
+				var request = msg.a;
+				if (request.$ === 'Internal') {
+					var url = request.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								route: author$project$Main$urlToRoute(
+									elm$url$Url$toString(url))
+							}),
+						A2(
+							elm$browser$Browser$Navigation$pushUrl,
+							model.key,
+							A2(
+								elm$url$Url$Builder$absolute,
+								_List_fromArray(
+									[
+										elm$url$Url$toString(url)
+									]),
+								_List_Nil)));
+				} else {
+					var url = request.a;
+					return _Utils_Tuple2(
+						model,
+						elm$browser$Browser$Navigation$load(url));
+				}
+			case 'UrlChanged':
+				var url = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
+							chatName: A2(
+								author$project$Main$clearChatName,
+								author$project$Main$urlToRoute(
+									elm$url$Url$toString(url)),
+								model.chatName),
 							route: author$project$Main$urlToRoute(
 								elm$url$Url$toString(url))
 						}),
+					elm$core$Platform$Cmd$none);
+			case 'NameEntered':
+				var name = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{chatName: name}),
+					elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{route: author$project$Main$Chat}),
 					A2(
 						elm$browser$Browser$Navigation$pushUrl,
 						model.key,
 						A2(
-							elm$url$Url$Builder$relative,
+							elm$url$Url$Builder$absolute,
 							_List_fromArray(
-								[
-									elm$url$Url$toString(url)
-								]),
+								['chat']),
 							_List_Nil)));
-			} else {
-				var url = request.a;
-				return _Utils_Tuple2(
-					model,
-					elm$browser$Browser$Navigation$load(url));
-			}
-		} else {
-			var url = msg.a;
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{
-						route: author$project$Main$urlToRoute(
-							elm$url$Url$toString(url))
-					}),
-				elm$core$Platform$Cmd$none);
 		}
 	});
 var elm$html$Html$div = _VirtualDom_node('div');
 var elm$html$Html$h1 = _VirtualDom_node('h1');
+var elm$html$Html$p = _VirtualDom_node('p');
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
 var author$project$Main$chatView = function (model) {
@@ -6030,6 +6101,13 @@ var author$project$Main$chatView = function (model) {
 					_List_fromArray(
 						[
 							elm$html$Html$text('Chat Room')
+						])),
+					A2(
+					elm$html$Html$p,
+					_List_Nil,
+					_List_fromArray(
+						[
+							elm$html$Html$text(model.chatName + ' has entered the room!')
 						]))
 				])),
 		title: 'Chat Room'
@@ -6158,13 +6236,19 @@ var author$project$Css$CssGrid$gridAttributes = function (grid) {
 				author$project$Css$CssGrid$getGridAutoRows(grid))
 			]));
 };
-var author$project$Css$CssGrid$gridContainer = F2(
-	function (grid, children) {
+var author$project$Css$CssGrid$gridContainer = F3(
+	function (grid, attributes, children) {
 		return A2(
 			elm$html$Html$div,
-			author$project$Css$CssGrid$gridAttributes(grid),
+			_Utils_ap(
+				author$project$Css$CssGrid$gridAttributes(grid),
+				attributes),
 			children);
 	});
+var author$project$Css$CssGrid$getGridArea = function (_n0) {
+	var item = _n0.a;
+	return author$project$Css$CssGrid$Single(item.gridArea);
+};
 var author$project$Css$CssGrid$getGridColumnEnd = function (_n0) {
 	var item = _n0.a;
 	return author$project$Css$CssGrid$Single(item.gridColumnEnd);
@@ -6202,7 +6286,11 @@ var author$project$Css$CssGrid$gridItemAttributes = function (item) {
 				A2(
 				author$project$Css$CssGrid$maybeCssAttribute,
 				'grid-row-end',
-				author$project$Css$CssGrid$getGridRowEnd(item))
+				author$project$Css$CssGrid$getGridRowEnd(item)),
+				A2(
+				author$project$Css$CssGrid$maybeCssAttribute,
+				'grid-area',
+				author$project$Css$CssGrid$getGridArea(item))
 			]));
 };
 var author$project$Css$CssGrid$gridItem = F4(
@@ -6214,15 +6302,38 @@ var author$project$Css$CssGrid$gridItem = F4(
 				attributes),
 			children);
 	});
-var author$project$Css$CssGrid$GridItem = function (a) {
-	return {$: 'GridItem', a: a};
-};
-var author$project$Css$CssGrid$makeGridItem = F4(
-	function (gColS, gColE, gRowS, gRowE) {
-		return author$project$Css$CssGrid$GridItem(
-			{gridColumnEnd: gColE, gridColumnStart: gColS, gridRowEnd: gRowE, gridRowStart: gRowS});
+var elm$core$Bitwise$and = _Bitwise_and;
+var elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
+var elm$core$String$repeatHelp = F3(
+	function (n, chunk, result) {
+		return (n <= 0) ? result : A3(
+			elm$core$String$repeatHelp,
+			n >> 1,
+			_Utils_ap(chunk, chunk),
+			(!(n & 1)) ? result : _Utils_ap(result, chunk));
 	});
-var author$project$Main$header = A4(author$project$Css$CssGrid$makeGridItem, 'two', 'three', 'row1-end', 'row2-end');
+var elm$core$String$repeat = F2(
+	function (n, chunk) {
+		return A3(elm$core$String$repeatHelp, n, chunk, '');
+	});
+var author$project$Css$CssGrid$repeatTemplateStrings = F2(
+	function (strings, amount) {
+		return A2(
+			elm$core$List$map,
+			function (p) {
+				return A2(elm$core$String$repeat, amount, p + ' ');
+			},
+			strings);
+	});
+var author$project$Css$CssGrid$gridTemplateProperty = function (_n0) {
+	var props = _n0.a;
+	var amount = _n0.b;
+	return A3(
+		elm$core$List$foldl,
+		elm$core$List$cons,
+		A2(author$project$Css$CssGrid$repeatTemplateStrings, props, amount),
+		_List_Nil);
+};
 var author$project$Css$CssGrid$Grid = function (a) {
 	return {$: 'Grid', a: a};
 };
@@ -6231,26 +6342,171 @@ var author$project$Css$CssGrid$makeGrid = F7(
 		return author$project$Css$CssGrid$Grid(
 			{gridAutoColumns: aC, gridAutoFlow: aF, gridAutoRows: aR, gridTemplate: t, gridTemplateArea: tArea, gridTemplateColumns: tCols, gridTemplateRows: tRows});
 	});
-var author$project$Main$homeGrid = A7(author$project$Css$CssGrid$makeGrid, '0.5fr 1fr 0.5fr', '0.25fr 1fr 0.25fr', _List_Nil, _List_Nil, '', '', '');
-var author$project$Main$homeView = {
-	content: A2(
+var author$project$Css$CssGrid$makeTemplateAreaGrid = F3(
+	function (tCols, tRows, tArea) {
+		return A7(author$project$Css$CssGrid$makeGrid, tCols, tRows, tArea, _List_Nil, '', '', '');
+	});
+var author$project$Main$homeGrid = A3(
+	author$project$Css$CssGrid$makeTemplateAreaGrid,
+	'50px 1fr 50px',
+	'50px 1fr 50px',
+	author$project$Css$CssGrid$gridTemplateProperty(
+		_Utils_Tuple2(
+			_List_fromArray(
+				['header', 'main', 'input']),
+			3)));
+var author$project$Css$CssGrid$GridItem = function (a) {
+	return {$: 'GridItem', a: a};
+};
+var author$project$Css$CssGrid$makeGridItem = F5(
+	function (gColS, gColE, gRowS, gRowE, gA) {
+		return author$project$Css$CssGrid$GridItem(
+			{gridArea: gA, gridColumnEnd: gColE, gridColumnStart: gColS, gridRowEnd: gRowE, gridRowStart: gRowS});
+	});
+var author$project$Css$CssGrid$makeAreaGridItem = function (area) {
+	return A5(author$project$Css$CssGrid$makeGridItem, '', '', '', '', area);
+};
+var author$project$Main$mainContent = author$project$Css$CssGrid$makeAreaGridItem('main');
+var author$project$Main$NameEntered = function (a) {
+	return {$: 'NameEntered', a: a};
+};
+var author$project$Main$NameSubmitted = {$: 'NameSubmitted'};
+var author$project$Css$CssGrid$blankGridItem = A5(author$project$Css$CssGrid$makeGridItem, '', '', '', '', '');
+var author$project$Main$nameInputItem = author$project$Css$CssGrid$blankGridItem;
+var elm$html$Html$form = _VirtualDom_node('form');
+var elm$html$Html$input = _VirtualDom_node('input');
+var elm$json$Json$Encode$string = _Json_wrap;
+var elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			elm$json$Json$Encode$string(string));
+	});
+var elm$html$Html$Attributes$placeholder = elm$html$Html$Attributes$stringProperty('placeholder');
+var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
+var elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 'MayStopPropagation', a: a};
+};
+var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			elm$virtual_dom$VirtualDom$on,
+			event,
+			elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var elm$json$Json$Decode$field = _Json_decodeField;
+var elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3(elm$core$List$foldr, elm$json$Json$Decode$field, decoder, fields);
+	});
+var elm$json$Json$Decode$string = _Json_decodeString;
+var elm$html$Html$Events$targetValue = A2(
+	elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	elm$json$Json$Decode$string);
+var elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			elm$json$Json$Decode$map,
+			elm$html$Html$Events$alwaysStop,
+			A2(elm$json$Json$Decode$map, tagger, elm$html$Html$Events$targetValue)));
+};
+var elm$html$Html$Events$alwaysPreventDefault = function (msg) {
+	return _Utils_Tuple2(msg, true);
+};
+var elm$virtual_dom$VirtualDom$MayPreventDefault = function (a) {
+	return {$: 'MayPreventDefault', a: a};
+};
+var elm$html$Html$Events$preventDefaultOn = F2(
+	function (event, decoder) {
+		return A2(
+			elm$virtual_dom$VirtualDom$on,
+			event,
+			elm$virtual_dom$VirtualDom$MayPreventDefault(decoder));
+	});
+var elm$html$Html$Events$onSubmit = function (msg) {
+	return A2(
+		elm$html$Html$Events$preventDefaultOn,
+		'submit',
+		A2(
+			elm$json$Json$Decode$map,
+			elm$html$Html$Events$alwaysPreventDefault,
+			elm$json$Json$Decode$succeed(msg)));
+};
+var author$project$Main$nameInput = function (model) {
+	return A4(
+		author$project$Css$CssGrid$gridItem,
+		author$project$Main$nameInputItem,
+		elm$html$Html$form,
+		_List_fromArray(
+			[
+				A2(elm$html$Html$Attributes$style, 'grid-area', 'input'),
+				A2(elm$html$Html$Attributes$style, 'justify-self', 'center'),
+				A2(elm$html$Html$Attributes$style, 'width', '40%'),
+				elm$html$Html$Events$onSubmit(author$project$Main$NameSubmitted)
+			]),
+		_List_fromArray(
+			[
+				A2(
+				elm$html$Html$input,
+				_List_fromArray(
+					[
+						A2(elm$html$Html$Attributes$style, 'width', '100%'),
+						A2(elm$html$Html$Attributes$style, 'font-size', '18px'),
+						A2(elm$html$Html$Attributes$style, 'padding', '0.5em'),
+						elm$html$Html$Attributes$placeholder('Enter Your Name'),
+						elm$html$Html$Attributes$value(model.chatName),
+						elm$html$Html$Events$onInput(author$project$Main$NameEntered)
+					]),
+				_List_Nil)
+			]));
+};
+var author$project$Main$welcomeText = function (model) {
+	var base = 'Welcome';
+	var _n0 = elm$core$String$length(model.chatName);
+	if (!_n0) {
+		return base + '!';
+	} else {
+		return base + (', ' + (model.chatName + '!'));
+	}
+};
+var author$project$Main$homeGridContainer = function (model) {
+	return A3(
 		author$project$Css$CssGrid$gridContainer,
 		author$project$Main$homeGrid,
+		_List_Nil,
 		_List_fromArray(
 			[
 				A4(
 				author$project$Css$CssGrid$gridItem,
-				author$project$Main$header,
+				author$project$Main$mainContent,
 				elm$html$Html$h1,
-				_List_Nil,
 				_List_fromArray(
 					[
-						elm$html$Html$text('Welcome!')
-					]))
-			])),
-	title: 'Home'
+						A2(elm$html$Html$Attributes$style, 'justify-self', 'center')
+					]),
+				_List_fromArray(
+					[
+						elm$html$Html$text(
+						author$project$Main$welcomeText(model))
+					])),
+				author$project$Main$nameInput(model)
+			]));
 };
-var elm$html$Html$p = _VirtualDom_node('p');
+var author$project$Main$homeView = function (model) {
+	return {
+		content: author$project$Main$homeGridContainer(model),
+		title: 'Home'
+	};
+};
 var author$project$Main$notFoundView = {
 	content: A2(
 		elm$html$Html$div,
@@ -6287,7 +6543,8 @@ var author$project$Main$view = function (model) {
 	var _n0 = model.route;
 	switch (_n0.$) {
 		case 'Home':
-			return author$project$Main$viewContainer(author$project$Main$homeView);
+			return author$project$Main$viewContainer(
+				author$project$Main$homeView(model));
 		case 'Chat':
 			return author$project$Main$viewContainer(
 				author$project$Main$chatView(model));

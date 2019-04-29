@@ -1,10 +1,135 @@
-module Css.CssGrid exposing (CssAttribute(..), Grid(..), GridItem(..), getGridAutoColumns, getGridAutoFlow, getGridAutoRows, getGridColumnEnd, getGridColumnStart, getGridRowEnd, getGridRowStart, getGridTemplate, getGridTemplateArea, getGridTemplateColumns, getGridTemplateRows, gridContainer, gridItem, makeGrid, makeGridItem, setAutoColumns, setAutoFlow, setAutoRows, setColumnEnd, setColumnStart, setRowEnd, setRowStart, setTemplate, setTemplateArea, setTemplateColumns, setTemplateRows)
+module Css.CssGrid exposing (Grid, GridItem, blankGridItem, gridContainer, gridItem, gridTemplateProperty, makeAreaGridItem, makeGrid, makeGridItem, makeTemplateAreaGrid)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 
 
 
+{-
+   This section outlines what is explosed by the module.
+-}
+-- TYPES
+
+
+type Grid
+    = Grid
+        { gridTemplateColumns : GridTemplateColumns
+        , gridTemplateRows : GridTemplateRows
+        , gridTemplateArea : GridTemplateArea
+        , gridTemplate : GridTemplate
+        , gridAutoFlow : GridAutoFlow
+        , gridAutoColumns : GridAutoColumns
+        , gridAutoRows : GridAutoRows
+        }
+
+
+type GridItem
+    = GridItem
+        { gridColumnStart : GridColumnStart
+        , gridColumnEnd : GridColumnEnd
+        , gridRowStart : GridRowStart
+        , gridRowEnd : GridRowEnd
+        , gridArea : GridArea
+        }
+
+
+
+-- CONSTRUCTORS
+
+
+makeGrid :
+    GridTemplateColumns
+    -> GridTemplateRows
+    -> GridTemplateArea
+    -> GridTemplate
+    -> GridAutoFlow
+    -> GridAutoColumns
+    -> GridAutoRows
+    -> Grid
+makeGrid tCols tRows tArea t aF aC aR =
+    Grid
+        { gridTemplateColumns = tCols
+        , gridTemplateRows = tRows
+        , gridTemplateArea = tArea
+        , gridTemplate = t
+        , gridAutoFlow = aF
+        , gridAutoColumns = aC
+        , gridAutoRows = aR
+        }
+
+
+makeTemplateAreaGrid :
+    GridTemplateColumns
+    -> GridTemplateRows
+    -> GridTemplateArea
+    -> Grid
+makeTemplateAreaGrid tCols tRows tArea =
+    makeGrid tCols tRows tArea [] "" "" ""
+
+
+makeGridItem :
+    GridColumnStart
+    -> GridColumnEnd
+    -> GridRowStart
+    -> GridRowEnd
+    -> GridArea
+    -> GridItem
+makeGridItem gColS gColE gRowS gRowE gA =
+    GridItem
+        { gridColumnStart = gColS
+        , gridColumnEnd = gColE
+        , gridRowStart = gRowS
+        , gridRowEnd = gRowE
+        , gridArea = gA
+        }
+
+
+makeAreaGridItem : GridArea -> GridItem
+makeAreaGridItem area =
+    makeGridItem "" "" "" "" area
+
+
+
+-- GRID BASICS
+
+
+gridContainer :
+    Grid
+    -> List (Attribute msg)
+    -> List (Html msg)
+    -> Html msg
+gridContainer grid attributes children =
+    div (gridAttributes grid ++ attributes) children
+
+
+gridItem :
+    GridItem
+    -> (List (Attribute msg) -> List (Html msg) -> Html msg)
+    -> List (Attribute msg)
+    -> List (Html msg)
+    -> Html msg
+gridItem item html attributes children =
+    html (gridItemAttributes item ++ attributes) children
+
+
+
+-- CONVENIENCE FUNCTIONS
+
+
+gridTemplateProperty : ( List String, Int ) -> List String
+gridTemplateProperty ( props, amount ) =
+    List.foldl (::) (repeatTemplateStrings props amount) []
+
+
+blankGridItem : GridItem
+blankGridItem =
+    makeGridItem "" "" "" "" ""
+
+
+
+{-
+   All functions past this point are not exposed by the module.
+-}
 -- TYPES
 
 
@@ -12,27 +137,6 @@ type CssAttribute
     = None
     | Single String
     | Multiple (List String)
-
-
-type Grid
-    = Grid
-        { gridTemplateColumns : String
-        , gridTemplateRows : String
-        , gridTemplateArea : List String
-        , gridTemplate : List String
-        , gridAutoFlow : String
-        , gridAutoColumns : String
-        , gridAutoRows : String
-        }
-
-
-type GridItem
-    = GridItem
-        { gridColumnStart : String
-        , gridColumnEnd : String
-        , gridRowStart : String
-        , gridRowEnd : String
-        }
 
 
 
@@ -67,6 +171,10 @@ type alias GridAutoRows =
     String
 
 
+type alias GridArea =
+    String
+
+
 type alias GridColumnStart =
     String
 
@@ -84,62 +192,32 @@ type alias GridRowEnd =
 
 
 
--- CONSTRUCTORS
+-- DISPLAY FUNCTIONS
 
 
-makeGrid :
-    GridTemplateColumns
-    -> GridTemplateRows
-    -> GridTemplateArea
-    -> GridTemplate
-    -> GridAutoFlow
-    -> GridAutoColumns
-    -> GridAutoRows
-    -> Grid
-makeGrid tCols tRows tArea t aF aC aR =
-    Grid
-        { gridTemplateColumns = tCols
-        , gridTemplateRows = tRows
-        , gridTemplateArea = tArea
-        , gridTemplate = t
-        , gridAutoFlow = aF
-        , gridAutoColumns = aC
-        , gridAutoRows = aR
-        }
+gridAttributes : Grid -> List (Attribute msg)
+gridAttributes grid =
+    List.filterMap identity
+        [ Just <| style "display" "grid"
+        , maybeCssAttribute "grid-template-columns" (getGridTemplateColumns grid)
+        , maybeCssAttribute "grid-template-rows" (getGridTemplateRows grid)
+        , maybeCssAttribute "grid-template-areas" (getGridTemplateArea grid)
+        , maybeCssAttribute "grid-template" (getGridTemplate grid)
+        , maybeCssAttribute "grid-auto-flow" (getGridAutoFlow grid)
+        , maybeCssAttribute "grid-auto-columns" (getGridAutoColumns grid)
+        , maybeCssAttribute "grid-auto-rows" (getGridAutoRows grid)
+        ]
 
 
-makeGridItem :
-    GridColumnStart
-    -> GridColumnEnd
-    -> GridRowStart
-    -> GridRowEnd
-    -> GridItem
-makeGridItem gColS gColE gRowS gRowE =
-    GridItem
-        { gridColumnStart = gColS
-        , gridColumnEnd = gColE
-        , gridRowStart = gRowS
-        , gridRowEnd = gRowE
-        }
-
-
-
--- GRID BASICS
-
-
-gridContainer : Grid -> List (Html msg) -> Html msg
-gridContainer grid children =
-    div (gridAttributes grid) children
-
-
-gridItem :
-    GridItem
-    -> (List (Attribute msg) -> List (Html msg) -> Html msg)
-    -> List (Attribute msg)
-    -> List (Html msg)
-    -> Html msg
-gridItem item html attributes children =
-    html (gridItemAttributes item ++ attributes) children
+gridItemAttributes : GridItem -> List (Attribute msg)
+gridItemAttributes item =
+    List.filterMap identity
+        [ maybeCssAttribute "grid-column-start" (getGridColumnStart item)
+        , maybeCssAttribute "grid-column-end" (getGridColumnEnd item)
+        , maybeCssAttribute "grid-row-start" (getGridRowStart item)
+        , maybeCssAttribute "grid-row-end" (getGridRowEnd item)
+        , maybeCssAttribute "grid-area" (getGridArea item)
+        ]
 
 
 
@@ -182,45 +260,6 @@ getGridAutoRows (Grid definition) =
 
 
 
--- GRID SETTERS
-
-
-setTemplateColumns : String -> Grid -> Grid
-setTemplateColumns attribute (Grid definition) =
-    Grid { definition | gridTemplateColumns = attribute }
-
-
-setTemplateRows : String -> Grid -> Grid
-setTemplateRows attribute (Grid definition) =
-    Grid { definition | gridTemplateRows = attribute }
-
-
-setTemplateArea : List String -> Grid -> Grid
-setTemplateArea attribute (Grid definition) =
-    Grid { definition | gridTemplateArea = attribute }
-
-
-setTemplate : List String -> Grid -> Grid
-setTemplate attribute (Grid definition) =
-    Grid { definition | gridTemplate = attribute }
-
-
-setAutoFlow : String -> Grid -> Grid
-setAutoFlow attribute (Grid definition) =
-    Grid { definition | gridAutoFlow = attribute }
-
-
-setAutoColumns : String -> Grid -> Grid
-setAutoColumns attribute (Grid definition) =
-    Grid { definition | gridAutoColumns = attribute }
-
-
-setAutoRows : String -> Grid -> Grid
-setAutoRows attribute (Grid definition) =
-    Grid { definition | gridAutoRows = attribute }
-
-
-
 -- GRID ITEM GETTERS
 
 
@@ -244,60 +283,18 @@ getGridRowEnd (GridItem item) =
     Single item.gridRowEnd
 
 
-
--- GRID ITEM SETTERS
-
-
-setColumnStart : String -> GridItem -> GridItem
-setColumnStart attribute (GridItem item) =
-    GridItem { item | gridColumnStart = attribute }
-
-
-setColumnEnd : String -> GridItem -> GridItem
-setColumnEnd attribute (GridItem item) =
-    GridItem { item | gridColumnEnd = attribute }
-
-
-setRowStart : String -> GridItem -> GridItem
-setRowStart attribute (GridItem item) =
-    GridItem { item | gridRowStart = attribute }
-
-
-setRowEnd : String -> GridItem -> GridItem
-setRowEnd attribute (GridItem item) =
-    GridItem { item | gridRowEnd = attribute }
-
-
-
--- HELPERS
-
-
-gridAttributes : Grid -> List (Attribute msg)
-gridAttributes grid =
-    List.filterMap identity
-        [ Just <| style "display" "grid"
-        , maybeCssAttribute "grid-template-columns" (getGridTemplateColumns grid)
-        , maybeCssAttribute "grid-template-rows" (getGridTemplateRows grid)
-        , maybeCssAttribute "grid-template-areas" (getGridTemplateArea grid)
-        , maybeCssAttribute "grid-template" (getGridTemplate grid)
-        , maybeCssAttribute "grid-auto-flow" (getGridAutoFlow grid)
-        , maybeCssAttribute "grid-auto-columns" (getGridAutoColumns grid)
-        , maybeCssAttribute "grid-auto-rows" (getGridAutoRows grid)
-        ]
-
-
-gridItemAttributes : GridItem -> List (Attribute msg)
-gridItemAttributes item =
-    List.filterMap identity
-        [ maybeCssAttribute "grid-column-start" (getGridColumnStart item)
-        , maybeCssAttribute "grid-column-end" (getGridColumnEnd item)
-        , maybeCssAttribute "grid-row-start" (getGridRowStart item)
-        , maybeCssAttribute "grid-row-end" (getGridRowEnd item)
-        ]
+getGridArea : GridItem -> CssAttribute
+getGridArea (GridItem item) =
+    Single item.gridArea
 
 
 
 -- UTILITIES
+
+
+repeatTemplateStrings : List String -> Int -> List String
+repeatTemplateStrings strings amount =
+    List.map (\p -> String.repeat amount (p ++ " ")) strings
 
 
 maybeCssAttribute : String -> CssAttribute -> Maybe (Attribute msg)
