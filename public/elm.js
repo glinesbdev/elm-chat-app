@@ -4329,6 +4329,107 @@ function _Browser_load(url)
 }
 
 
+// CREATE
+
+var _Regex_never = /.^/;
+
+var _Regex_fromStringWith = F2(function(options, string)
+{
+	var flags = 'g';
+	if (options.multiline) { flags += 'm'; }
+	if (options.caseInsensitive) { flags += 'i'; }
+
+	try
+	{
+		return elm$core$Maybe$Just(new RegExp(string, flags));
+	}
+	catch(error)
+	{
+		return elm$core$Maybe$Nothing;
+	}
+});
+
+
+// USE
+
+var _Regex_contains = F2(function(re, string)
+{
+	return string.match(re) !== null;
+});
+
+
+var _Regex_findAtMost = F3(function(n, re, str)
+{
+	var out = [];
+	var number = 0;
+	var string = str;
+	var lastIndex = re.lastIndex;
+	var prevLastIndex = -1;
+	var result;
+	while (number++ < n && (result = re.exec(string)))
+	{
+		if (prevLastIndex == re.lastIndex) break;
+		var i = result.length - 1;
+		var subs = new Array(i);
+		while (i > 0)
+		{
+			var submatch = result[i];
+			subs[--i] = submatch
+				? elm$core$Maybe$Just(submatch)
+				: elm$core$Maybe$Nothing;
+		}
+		out.push(A4(elm$regex$Regex$Match, result[0], result.index, number, _List_fromArray(subs)));
+		prevLastIndex = re.lastIndex;
+	}
+	re.lastIndex = lastIndex;
+	return _List_fromArray(out);
+});
+
+
+var _Regex_replaceAtMost = F4(function(n, re, replacer, string)
+{
+	var count = 0;
+	function jsReplacer(match)
+	{
+		if (count++ >= n)
+		{
+			return match;
+		}
+		var i = arguments.length - 3;
+		var submatches = new Array(i);
+		while (i > 0)
+		{
+			var submatch = arguments[i];
+			submatches[--i] = submatch
+				? elm$core$Maybe$Just(submatch)
+				: elm$core$Maybe$Nothing;
+		}
+		return replacer(A4(elm$regex$Regex$Match, match, arguments[arguments.length - 2], count, _List_fromArray(submatches)));
+	}
+	return string.replace(re, jsReplacer);
+});
+
+var _Regex_splitAtMost = F3(function(n, re, str)
+{
+	var string = str;
+	var out = [];
+	var start = re.lastIndex;
+	var restoreLastIndex = re.lastIndex;
+	while (n--)
+	{
+		var result = re.exec(string);
+		if (!result) break;
+		out.push(string.slice(start, result.index));
+		start = re.lastIndex;
+	}
+	out.push(string.slice(start));
+	re.lastIndex = restoreLastIndex;
+	return _List_fromArray(out);
+});
+
+var _Regex_infinity = Infinity;
+
+
 
 var _Bitwise_and = F2(function(a, b)
 {
@@ -4370,9 +4471,9 @@ var author$project$Main$UrlChanged = function (a) {
 var author$project$Main$UrlRequested = function (a) {
 	return {$: 'UrlRequested', a: a};
 };
-var author$project$Main$Model = F3(
-	function (key, route, chatName) {
-		return {chatName: chatName, key: key, route: route};
+var author$project$Main$Model = F4(
+	function (key, route, chatName, errors) {
+		return {chatName: chatName, errors: errors, key: key, route: route};
 	});
 var author$project$Main$NotFound = {$: 'NotFound'};
 var author$project$Main$Chat = {$: 'Chat'};
@@ -5975,28 +6076,18 @@ var elm$url$Url$toString = function (url) {
 var author$project$Main$init = F3(
 	function (_n0, url, key) {
 		return _Utils_Tuple2(
-			A3(
+			A4(
 				author$project$Main$Model,
 				key,
 				author$project$Main$urlToRoute(
 					elm$url$Url$toString(url)),
-				''),
+				'',
+				_List_Nil),
 			A2(
 				elm$browser$Browser$Navigation$pushUrl,
 				key,
 				elm$url$Url$toString(url)));
 	});
-var author$project$Main$clearChatName = F2(
-	function (route, currentName) {
-		if (route.$ === 'Home') {
-			return '';
-		} else {
-			return currentName;
-		}
-	});
-var elm$browser$Browser$Navigation$load = _Browser_load;
-var elm$core$Platform$Cmd$batch = _Platform_batch;
-var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var elm$url$Url$Builder$toQueryPair = function (_n0) {
 	var key = _n0.a;
 	var value = _n0.b;
@@ -6016,6 +6107,119 @@ var elm$url$Url$Builder$absolute = F2(
 	function (pathSegments, parameters) {
 		return '/' + (A2(elm$core$String$join, '/', pathSegments) + elm$url$Url$Builder$toQuery(parameters));
 	});
+var author$project$Main$rootPath = A2(
+	elm$url$Url$Builder$absolute,
+	_List_fromArray(
+		['']),
+	_List_Nil);
+var author$project$Main$authChangeUrl = F3(
+	function (authd, key, url) {
+		return authd ? A2(
+			elm$browser$Browser$Navigation$pushUrl,
+			key,
+			A2(
+				elm$url$Url$Builder$absolute,
+				_List_fromArray(
+					[url]),
+				_List_Nil)) : A2(
+			elm$browser$Browser$Navigation$pushUrl,
+			key,
+			A2(
+				elm$url$Url$Builder$absolute,
+				_List_fromArray(
+					[author$project$Main$rootPath]),
+				_List_Nil));
+	});
+var author$project$Main$authRoute = F2(
+	function (validation, route) {
+		return validation ? route : author$project$Main$Home;
+	});
+var elm$regex$Regex$Match = F4(
+	function (match, index, number, submatches) {
+		return {index: index, match: match, number: number, submatches: submatches};
+	});
+var elm$regex$Regex$fromStringWith = _Regex_fromStringWith;
+var elm$regex$Regex$fromString = function (string) {
+	return A2(
+		elm$regex$Regex$fromStringWith,
+		{caseInsensitive: false, multiline: false},
+		string);
+};
+var elm$regex$Regex$never = _Regex_never;
+var author$project$Main$startsWithDigit = A2(
+	elm$core$Maybe$withDefault,
+	elm$regex$Regex$never,
+	elm$regex$Regex$fromString('^(?!\\d)\\w+'));
+var elm$regex$Regex$contains = _Regex_contains;
+var author$project$Main$startsWithChar = function (val) {
+	return A2(elm$regex$Regex$contains, author$project$Main$startsWithDigit, val);
+};
+var elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var elm$core$Basics$not = _Basics_not;
+var elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
+var elm$core$List$all = F2(
+	function (isOkay, list) {
+		return !A2(
+			elm$core$List$any,
+			A2(elm$core$Basics$composeL, elm$core$Basics$not, isOkay),
+			list);
+	});
+var author$project$Main$validForm = function (validations) {
+	return A2(
+		elm$core$List$all,
+		function (v) {
+			return v;
+		},
+		validations);
+};
+var author$project$Main$canEnterChat = function (model) {
+	return author$project$Main$validForm(
+		_List_fromArray(
+			[
+				author$project$Main$startsWithChar(model.chatName),
+				elm$core$String$length(model.chatName) > 0
+			]));
+};
+var author$project$Main$clearChatName = F2(
+	function (route, currentName) {
+		if (route.$ === 'Chat') {
+			return currentName;
+		} else {
+			return '';
+		}
+	});
+var author$project$Main$formErrors = F2(
+	function (valid, model) {
+		return valid ? _List_Nil : A2(elm$core$List$cons, 'There are errors on the form', model.errors);
+	});
+var elm$browser$Browser$Navigation$load = _Browser_load;
+var elm$core$Platform$Cmd$batch = _Platform_batch;
+var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
+var elm$core$String$trim = _String_trim;
 var author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -6030,8 +6234,9 @@ var author$project$Main$update = F2(
 								route: author$project$Main$urlToRoute(
 									elm$url$Url$toString(url))
 							}),
-						A2(
-							elm$browser$Browser$Navigation$pushUrl,
+						A3(
+							author$project$Main$authChangeUrl,
+							author$project$Main$canEnterChat(model),
 							model.key,
 							A2(
 								elm$url$Url$Builder$absolute,
@@ -6072,15 +6277,28 @@ var author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{route: author$project$Main$Chat}),
-					A2(
-						elm$browser$Browser$Navigation$pushUrl,
+						{
+							chatName: A2(
+								author$project$Main$clearChatName,
+								A2(
+									author$project$Main$authRoute,
+									author$project$Main$canEnterChat(model),
+									author$project$Main$Chat),
+								elm$core$String$trim(model.chatName)),
+							errors: A2(
+								author$project$Main$formErrors,
+								author$project$Main$canEnterChat(model),
+								model),
+							route: A2(
+								author$project$Main$authRoute,
+								author$project$Main$canEnterChat(model),
+								author$project$Main$Chat)
+						}),
+					A3(
+						author$project$Main$authChangeUrl,
+						author$project$Main$canEnterChat(model),
 						model.key,
-						A2(
-							elm$url$Url$Builder$absolute,
-							_List_fromArray(
-								['chat']),
-							_List_Nil)));
+						'chat'));
 		}
 	});
 var elm$html$Html$div = _VirtualDom_node('div');
@@ -6373,8 +6591,7 @@ var author$project$Main$NameEntered = function (a) {
 var author$project$Main$NameSubmitted = {$: 'NameSubmitted'};
 var author$project$Css$CssGrid$blankGridItem = A5(author$project$Css$CssGrid$makeGridItem, '', '', '', '', '');
 var author$project$Main$nameInputItem = author$project$Css$CssGrid$blankGridItem;
-var elm$html$Html$form = _VirtualDom_node('form');
-var elm$html$Html$input = _VirtualDom_node('input');
+var elm$html$Html$span = _VirtualDom_node('span');
 var elm$json$Json$Encode$string = _Json_wrap;
 var elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -6383,7 +6600,41 @@ var elm$html$Html$Attributes$stringProperty = F2(
 			key,
 			elm$json$Json$Encode$string(string));
 	});
+var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
+var author$project$Main$usernameInput = function (input) {
+	return A2(
+		elm$html$Html$div,
+		_List_fromArray(
+			[
+				elm$html$Html$Attributes$class('icon-input')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				elm$html$Html$span,
+				_List_fromArray(
+					[
+						elm$html$Html$Attributes$class('icon')
+					]),
+				_List_fromArray(
+					[
+						elm$html$Html$text('@')
+					])),
+				input
+			]));
+};
+var elm$html$Html$form = _VirtualDom_node('form');
+var elm$html$Html$input = _VirtualDom_node('input');
 var elm$html$Html$Attributes$placeholder = elm$html$Html$Attributes$stringProperty('placeholder');
+var elm$json$Json$Encode$bool = _Json_wrap;
+var elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			elm$json$Json$Encode$bool(bool));
+	});
+var elm$html$Html$Attributes$required = elm$html$Html$Attributes$boolProperty('required');
 var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
 var elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
@@ -6448,25 +6699,22 @@ var author$project$Main$nameInput = function (model) {
 		elm$html$Html$form,
 		_List_fromArray(
 			[
-				A2(elm$html$Html$Attributes$style, 'grid-area', 'input'),
-				A2(elm$html$Html$Attributes$style, 'justify-self', 'center'),
-				A2(elm$html$Html$Attributes$style, 'width', '40%'),
+				elm$html$Html$Attributes$class('name-input-form'),
 				elm$html$Html$Events$onSubmit(author$project$Main$NameSubmitted)
 			]),
 		_List_fromArray(
 			[
+				author$project$Main$usernameInput(
 				A2(
-				elm$html$Html$input,
-				_List_fromArray(
-					[
-						A2(elm$html$Html$Attributes$style, 'width', '100%'),
-						A2(elm$html$Html$Attributes$style, 'font-size', '18px'),
-						A2(elm$html$Html$Attributes$style, 'padding', '0.5em'),
-						elm$html$Html$Attributes$placeholder('Enter Your Name'),
-						elm$html$Html$Attributes$value(model.chatName),
-						elm$html$Html$Events$onInput(author$project$Main$NameEntered)
-					]),
-				_List_Nil)
+					elm$html$Html$input,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$placeholder('Enter Your Name'),
+							elm$html$Html$Attributes$value(model.chatName),
+							elm$html$Html$Attributes$required(true),
+							elm$html$Html$Events$onInput(author$project$Main$NameEntered)
+						]),
+					_List_Nil))
 			]));
 };
 var author$project$Main$welcomeText = function (model) {
@@ -6482,7 +6730,10 @@ var author$project$Main$homeGridContainer = function (model) {
 	return A3(
 		author$project$Css$CssGrid$gridContainer,
 		author$project$Main$homeGrid,
-		_List_Nil,
+		_List_fromArray(
+			[
+				elm$html$Html$Attributes$class('home-container')
+			]),
 		_List_fromArray(
 			[
 				A4(
@@ -6530,26 +6781,53 @@ var author$project$Main$notFoundView = {
 			])),
 	title: 'Not Found'
 };
-var author$project$Main$viewContainer = function (_n0) {
-	var title = _n0.title;
-	var content = _n0.content;
-	return {
-		body: _List_fromArray(
-			[content]),
-		title: title + ' - Elm Chat'
-	};
+var elm$html$Html$li = _VirtualDom_node('li');
+var elm$html$Html$ul = _VirtualDom_node('ul');
+var author$project$Main$viewErrors = function (errors) {
+	return A2(
+		elm$html$Html$ul,
+		_List_Nil,
+		A2(
+			elm$core$List$map,
+			function (e) {
+				return A2(
+					elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							elm$html$Html$text(e)
+						]));
+			},
+			errors));
 };
+var author$project$Main$viewContainer = F2(
+	function (model, _n0) {
+		var title = _n0.title;
+		var content = _n0.content;
+		return {
+			body: _List_fromArray(
+				[
+					author$project$Main$viewErrors(model.errors),
+					content
+				]),
+			title: title + ' - Elm Chat'
+		};
+	});
 var author$project$Main$view = function (model) {
 	var _n0 = model.route;
 	switch (_n0.$) {
 		case 'Home':
-			return author$project$Main$viewContainer(
+			return A2(
+				author$project$Main$viewContainer,
+				model,
 				author$project$Main$homeView(model));
 		case 'Chat':
-			return author$project$Main$viewContainer(
+			return A2(
+				author$project$Main$viewContainer,
+				model,
 				author$project$Main$chatView(model));
 		default:
-			return author$project$Main$viewContainer(author$project$Main$notFoundView);
+			return A2(author$project$Main$viewContainer, model, author$project$Main$notFoundView);
 	}
 };
 var elm$browser$Browser$application = _Browser_application;

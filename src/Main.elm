@@ -1,4 +1,4 @@
-module Main exposing (Model, Msg(..), Route(..), chatPath, chatView, homeView, init, main, notFoundView, parser, rootPath, update, urlToRoute, view, viewContainer)
+module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
@@ -6,6 +6,7 @@ import Css.CssGrid as Grid
 import Html exposing (..)
 import Html.Attributes as Attr
 import Html.Events as Event
+import Regex
 import Url
 import Url.Builder as Builder
 import Url.Parser as Parser
@@ -35,12 +36,13 @@ type alias Model =
     { key : Nav.Key
     , route : Route
     , chatName : String
+    , errors : List String
     }
 
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
-    ( Model key (urlToRoute (Url.toString url)) ""
+    ( Model key (urlToRoute (Url.toString url)) "" []
     , Nav.pushUrl key (Url.toString url)
     )
 
@@ -53,24 +55,37 @@ view : Model -> Browser.Document Msg
 view model =
     case model.route of
         Home ->
-            viewContainer (homeView model)
+            viewContainer model (homeView model)
 
         Chat ->
-            viewContainer (chatView model)
+            viewContainer model (chatView model)
 
         NotFound ->
-            viewContainer notFoundView
+            viewContainer model notFoundView
 
 
 
 -- VIEW CONTAINER
 
 
-viewContainer : { title : String, content : Html Msg } -> Browser.Document Msg
-viewContainer { title, content } =
+viewContainer : Model -> { title : String, content : Html Msg } -> Browser.Document Msg
+viewContainer model { title, content } =
     { title = title ++ " - Elm Chat"
-    , body = [ content ]
+    , body =
+        [ viewErrors model.errors
+        , content
+        ]
     }
+
+
+
+-- Errors
+
+
+viewErrors : List String -> Html Msg
+viewErrors errors =
+    ul []
+        (List.map (\e -> li [] [ text e ]) errors)
 
 
 
@@ -88,7 +103,7 @@ homeView model =
 homeGridContainer : Model -> Html Msg
 homeGridContainer model =
     Grid.gridContainer homeGrid
-        []
+        [ Attr.class "home-container" ]
         [ Grid.gridItem mainContent h1 [ Attr.style "justify-self" "center" ] [ text (welcomeText model) ]
         , nameInput model
         ]
@@ -112,20 +127,25 @@ nameInput : Model -> Html Msg
 nameInput model =
     Grid.gridItem nameInputItem
         form
-        [ Attr.style "grid-area" "input"
-        , Attr.style "justify-self" "center"
-        , Attr.style "width" "40%"
+        [ Attr.class "name-input-form"
         , Event.onSubmit NameSubmitted
         ]
-        [ input
-            [ Attr.style "width" "100%"
-            , Attr.style "font-size" "18px"
-            , Attr.style "padding" "0.5em"
-            , Attr.placeholder "Enter Your Name"
-            , Attr.value model.chatName
-            , Event.onInput NameEntered
-            ]
-            []
+        [ usernameInput <|
+            input
+                [ Attr.placeholder "Enter Your Name"
+                , Attr.value model.chatName
+                , Attr.required True
+                , Event.onInput NameEntered
+                ]
+                []
+        ]
+
+
+usernameInput : Html Msg -> Html Msg
+usernameInput input =
+    div [ Attr.class "icon-input" ]
+        [ span [ Attr.class "icon" ] [ text "@" ]
+        , input
         ]
 
 
@@ -213,7 +233,7 @@ update msg model =
             case request of
                 Browser.Internal url ->
                     ( { model | route = urlToRoute (Url.toString url) }
-                    , Nav.pushUrl model.key (Builder.absolute [ Url.toString url ] [])
+                    , authChangeUrl (canEnterChat model) model.key (Builder.absolute [ Url.toString url ] [])
                     )
 
                 Browser.External url ->
@@ -235,8 +255,12 @@ update msg model =
             )
 
         NameSubmitted ->
-            ( { model | route = Chat }
-            , Nav.pushUrl model.key (Builder.absolute [ "chat" ] [])
+            ( { model
+                | route = authRoute (canEnterChat model) Chat
+                , chatName = clearChatName (authRoute (canEnterChat model) Chat) (String.trim model.chatName)
+                , errors = formErrors (canEnterChat model) model
+              }
+            , authChangeUrl (canEnterChat model) model.key "chat"
             )
 
 
@@ -248,6 +272,61 @@ clearChatName route currentName =
 
         _ ->
             ""
+
+
+canEnterChat : Model -> Bool
+canEnterChat model =
+    validForm
+        [ startsWithChar model.chatName
+        , String.length model.chatName > 0
+        ]
+
+
+authChangeUrl : Bool -> Nav.Key -> String -> Cmd Msg
+authChangeUrl authd key url =
+    if authd then
+        Nav.pushUrl key (Builder.absolute [ url ] [])
+
+    else
+        Nav.pushUrl key (Builder.absolute [ rootPath ] [])
+
+
+authRoute : Bool -> Route -> Route
+authRoute validation route =
+    if validation then
+        route
+
+    else
+        Home
+
+
+
+-- FORM VALIDATION
+
+
+startsWithDigit : Regex.Regex
+startsWithDigit =
+    Maybe.withDefault Regex.never <|
+        Regex.fromString "^(?!\\d)\\w+"
+
+
+startsWithChar : String -> Bool
+startsWithChar val =
+    Regex.contains startsWithDigit val
+
+
+validForm : List Bool -> Bool
+validForm validations =
+    List.all (\v -> v) validations
+
+
+formErrors : Bool -> Model -> List String
+formErrors valid model =
+    if valid then
+        []
+
+    else
+        "There are errors on the form" :: model.errors
 
 
 

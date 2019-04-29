@@ -1,0 +1,18 @@
+.home-container .name-input-form {
+    grid-area: input;
+    justify-self: center;
+    width: 40%;
+}
+
+.icon-input .icon {
+    font-size: 19px;
+    background-color: #eee;
+    padding: 0.5em;
+}
+
+.icon-input input {
+    width: 87%;
+    font-size: 18px;
+    padding: 0.45em;
+    padding-right: 0;
+}
