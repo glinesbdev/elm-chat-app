@@ -2,6 +2,7 @@ module Main exposing (Model, Msg(..), Route(..), chatPath, chatView, homeView, i
 
 import Browser
 import Browser.Navigation as Nav
+import Css.CssGrid as Grid
 import Html exposing (..)
 import Html.Attributes exposing (href)
 import Url
@@ -78,11 +79,20 @@ homeView : { title : String, content : Html Msg }
 homeView =
     { title = "Home"
     , content =
-        div []
-            [ h1 [] [ text "Welcome to chat! " ]
-            , a [ href chatPath ] [ text "Chat" ]
+        Grid.gridContainer homeGrid
+            [ Grid.gridItem header h1 [] [ text "Welcome!" ]
             ]
     }
+
+
+homeGrid : Grid.Grid
+homeGrid =
+    Grid.makeGrid "0.5fr 1fr 0.5fr" "0.25fr 1fr 0.25fr" [] [] "" "" ""
+
+
+header : Grid.GridItem
+header =
+    Grid.makeGridItem "two" "three" "row1-end" "row2-end"
 
 
 

@@ -4333,9 +4333,9 @@ var author$project$Main$UrlChanged = function (a) {
 var author$project$Main$UrlRequested = function (a) {
 	return {$: 'UrlRequested', a: a};
 };
-var author$project$Main$Model = F3(
-	function (key, url, route) {
-		return {key: key, route: route, url: url};
+var author$project$Main$Model = F2(
+	function (key, route) {
+		return {key: key, route: route};
 	});
 var author$project$Main$NotFound = {$: 'NotFound'};
 var author$project$Main$Chat = {$: 'Chat'};
@@ -5938,10 +5938,9 @@ var elm$url$Url$toString = function (url) {
 var author$project$Main$init = F3(
 	function (_n0, url, key) {
 		return _Utils_Tuple2(
-			A3(
+			A2(
 				author$project$Main$Model,
 				key,
-				url,
 				author$project$Main$urlToRoute(
 					elm$url$Url$toString(url))),
 			A2(
@@ -5984,8 +5983,7 @@ var author$project$Main$update = F2(
 						model,
 						{
 							route: author$project$Main$urlToRoute(
-								elm$url$Url$toString(url)),
-							url: url
+								elm$url$Url$toString(url))
 						}),
 					A2(
 						elm$browser$Browser$Navigation$pushUrl,
@@ -6037,52 +6035,217 @@ var author$project$Main$chatView = function (model) {
 		title: 'Chat Room'
 	};
 };
-var elm$url$Url$Builder$absolute = F2(
-	function (pathSegments, parameters) {
-		return '/' + (A2(elm$core$String$join, '/', pathSegments) + elm$url$Url$Builder$toQuery(parameters));
-	});
-var author$project$Main$chatPath = A2(
-	elm$url$Url$Builder$absolute,
-	_List_fromArray(
-		['chat']),
-	_List_Nil);
-var elm$html$Html$a = _VirtualDom_node('a');
-var elm$json$Json$Encode$string = _Json_wrap;
-var elm$html$Html$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			elm$json$Json$Encode$string(string));
-	});
-var elm$html$Html$Attributes$href = function (url) {
-	return A2(
-		elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
+var author$project$Css$CssGrid$Single = function (a) {
+	return {$: 'Single', a: a};
 };
-var author$project$Main$homeView = {
-	content: A2(
-		elm$html$Html$div,
-		_List_Nil,
+var author$project$Css$CssGrid$getGridAutoColumns = function (_n0) {
+	var definition = _n0.a;
+	return author$project$Css$CssGrid$Single(definition.gridAutoColumns);
+};
+var author$project$Css$CssGrid$getGridAutoFlow = function (_n0) {
+	var definition = _n0.a;
+	return author$project$Css$CssGrid$Single(definition.gridAutoFlow);
+};
+var author$project$Css$CssGrid$getGridAutoRows = function (_n0) {
+	var definition = _n0.a;
+	return author$project$Css$CssGrid$Single(definition.gridAutoRows);
+};
+var author$project$Css$CssGrid$Multiple = function (a) {
+	return {$: 'Multiple', a: a};
+};
+var author$project$Css$CssGrid$getGridTemplate = function (_n0) {
+	var definition = _n0.a;
+	return author$project$Css$CssGrid$Multiple(definition.gridTemplate);
+};
+var author$project$Css$CssGrid$getGridTemplateArea = function (_n0) {
+	var definition = _n0.a;
+	return author$project$Css$CssGrid$Multiple(definition.gridTemplateArea);
+};
+var author$project$Css$CssGrid$getGridTemplateColumns = function (_n0) {
+	var definition = _n0.a;
+	return author$project$Css$CssGrid$Single(definition.gridTemplateColumns);
+};
+var author$project$Css$CssGrid$getGridTemplateRows = function (_n0) {
+	var definition = _n0.a;
+	return author$project$Css$CssGrid$Single(definition.gridTemplateRows);
+};
+var elm$core$String$concat = function (strings) {
+	return A2(elm$core$String$join, '', strings);
+};
+var elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var elm$html$Html$Attributes$style = elm$virtual_dom$VirtualDom$style;
+var author$project$Css$CssGrid$maybeCssAttribute = F2(
+	function (name, attribute) {
+		switch (attribute.$) {
+			case 'Single':
+				var attr = attribute.a;
+				return elm$core$Maybe$Just(
+					A2(elm$html$Html$Attributes$style, name, attr));
+			case 'Multiple':
+				var list = attribute.a;
+				if (!list.b) {
+					return elm$core$Maybe$Nothing;
+				} else {
+					return elm$core$Maybe$Just(
+						A2(
+							elm$html$Html$Attributes$style,
+							name,
+							elm$core$String$concat(
+								A2(
+									elm$core$List$map,
+									function (attr) {
+										return '\'' + (attr + '\'');
+									},
+									list))));
+				}
+			default:
+				return elm$core$Maybe$Nothing;
+		}
+	});
+var elm$core$List$maybeCons = F3(
+	function (f, mx, xs) {
+		var _n0 = f(mx);
+		if (_n0.$ === 'Just') {
+			var x = _n0.a;
+			return A2(elm$core$List$cons, x, xs);
+		} else {
+			return xs;
+		}
+	});
+var elm$core$List$filterMap = F2(
+	function (f, xs) {
+		return A3(
+			elm$core$List$foldr,
+			elm$core$List$maybeCons(f),
+			_List_Nil,
+			xs);
+	});
+var author$project$Css$CssGrid$gridAttributes = function (grid) {
+	return A2(
+		elm$core$List$filterMap,
+		elm$core$Basics$identity,
+		_List_fromArray(
+			[
+				elm$core$Maybe$Just(
+				A2(elm$html$Html$Attributes$style, 'display', 'grid')),
+				A2(
+				author$project$Css$CssGrid$maybeCssAttribute,
+				'grid-template-columns',
+				author$project$Css$CssGrid$getGridTemplateColumns(grid)),
+				A2(
+				author$project$Css$CssGrid$maybeCssAttribute,
+				'grid-template-rows',
+				author$project$Css$CssGrid$getGridTemplateRows(grid)),
+				A2(
+				author$project$Css$CssGrid$maybeCssAttribute,
+				'grid-template-areas',
+				author$project$Css$CssGrid$getGridTemplateArea(grid)),
+				A2(
+				author$project$Css$CssGrid$maybeCssAttribute,
+				'grid-template',
+				author$project$Css$CssGrid$getGridTemplate(grid)),
+				A2(
+				author$project$Css$CssGrid$maybeCssAttribute,
+				'grid-auto-flow',
+				author$project$Css$CssGrid$getGridAutoFlow(grid)),
+				A2(
+				author$project$Css$CssGrid$maybeCssAttribute,
+				'grid-auto-columns',
+				author$project$Css$CssGrid$getGridAutoColumns(grid)),
+				A2(
+				author$project$Css$CssGrid$maybeCssAttribute,
+				'grid-auto-rows',
+				author$project$Css$CssGrid$getGridAutoRows(grid))
+			]));
+};
+var author$project$Css$CssGrid$gridContainer = F2(
+	function (grid, children) {
+		return A2(
+			elm$html$Html$div,
+			author$project$Css$CssGrid$gridAttributes(grid),
+			children);
+	});
+var author$project$Css$CssGrid$getGridColumnEnd = function (_n0) {
+	var item = _n0.a;
+	return author$project$Css$CssGrid$Single(item.gridColumnEnd);
+};
+var author$project$Css$CssGrid$getGridColumnStart = function (_n0) {
+	var item = _n0.a;
+	return author$project$Css$CssGrid$Single(item.gridColumnStart);
+};
+var author$project$Css$CssGrid$getGridRowEnd = function (_n0) {
+	var item = _n0.a;
+	return author$project$Css$CssGrid$Single(item.gridRowEnd);
+};
+var author$project$Css$CssGrid$getGridRowStart = function (_n0) {
+	var item = _n0.a;
+	return author$project$Css$CssGrid$Single(item.gridRowStart);
+};
+var author$project$Css$CssGrid$gridItemAttributes = function (item) {
+	return A2(
+		elm$core$List$filterMap,
+		elm$core$Basics$identity,
 		_List_fromArray(
 			[
 				A2(
+				author$project$Css$CssGrid$maybeCssAttribute,
+				'grid-column-start',
+				author$project$Css$CssGrid$getGridColumnStart(item)),
+				A2(
+				author$project$Css$CssGrid$maybeCssAttribute,
+				'grid-column-end',
+				author$project$Css$CssGrid$getGridColumnEnd(item)),
+				A2(
+				author$project$Css$CssGrid$maybeCssAttribute,
+				'grid-row-start',
+				author$project$Css$CssGrid$getGridRowStart(item)),
+				A2(
+				author$project$Css$CssGrid$maybeCssAttribute,
+				'grid-row-end',
+				author$project$Css$CssGrid$getGridRowEnd(item))
+			]));
+};
+var author$project$Css$CssGrid$gridItem = F4(
+	function (item, html, attributes, children) {
+		return A2(
+			html,
+			_Utils_ap(
+				author$project$Css$CssGrid$gridItemAttributes(item),
+				attributes),
+			children);
+	});
+var author$project$Css$CssGrid$GridItem = function (a) {
+	return {$: 'GridItem', a: a};
+};
+var author$project$Css$CssGrid$makeGridItem = F4(
+	function (gColS, gColE, gRowS, gRowE) {
+		return author$project$Css$CssGrid$GridItem(
+			{gridColumnEnd: gColE, gridColumnStart: gColS, gridRowEnd: gRowE, gridRowStart: gRowS});
+	});
+var author$project$Main$header = A4(author$project$Css$CssGrid$makeGridItem, 'two', 'three', 'row1-end', 'row2-end');
+var author$project$Css$CssGrid$Grid = function (a) {
+	return {$: 'Grid', a: a};
+};
+var author$project$Css$CssGrid$makeGrid = F7(
+	function (tCols, tRows, tArea, t, aF, aC, aR) {
+		return author$project$Css$CssGrid$Grid(
+			{gridAutoColumns: aC, gridAutoFlow: aF, gridAutoRows: aR, gridTemplate: t, gridTemplateArea: tArea, gridTemplateColumns: tCols, gridTemplateRows: tRows});
+	});
+var author$project$Main$homeGrid = A7(author$project$Css$CssGrid$makeGrid, '0.5fr 1fr 0.5fr', '0.25fr 1fr 0.25fr', _List_Nil, _List_Nil, '', '', '');
+var author$project$Main$homeView = {
+	content: A2(
+		author$project$Css$CssGrid$gridContainer,
+		author$project$Main$homeGrid,
+		_List_fromArray(
+			[
+				A4(
+				author$project$Css$CssGrid$gridItem,
+				author$project$Main$header,
 				elm$html$Html$h1,
 				_List_Nil,
 				_List_fromArray(
 					[
-						elm$html$Html$text('Welcome to chat! ')
-					])),
-				A2(
-				elm$html$Html$a,
-				_List_fromArray(
-					[
-						elm$html$Html$Attributes$href(author$project$Main$chatPath)
-					]),
-				_List_fromArray(
-					[
-						elm$html$Html$text('Chat')
+						elm$html$Html$text('Welcome!')
 					]))
 			])),
 	title: 'Home'
