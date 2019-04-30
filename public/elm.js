@@ -6088,6 +6088,29 @@ var author$project$Main$init = F3(
 				key,
 				elm$url$Url$toString(url)));
 	});
+var author$project$Main$allValidationsPass = function (items) {
+	allValidationsPass:
+	while (true) {
+		if (!items.b) {
+			return true;
+		} else {
+			if (!items.b.b) {
+				var x = items.a;
+				return x.a;
+			} else {
+				var x = items.a;
+				var xs = items.b;
+				if (x.a) {
+					var $temp$items = xs;
+					items = $temp$items;
+					continue allValidationsPass;
+				} else {
+					return false;
+				}
+			}
+		}
+	}
+};
 var elm$url$Url$Builder$toQueryPair = function (_n0) {
 	var key = _n0.a;
 	var value = _n0.b;
@@ -6113,8 +6136,8 @@ var author$project$Main$rootPath = A2(
 		['']),
 	_List_Nil);
 var author$project$Main$authChangeUrl = F3(
-	function (authd, key, url) {
-		return authd ? A2(
+	function (authCheck, key, url) {
+		return author$project$Main$allValidationsPass(authCheck) ? A2(
 			elm$browser$Browser$Navigation$pushUrl,
 			key,
 			A2(
@@ -6131,9 +6154,12 @@ var author$project$Main$authChangeUrl = F3(
 				_List_Nil));
 	});
 var author$project$Main$authRoute = F2(
-	function (validation, route) {
-		return validation ? route : author$project$Main$Home;
+	function (validations, route) {
+		return author$project$Main$allValidationsPass(validations) ? route : author$project$Main$Home;
 	});
+var author$project$Main$nameHasCharacters = function (valid) {
+	return valid ? _Utils_Tuple2(true, '') : _Utils_Tuple2(false, 'Names cannot be blank.');
+};
 var elm$regex$Regex$Match = F4(
 	function (match, index, number, submatches) {
 		return {index: index, match: match, number: number, submatches: submatches};
@@ -6149,61 +6175,30 @@ var elm$regex$Regex$never = _Regex_never;
 var author$project$Main$startsWithDigit = A2(
 	elm$core$Maybe$withDefault,
 	elm$regex$Regex$never,
-	elm$regex$Regex$fromString('^(?!\\d)\\w+'));
+	elm$regex$Regex$fromString('^([^\\d+].*)?$'));
+var elm$core$Basics$not = _Basics_not;
 var elm$regex$Regex$contains = _Regex_contains;
 var author$project$Main$startsWithChar = function (val) {
-	return A2(elm$regex$Regex$contains, author$project$Main$startsWithDigit, val);
+	return (!elm$core$String$isEmpty(val)) ? _Utils_Tuple2(
+		A2(elm$regex$Regex$contains, author$project$Main$startsWithDigit, val),
+		'Names cannot start with numbers.') : _Utils_Tuple2(true, '');
 };
-var elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
-var elm$core$Basics$not = _Basics_not;
-var elm$core$List$any = F2(
-	function (isOkay, list) {
-		any:
-		while (true) {
-			if (!list.b) {
-				return false;
-			} else {
-				var x = list.a;
-				var xs = list.b;
-				if (isOkay(x)) {
-					return true;
-				} else {
-					var $temp$isOkay = isOkay,
-						$temp$list = xs;
-					isOkay = $temp$isOkay;
-					list = $temp$list;
-					continue any;
-				}
-			}
-		}
-	});
-var elm$core$List$all = F2(
-	function (isOkay, list) {
-		return !A2(
-			elm$core$List$any,
-			A2(elm$core$Basics$composeL, elm$core$Basics$not, isOkay),
-			list);
-	});
-var author$project$Main$validForm = function (validations) {
-	return A2(
-		elm$core$List$all,
-		function (v) {
-			return v;
-		},
-		validations);
+var author$project$Main$hasValidName = function (name) {
+	return _List_fromArray(
+		[
+			author$project$Main$startsWithChar(name),
+			author$project$Main$nameHasCharacters(
+			!elm$core$String$isEmpty(name))
+		]);
 };
 var author$project$Main$canEnterChat = function (model) {
-	return author$project$Main$validForm(
-		_List_fromArray(
-			[
-				author$project$Main$startsWithChar(model.chatName),
-				elm$core$String$length(model.chatName) > 0
-			]));
+	return author$project$Main$hasValidName(model.chatName);
 };
+var author$project$Main$chatPath = A2(
+	elm$url$Url$Builder$absolute,
+	_List_fromArray(
+		['chat']),
+	_List_Nil);
 var author$project$Main$clearChatName = F2(
 	function (route, currentName) {
 		if (route.$ === 'Chat') {
@@ -6212,10 +6207,18 @@ var author$project$Main$clearChatName = F2(
 			return '';
 		}
 	});
-var author$project$Main$formErrors = F2(
-	function (valid, model) {
-		return valid ? _List_Nil : A2(elm$core$List$cons, 'There are errors on the form', model.errors);
-	});
+var elm$core$Tuple$second = function (_n0) {
+	var y = _n0.b;
+	return y;
+};
+var author$project$Main$formErrors = function (validations) {
+	return author$project$Main$allValidationsPass(validations) ? _List_Nil : A2(
+		elm$core$List$map,
+		function (v) {
+			return v.b;
+		},
+		validations);
+};
 var elm$browser$Browser$Navigation$load = _Browser_load;
 var elm$core$Platform$Cmd$batch = _Platform_batch;
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
@@ -6271,7 +6274,11 @@ var author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{chatName: name}),
+						{
+							chatName: name,
+							errors: author$project$Main$formErrors(
+								author$project$Main$hasValidName(name))
+						}),
 					elm$core$Platform$Cmd$none);
 			default:
 				return _Utils_Tuple2(
@@ -6285,10 +6292,8 @@ var author$project$Main$update = F2(
 									author$project$Main$canEnterChat(model),
 									author$project$Main$Chat),
 								elm$core$String$trim(model.chatName)),
-							errors: A2(
-								author$project$Main$formErrors,
-								author$project$Main$canEnterChat(model),
-								model),
+							errors: author$project$Main$formErrors(
+								author$project$Main$canEnterChat(model)),
 							route: A2(
 								author$project$Main$authRoute,
 								author$project$Main$canEnterChat(model),
@@ -6298,7 +6303,7 @@ var author$project$Main$update = F2(
 						author$project$Main$authChangeUrl,
 						author$project$Main$canEnterChat(model),
 						model.key,
-						'chat'));
+						author$project$Main$chatPath));
 		}
 	});
 var elm$html$Html$div = _VirtualDom_node('div');
@@ -6601,40 +6606,32 @@ var elm$html$Html$Attributes$stringProperty = F2(
 			elm$json$Json$Encode$string(string));
 	});
 var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
-var author$project$Main$usernameInput = function (input) {
-	return A2(
-		elm$html$Html$div,
-		_List_fromArray(
-			[
-				elm$html$Html$Attributes$class('icon-input')
-			]),
-		_List_fromArray(
-			[
-				A2(
-				elm$html$Html$span,
-				_List_fromArray(
-					[
-						elm$html$Html$Attributes$class('icon')
-					]),
-				_List_fromArray(
-					[
-						elm$html$Html$text('@')
-					])),
-				input
-			]));
-};
+var author$project$Main$usernameInput = F2(
+	function (model, input) {
+		return A2(
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					elm$html$Html$Attributes$class('icon-input')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					elm$html$Html$span,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class('icon')
+						]),
+					_List_fromArray(
+						[
+							elm$html$Html$text('@')
+						])),
+					input
+				]));
+	});
 var elm$html$Html$form = _VirtualDom_node('form');
 var elm$html$Html$input = _VirtualDom_node('input');
 var elm$html$Html$Attributes$placeholder = elm$html$Html$Attributes$stringProperty('placeholder');
-var elm$json$Json$Encode$bool = _Json_wrap;
-var elm$html$Html$Attributes$boolProperty = F2(
-	function (key, bool) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			elm$json$Json$Encode$bool(bool));
-	});
-var elm$html$Html$Attributes$required = elm$html$Html$Attributes$boolProperty('required');
 var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
 var elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
@@ -6704,14 +6701,15 @@ var author$project$Main$nameInput = function (model) {
 			]),
 		_List_fromArray(
 			[
-				author$project$Main$usernameInput(
+				A2(
+				author$project$Main$usernameInput,
+				model,
 				A2(
 					elm$html$Html$input,
 					_List_fromArray(
 						[
 							elm$html$Html$Attributes$placeholder('Enter Your Name'),
 							elm$html$Html$Attributes$value(model.chatName),
-							elm$html$Html$Attributes$required(true),
 							elm$html$Html$Events$onInput(author$project$Main$NameEntered)
 						]),
 					_List_Nil))
@@ -6719,12 +6717,7 @@ var author$project$Main$nameInput = function (model) {
 };
 var author$project$Main$welcomeText = function (model) {
 	var base = 'Welcome';
-	var _n0 = elm$core$String$length(model.chatName);
-	if (!_n0) {
-		return base + '!';
-	} else {
-		return base + (', ' + (model.chatName + '!'));
-	}
+	return elm$core$String$isEmpty(model.chatName) ? (base + '!') : (base + (', ' + (model.chatName + '!')));
 };
 var author$project$Main$homeGridContainer = function (model) {
 	return A3(
@@ -6742,7 +6735,7 @@ var author$project$Main$homeGridContainer = function (model) {
 				elm$html$Html$h1,
 				_List_fromArray(
 					[
-						A2(elm$html$Html$Attributes$style, 'justify-self', 'center')
+						elm$html$Html$Attributes$class('heading')
 					]),
 				_List_fromArray(
 					[
@@ -6781,9 +6774,17 @@ var author$project$Main$notFoundView = {
 			])),
 	title: 'Not Found'
 };
+var author$project$Main$maybeError = function (error) {
+	if (error === '') {
+		return elm$core$Maybe$Nothing;
+	} else {
+		return elm$core$Maybe$Just(error);
+	}
+};
 var elm$html$Html$li = _VirtualDom_node('li');
 var elm$html$Html$ul = _VirtualDom_node('ul');
 var author$project$Main$viewErrors = function (errors) {
+	var actualErrors = A2(elm$core$List$filterMap, author$project$Main$maybeError, errors);
 	return A2(
 		elm$html$Html$ul,
 		_List_Nil,
@@ -6798,7 +6799,7 @@ var author$project$Main$viewErrors = function (errors) {
 							elm$html$Html$text(e)
 						]));
 			},
-			errors));
+			actualErrors));
 };
 var author$project$Main$viewContainer = F2(
 	function (model, _n0) {

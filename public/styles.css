@@ -1,18 +1,92 @@
+@media screen and (max-width: 991px) {
+/* large tablet styles */
+
+    .icon-input input {
+        width: 87%;
+    }
+
+    .home-container .name-input-form {
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+/* medium tablet styles */
+
+    .icon-input input {
+        width: 83%;
+    }
+}
+
+@media screen and (max-width: 479px) {
+/* phone styles */
+
+    .home-container .name-input-form {
+        width: 100%;
+    }
+
+    .icon-input input {
+        width: 83%;
+    }
+}
+
+@media screen and (max-width: 375px) {
+/* x-small phone styles */
+
+    .home-container .name-input-form {
+        width: 100%;
+    }
+
+    .icon-input input {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 375px) {
+/* xx-small phone styles */
+
+    .home-container .name-input-form {
+        width: 100%;
+    }
+
+    .icon-input input {
+        width: 78%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+/* desktop styles */
+
+    .home-container .name-input-form {
+        width: 75%;
+    }
+
+    .icon-input input {
+        width: 50%
+    }
+}
+
+/* global styles */
+
+.home-container .heading {
+    text-align: center;
+}
+
 .home-container .name-input-form {
     grid-area: input;
     justify-self: center;
-    width: 40%;
+    text-align: center;
+    width: 75%;
+}
+
+.icon-input input {
+    font-size: 18px;
+    padding: 0.45em;
+    padding-right: 0;
 }
 
 .icon-input .icon {
     font-size: 19px;
     background-color: #eee;
     padding: 0.5em;
-}
-
-.icon-input input {
-    width: 87%;
-    font-size: 18px;
-    padding: 0.45em;
-    padding-right: 0;
 }

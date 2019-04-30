@@ -84,8 +84,12 @@ viewContainer model { title, content } =
 
 viewErrors : List String -> Html Msg
 viewErrors errors =
+    let
+        actualErrors =
+            List.filterMap maybeError errors
+    in
     ul []
-        (List.map (\e -> li [] [ text e ]) errors)
+        (List.map (\e -> li [] [ text e ]) actualErrors)
 
 
 
@@ -104,7 +108,7 @@ homeGridContainer : Model -> Html Msg
 homeGridContainer model =
     Grid.gridContainer homeGrid
         [ Attr.class "home-container" ]
-        [ Grid.gridItem mainContent h1 [ Attr.style "justify-self" "center" ] [ text (welcomeText model) ]
+        [ Grid.gridItem mainContent h1 [ Attr.class "heading" ] [ text (welcomeText model) ]
         , nameInput model
         ]
 
@@ -115,12 +119,11 @@ welcomeText model =
         base =
             "Welcome"
     in
-    case String.length model.chatName of
-        0 ->
-            base ++ "!"
+    if String.isEmpty model.chatName then
+        base ++ "!"
 
-        _ ->
-            base ++ ", " ++ model.chatName ++ "!"
+    else
+        base ++ ", " ++ model.chatName ++ "!"
 
 
 nameInput : Model -> Html Msg
@@ -130,19 +133,20 @@ nameInput model =
         [ Attr.class "name-input-form"
         , Event.onSubmit NameSubmitted
         ]
-        [ usernameInput <|
+        [ usernameInput model <|
             input
                 [ Attr.placeholder "Enter Your Name"
                 , Attr.value model.chatName
-                , Attr.required True
+
+                -- , Attr.required True
                 , Event.onInput NameEntered
                 ]
                 []
         ]
 
 
-usernameInput : Html Msg -> Html Msg
-usernameInput input =
+usernameInput : Model -> Html Msg -> Html Msg
+usernameInput model input =
     div [ Attr.class "icon-input" ]
         [ span [ Attr.class "icon" ] [ text "@" ]
         , input
@@ -233,7 +237,10 @@ update msg model =
             case request of
                 Browser.Internal url ->
                     ( { model | route = urlToRoute (Url.toString url) }
-                    , authChangeUrl (canEnterChat model) model.key (Builder.absolute [ Url.toString url ] [])
+                    , authChangeUrl
+                        (canEnterChat model)
+                        model.key
+                        (Builder.absolute [ Url.toString url ] [])
                     )
 
                 Browser.External url ->
@@ -250,18 +257,51 @@ update msg model =
             )
 
         NameEntered name ->
-            ( { model | chatName = name }
+            ( { model | chatName = name, errors = formErrors <| hasValidName name }
             , Cmd.none
             )
 
         NameSubmitted ->
             ( { model
                 | route = authRoute (canEnterChat model) Chat
-                , chatName = clearChatName (authRoute (canEnterChat model) Chat) (String.trim model.chatName)
-                , errors = formErrors (canEnterChat model) model
+                , chatName =
+                    clearChatName
+                        (authRoute (canEnterChat model) Chat)
+                        (String.trim model.chatName)
+                , errors = formErrors <| canEnterChat model
               }
-            , authChangeUrl (canEnterChat model) model.key "chat"
+            , authChangeUrl (canEnterChat model) model.key chatPath
             )
+
+
+canEnterChat : Model -> List ( Bool, String )
+canEnterChat model =
+    hasValidName model.chatName
+
+
+hasValidName : String -> List ( Bool, String )
+hasValidName name =
+    [ startsWithChar name
+    , nameHasCharacters (not <| String.isEmpty name)
+    ]
+
+
+authChangeUrl : List ( Bool, String ) -> Nav.Key -> String -> Cmd Msg
+authChangeUrl authCheck key url =
+    if allValidationsPass authCheck then
+        Nav.pushUrl key (Builder.absolute [ url ] [])
+
+    else
+        Nav.pushUrl key (Builder.absolute [ rootPath ] [])
+
+
+authRoute : List ( Bool, String ) -> Route -> Route
+authRoute validations route =
+    if allValidationsPass validations then
+        route
+
+    else
+        Home
 
 
 clearChatName : Route -> String -> String
@@ -274,32 +314,6 @@ clearChatName route currentName =
             ""
 
 
-canEnterChat : Model -> Bool
-canEnterChat model =
-    validForm
-        [ startsWithChar model.chatName
-        , String.length model.chatName > 0
-        ]
-
-
-authChangeUrl : Bool -> Nav.Key -> String -> Cmd Msg
-authChangeUrl authd key url =
-    if authd then
-        Nav.pushUrl key (Builder.absolute [ url ] [])
-
-    else
-        Nav.pushUrl key (Builder.absolute [ rootPath ] [])
-
-
-authRoute : Bool -> Route -> Route
-authRoute validation route =
-    if validation then
-        route
-
-    else
-        Home
-
-
 
 -- FORM VALIDATION
 
@@ -307,26 +321,34 @@ authRoute validation route =
 startsWithDigit : Regex.Regex
 startsWithDigit =
     Maybe.withDefault Regex.never <|
-        Regex.fromString "^(?!\\d)\\w+"
+        Regex.fromString "^([^\\d+].*)?$"
 
 
-startsWithChar : String -> Bool
+startsWithChar : String -> ( Bool, String )
 startsWithChar val =
-    Regex.contains startsWithDigit val
+    if not <| String.isEmpty val then
+        ( Regex.contains startsWithDigit val, "Names cannot start with numbers." )
+
+    else
+        ( True, "" )
 
 
-validForm : List Bool -> Bool
-validForm validations =
-    List.all (\v -> v) validations
-
-
-formErrors : Bool -> Model -> List String
-formErrors valid model =
+nameHasCharacters : Bool -> ( Bool, String )
+nameHasCharacters valid =
     if valid then
+        ( True, "" )
+
+    else
+        ( False, "Names cannot be blank." )
+
+
+formErrors : List ( Bool, String ) -> List String
+formErrors validations =
+    if allValidationsPass validations then
         []
 
     else
-        "There are errors on the form" :: model.errors
+        List.map (\v -> Tuple.second v) validations
 
 
 
@@ -356,3 +378,34 @@ urlToRoute url =
 
         Just route ->
             Maybe.withDefault NotFound (Parser.parse parser route)
+
+
+
+-- GENERAL HELPERS
+
+
+allValidationsPass : List ( Bool, String ) -> Bool
+allValidationsPass items =
+    case items of
+        [] ->
+            True
+
+        [ x ] ->
+            Tuple.first x
+
+        x :: xs ->
+            if Tuple.first x then
+                allValidationsPass xs
+
+            else
+                False
+
+
+maybeError : String -> Maybe String
+maybeError error =
+    case error of
+        "" ->
+            Nothing
+
+        _ ->
+            Just error
