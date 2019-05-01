@@ -6,6 +6,9 @@ import Css.CssGrid as Grid
 import Html exposing (..)
 import Html.Attributes as Attr
 import Html.Events as Event
+import Random
+import Random.Char as RandomChar
+import Random.String as RandomString
 import Regex
 import Url
 import Url.Builder as Builder
@@ -35,16 +38,56 @@ main =
 type alias Model =
     { key : Nav.Key
     , route : Route
-    , chatName : String
+    , chatter : ChatEntity
     , errors : List String
+    , pendingMessage : String
+    }
+
+
+type alias ChatEntity =
+    { id : String
+    , name : String
+    , messages : List String
     }
 
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
-    ( Model key (urlToRoute (Url.toString url)) "" []
-    , Nav.pushUrl key (Url.toString url)
+    ( initialModel key (urlToRoute <| urlPath url)
+    , Cmd.batch
+        [ Nav.pushUrl key (urlPath url)
+        , generateRandomChatId
+        ]
     )
+
+
+initialModel : Nav.Key -> Route -> Model
+initialModel key route =
+    { key = key
+    , route = route
+    , chatter = ChatEntity "" "" []
+    , errors = []
+    , pendingMessage = ""
+    }
+
+
+
+-- CHATTER HELPERS
+
+
+setName : String -> ChatEntity -> ChatEntity
+setName name entity =
+    { entity | name = name }
+
+
+setMessages : List String -> ChatEntity -> ChatEntity
+setMessages messages entity =
+    { entity | messages = messages }
+
+
+setId : String -> ChatEntity -> ChatEntity
+setId id entity =
+    { entity | id = id }
 
 
 
@@ -72,14 +115,14 @@ viewContainer : Model -> { title : String, content : Html Msg } -> Browser.Docum
 viewContainer model { title, content } =
     { title = title ++ " - Elm Chat"
     , body =
-        [ viewErrors model.errors
+        [ shouldRender (not <| List.isEmpty model.errors) (viewErrors model.errors)
         , content
         ]
     }
 
 
 
--- Errors
+-- ERRORS
 
 
 viewErrors : List String -> Html Msg
@@ -119,11 +162,11 @@ welcomeText model =
         base =
             "Welcome"
     in
-    if String.isEmpty model.chatName then
+    if String.isEmpty model.chatter.name then
         base ++ "!"
 
     else
-        base ++ ", " ++ model.chatName ++ "!"
+        base ++ ", " ++ model.chatter.name ++ "!"
 
 
 nameInput : Model -> Html Msg
@@ -133,23 +176,23 @@ nameInput model =
         [ Attr.class "name-input-form"
         , Event.onSubmit NameSubmitted
         ]
-        [ usernameInput model <|
-            input
-                [ Attr.placeholder "Enter Your Name"
-                , Attr.value model.chatName
-
-                -- , Attr.required True
-                , Event.onInput NameEntered
-                ]
-                []
+        [ usernameInput model
+        , button [ Attr.class "enter-chat-button" ] [ text "Enter" ]
         ]
 
 
-usernameInput : Model -> Html Msg -> Html Msg
-usernameInput model input =
+usernameInput : Model -> Html Msg
+usernameInput model =
     div [ Attr.class "icon-input" ]
         [ span [ Attr.class "icon" ] [ text "@" ]
         , input
+            [ Attr.placeholder "Enter Your Name"
+            , Attr.value model.chatter.name
+            , Attr.required True
+            , Attr.autofocus True
+            , Event.onInput NameEntered
+            ]
+            []
         ]
 
 
@@ -184,10 +227,59 @@ chatView model =
     { title = "Chat Room"
     , content =
         div []
-            [ h1 [] [ text "Chat Room" ]
-            , p [] [ text (model.chatName ++ " has entered the room!") ]
+            [ h1 [ Attr.class "chat-heading" ] [ text "Chat Room" ]
+            , messageBox model
+            , messageInput model
             ]
     }
+
+
+messageBox : Model -> Html Msg
+messageBox model =
+    div [ Attr.class "message-box" ] <|
+        List.map (\m -> displayedMessage model m) model.chatter.messages
+
+
+displayedMessage : Model -> String -> Html Msg
+displayedMessage model message =
+    div
+        [ Attr.classList
+            [ ( "message", True )
+            , ( "text-right", not <| String.contains model.chatter.name model.chatter.id )
+            ]
+        ]
+        [ span [] [ text model.chatter.name ]
+        , p
+            [ Attr.classList
+                [ ( "mt0", True ), ( "text-light", True ) ]
+            ]
+            [ text message ]
+        ]
+
+
+
+-- messagePostedByUser
+
+
+messageInput : Model -> Html Msg
+messageInput model =
+    form [ Event.onSubmit MessageSubmitted, Attr.class "message-input" ]
+        [ input
+            [ Event.onInput MessageEntered
+            , Attr.value model.pendingMessage
+            , Attr.autofocus True
+            , Attr.class "message-input-box"
+            ]
+            []
+
+        -- This is type_ "button" so the form isn't submitted twice
+        , button
+            [ Event.onClick MessageSubmitted
+            , Attr.type_ "button"
+            , Attr.class "message-submit"
+            ]
+            [ text "Send" ]
+        ]
 
 
 
@@ -206,20 +298,6 @@ notFoundView =
 
 
 
--- URL HELPERS
-
-
-rootPath : String
-rootPath =
-    Builder.absolute [ "" ] []
-
-
-chatPath : String
-chatPath =
-    Builder.absolute [ "chat" ] []
-
-
-
 --UPDATE
 
 
@@ -228,6 +306,9 @@ type Msg
     | UrlChanged Url.Url
     | NameEntered String
     | NameSubmitted
+    | MessageEntered String
+    | MessageSubmitted
+    | GenerateRandomId String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -236,11 +317,11 @@ update msg model =
         UrlRequested request ->
             case request of
                 Browser.Internal url ->
-                    ( { model | route = urlToRoute (Url.toString url) }
-                    , authChangeUrl
-                        (canEnterChat model)
-                        model.key
-                        (Builder.absolute [ Url.toString url ] [])
+                    ( { model
+                        | route = urlToRoute <| Url.toString url
+                        , errors = authErrors (canEnterChat model) (urlToRoute <| urlPath url) ++ model.errors
+                      }
+                    , authChangeUrl (canEnterChat model) model.key (urlPath url)
                     )
 
                 Browser.External url ->
@@ -249,59 +330,87 @@ update msg model =
                     )
 
         UrlChanged url ->
+            let
+                route =
+                    urlToRoute <| Url.toString url
+
+                chatEntity =
+                    setName (clearChatName route model.chatter.name) model.chatter
+            in
             ( { model
-                | route = urlToRoute (Url.toString url)
-                , chatName = clearChatName (urlToRoute <| Url.toString url) model.chatName
+                | route = route
+                , errors = authErrors (canEnterChat model) route
+                , chatter = chatEntity
               }
             , Cmd.none
             )
 
         NameEntered name ->
-            ( { model | chatName = name, errors = formErrors <| hasValidName name }
+            let
+                chatEntity =
+                    setName name model.chatter
+            in
+            ( { model | chatter = chatEntity, errors = formErrors <| hasValidName name }
             , Cmd.none
             )
 
         NameSubmitted ->
+            let
+                route =
+                    authRoute (canEnterChat model) Chat
+
+                chatEntity =
+                    setName (String.trim model.chatter.name |> clearChatName route) model.chatter
+                        |> setMessages ((model.chatter.name ++ " has entered the room!") :: model.chatter.messages)
+            in
             ( { model
-                | route = authRoute (canEnterChat model) Chat
-                , chatName =
-                    clearChatName
-                        (authRoute (canEnterChat model) Chat)
-                        (String.trim model.chatName)
-                , errors = formErrors <| canEnterChat model
+                | route = route
+                , chatter = chatEntity
+                , errors = authErrors (canEnterChat model) route
               }
-            , authChangeUrl (canEnterChat model) model.key chatPath
+            , Cmd.batch
+                [ authChangeUrl (canEnterChat model) model.key chatPath
+                , generateRandomChatId
+                ]
+            )
+
+        MessageEntered message ->
+            ( { model | pendingMessage = message }
+            , Cmd.none
+            )
+
+        MessageSubmitted ->
+            let
+                chatEntity =
+                    setMessages (basicHtmlEscapeTrim model.pendingMessage :: model.chatter.messages) model.chatter
+            in
+            ( { model
+                | chatter = chatEntity
+                , pendingMessage = ""
+              }
+            , Cmd.none
+            )
+
+        GenerateRandomId id ->
+            let
+                chatEntity =
+                    setId (String.concat [ model.chatter.name, "-", id ]) model.chatter
+            in
+            ( { model | chatter = chatEntity }
+            , Cmd.none
             )
 
 
 canEnterChat : Model -> List ( Bool, String )
 canEnterChat model =
-    hasValidName model.chatName
+    hasValidName model.chatter.name
 
 
 hasValidName : String -> List ( Bool, String )
 hasValidName name =
     [ startsWithChar name
-    , nameHasCharacters (not <| String.isEmpty name)
+    , nameHasCharacters name
     ]
-
-
-authChangeUrl : List ( Bool, String ) -> Nav.Key -> String -> Cmd Msg
-authChangeUrl authCheck key url =
-    if allValidationsPass authCheck then
-        Nav.pushUrl key (Builder.absolute [ url ] [])
-
-    else
-        Nav.pushUrl key (Builder.absolute [ rootPath ] [])
-
-
-authRoute : List ( Bool, String ) -> Route -> Route
-authRoute validations route =
-    if allValidationsPass validations then
-        route
-
-    else
-        Home
 
 
 clearChatName : Route -> String -> String
@@ -333,9 +442,9 @@ startsWithChar val =
         ( True, "" )
 
 
-nameHasCharacters : Bool -> ( Bool, String )
-nameHasCharacters valid =
-    if valid then
+nameHasCharacters : String -> ( Bool, String )
+nameHasCharacters name =
+    if not <| String.isEmpty name then
         ( True, "" )
 
     else
@@ -380,32 +489,119 @@ urlToRoute url =
             Maybe.withDefault NotFound (Parser.parse parser route)
 
 
+authChangeUrl : List ( Bool, String ) -> Nav.Key -> String -> Cmd Msg
+authChangeUrl authCheck key url =
+    if allValidationsPass authCheck then
+        Nav.pushUrl key url
+
+    else
+        Nav.pushUrl key rootPath
+
+
+authRoute : List ( Bool, String ) -> Route -> Route
+authRoute validations route =
+    if allValidationsPass validations then
+        route
+
+    else
+        Home
+
+
+urlPath : Url.Url -> String
+urlPath url =
+    Url.toString url
+
+
+rootPath : String
+rootPath =
+    Builder.relative [ "" ] []
+
+
+chatPath : String
+chatPath =
+    Builder.relative [ "chat" ] []
+
+
 
 -- GENERAL HELPERS
 
 
 allValidationsPass : List ( Bool, String ) -> Bool
 allValidationsPass items =
-    case items of
-        [] ->
-            True
+    List.all Tuple.first items
 
-        [ x ] ->
-            Tuple.first x
 
-        x :: xs ->
-            if Tuple.first x then
-                allValidationsPass xs
 
-            else
-                False
+-- The code below was refeactored to the above.
+-- Yay for trying to find a reason to use recursion 🤦‍♂️
+-- case items of
+--     [] ->
+--         True
+--     [ x ] ->
+--         Tuple.first x
+--     x :: xs ->
+--         if Tuple.first x then
+--             allValidationsPass xs
+--         else
+--             False
 
 
 maybeError : String -> Maybe String
 maybeError error =
-    case error of
-        "" ->
-            Nothing
+    if String.isEmpty error then
+        Nothing
+
+    else
+        Just error
+
+
+basicHtmlEscapeTrim : String -> String
+basicHtmlEscapeTrim =
+    String.replace "<" "&gt;"
+        >> String.replace ">" "&lt;"
+        >> String.trim
+
+
+shouldRender : Bool -> Html Msg -> Html Msg
+shouldRender cond html =
+    if cond then
+        html
+
+    else
+        text ""
+
+
+generateRandomChatId : Cmd Msg
+generateRandomChatId =
+    Random.generate GenerateRandomId <| RandomString.string 10 RandomChar.latin
+
+
+authErrors : List ( Bool, String ) -> Route -> List String
+authErrors validations route =
+    case route of
+        Chat ->
+            if not <| allValidationsPass validations then
+                [ "You're not authorized for the requested page." ]
+
+            else
+                []
 
         _ ->
-            Just error
+            []
+
+
+
+-- TODO remove if no longer needed
+
+
+routeToString : Route -> String
+routeToString route =
+    case route of
+        Home ->
+            "home"
+
+        Chat ->
+            "chat"
+
+        NotFound ->
+            "not-found"

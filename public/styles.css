@@ -1,7 +1,7 @@
 @media screen and (max-width: 991px) {
 /* large tablet styles */
 
-    .icon-input input {
+    .icon-input input, .message-input-box {
         width: 87%;
     }
 
@@ -13,7 +13,7 @@
 @media screen and (max-width: 767px) {
 /* medium tablet styles */
 
-    .icon-input input {
+    .icon-input input, .message-input-box {
         width: 83%;
     }
 }
@@ -25,7 +25,7 @@
         width: 100%;
     }
 
-    .icon-input input {
+    .icon-input input, .message-input-box {
         width: 83%;
     }
 }
@@ -37,7 +37,7 @@
         width: 100%;
     }
 
-    .icon-input input {
+    .icon-input input, .message-input-box {
         width: 80%;
     }
 }
@@ -49,7 +49,7 @@
         width: 100%;
     }
 
-    .icon-input input {
+    .icon-input input, .message-input-box {
         width: 78%;
     }
 }
@@ -61,12 +61,44 @@
         width: 75%;
     }
 
-    .icon-input input {
+    .icon-input input, .message-input-box {
         width: 50%
+    }
+
+    .entered-chat-notification {
+        padding: 1em 0;
+        font-size: 18px;
+        width: 60%;
+        margin: auto;
+        background-color: #42CAFD;
+        color: #01597a;
+        border-radius: 0.5em;
+    }
+    
+    .message-box {
+        margin: 2em auto;
+        width: 80%;
+        height: 350px;
     }
 }
 
 /* global styles */
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.text-light {
+    font-weight: 100;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mt0 {
+    margin-top: 0;
+}
 
 .home-container .heading {
     text-align: center;
@@ -79,7 +111,7 @@
     width: 75%;
 }
 
-.icon-input input {
+.icon-input input, .message-input-box {
     font-size: 18px;
     padding: 0.45em;
     padding-right: 0;
@@ -89,4 +121,44 @@
     font-size: 19px;
     background-color: #eee;
     padding: 0.5em;
+}
+
+.chat-heading, .entered-chat-notification {
+    text-align: center;
+}
+
+.message-box {
+    border: 1px solid #333;
+    padding: 1em;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.message-box .message:last-child {
+    padding-top: 1em;
+}
+
+.message-input {
+    text-align: center;
+}
+
+.message-input .message-input-box {
+    display: inline-block;
+}
+
+.message-submit, .enter-chat-button {
+    padding: 0.7em 2.5em;
+    font-size: 16px;
+    border-radius: 10px;
+    background-color: #42CAFD;
+    color: whitesmoke;
+}
+
+.message-submit {
+    margin-left: 1em;
+}
+
+.enter-chat-button {
+    margin-top: 1em;
 }

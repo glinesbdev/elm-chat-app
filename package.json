@@ -6,10 +6,13 @@
   "dependencies": {
     "express": "^4.16.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chokidar-cli": "^1.2.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "elm make src/Main.elm --output public/elm.js && node server.js"
+    "start": "node server.js & npm run watch",
+    "watch": "chokidar '**/*.elm' -c 'elm make src/Main.elm --output public/elm.js' --initial"
   },
   "keywords": [
     "Elm"
