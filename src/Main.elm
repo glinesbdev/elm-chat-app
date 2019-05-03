@@ -3,21 +3,12 @@ module Main exposing (main)
 import Browser
 import Browser.Navigation as Nav
 import Chat
-import Css.CssGrid as Grid
 import Home
-import Html exposing (..)
-import Html.Attributes as Attr
-import Html.Events as Event
+import Html
 import Page
-import Random
-import Random.Char as RandomChar
-import Random.String as RandomString
-import Regex
 import Route
 import Session
 import Url
-import Url.Builder as Builder
-import Url.Parser as Parser
 
 
 
