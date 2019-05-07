@@ -58,7 +58,11 @@
                 };
 
                 db.collection('messages').doc(message.id).set(msgData);
-                getChatName({ chatName: "Unknown", ...message });
+
+
+                db.collection('messages').doc(message.id).onSnapshot(doc => {
+                    getChatName({ id: doc.id, chatName: "Unknown", ...doc.data() });
+                })
             });
 
             function fetchRoom(room) {
