@@ -48,18 +48,6 @@
                     .catch(error => console.error(error));
 
                 fetchRoom(chatInit.roomName);
-            });
-
-            app.ports.storeMessage.subscribe(message => {
-                let msgData = {
-                    body: message.body,
-                    userId: message.userId,
-                    roomId: message.roomId,
-                    chatName: message.chatName
-                };
-
-                db.collection('messages').doc(message.id).set(msgData);
-
 
                 db.collection('messages').onSnapshot(snapshot => {
                     const messages = [];
@@ -69,7 +57,19 @@
                     });
 
                     app.ports.getAllMessages.send(messages);
-                })
+                });
+            });
+
+            app.ports.storeMessage.subscribe(message => {
+                let msgData = {
+                    body: message.body,
+                    userId: message.userId,
+                    roomId: message.roomId,
+                    chatName: message.chatName,
+                    timeSent: message.timeSent
+                };
+
+                db.collection('messages').doc(message.id).set(msgData);
             });
 
             function fetchRoom(room) {
@@ -99,7 +99,8 @@
                                 userId : doc.data().userId,
                                 body: doc.data().body,
                                 roomId: roomId,
-                                chatName: doc.data().chatName
+                                chatName: doc.data().chatName,
+                                timeSent: doc.data().timeSent
                             };
 
                             messages.push(msgData);

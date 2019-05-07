@@ -10,6 +10,8 @@ import Random.Char as RandomChar
 import Random.String as RandomString
 import Route
 import Session
+import Task
+import Time
 
 
 
@@ -23,11 +25,18 @@ type alias Model =
     , room : Room
     , userId : String
     , chatName : String
+    , timeSent : Int
     }
 
 
 type alias Message =
-    { id : String, userId : String, body : String, roomId : String, chatName : String }
+    { id : String
+    , userId : String
+    , body : String
+    , roomId : String
+    , chatName : String
+    , timeSent : Int
+    }
 
 
 type alias Room =
@@ -55,6 +64,7 @@ initialModel session =
     , userId = ""
     , chatName = Session.chatName session
     , room = Room "IIVY2snGny1UkBvgGqQB" "" []
+    , timeSent = 0
     }
 
 
@@ -76,8 +86,8 @@ view model =
 
 messageBox : Model -> Html Msg
 messageBox model =
-    List.map (\message -> displayedMessage model message) model.messages
-        |> List.reverse
+    List.sortBy .timeSent model.messages
+        |> List.map (\message -> displayedMessage model message)
         |> div [ Attr.class "bg-white px-2 -mb-12 overflow-y-scroll flex-1 mt-12 mx-4 message-box" ]
 
 
@@ -168,6 +178,7 @@ type Msg
     | GotUserId String
     | GenerateRandomId String
     | GotAllMessages (List Message)
+    | GotTime Time.Posix
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -180,6 +191,11 @@ update msg model =
 
         SubmitMessage ->
             ( model
+            , getTime
+            )
+
+        GotTime time ->
+            ( { model | timeSent = Time.posixToMillis time }
             , generateRandomId
             )
 
@@ -192,6 +208,7 @@ update msg model =
                         (String.trim model.pendingMessage)
                         model.room.id
                         (Session.chatName model.session)
+                        model.timeSent
             in
             ( { model | pendingMessage = "" }
             , storeMessage (messageEncoder message)
@@ -225,6 +242,7 @@ messageEncoder message =
         , ( "roomId", E.string message.roomId )
         , ( "chatName", E.string message.chatName )
         , ( "body", E.string message.body )
+        , ( "timeSent", E.int message.timeSent )
         ]
 
 
@@ -255,6 +273,11 @@ isHacker name =
 generateRandomId : Cmd Msg
 generateRandomId =
     Random.generate GenerateRandomId <| RandomString.string 20 RandomChar.latin
+
+
+getTime : Cmd Msg
+getTime =
+    Task.perform GotTime Time.now
 
 
 
