@@ -61,15 +61,19 @@
                 db.collection('messages').doc(message.id).set(msgData);
 
 
-                db.collection('messages').onSnapshot(snapshot => {
-                    const messages = [];
+                // db.collection('messages').onSnapshot(snapshot => {
+                //     const messages = [];
 
-                    snapshot.forEach(doc => {
-                        messages.push({ id: doc.id, ...doc.data() });
-                    });
+                //     snapshot.forEach(doc => {
+                //         messages.push({ id: doc.id, ...doc.data() });
+                //     });
 
-                    app.ports.getAllMessages.send(messages);
-                })
+                //     app.ports.getAllMessages.send(messages);
+                // })
+
+                db.collection('messages').doc(message.id).onSnapshot(doc => {
+                    app.ports.getMessage.send({ id: message.id, ...doc.data() });
+                });
             });
 
             function fetchRoom(room) {
