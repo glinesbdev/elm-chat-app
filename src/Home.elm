@@ -1,9 +1,12 @@
-module Home exposing (Model, Msg, init, toSession, update, view)
+port module Home exposing (Model, Msg, init, toSession, update, view)
 
-import Css.CssGrid as Grid
 import Html exposing (..)
 import Html.Attributes as Attr
 import Html.Events as Event
+import Json.Encode as E
+import Random
+import Random.Char as RandomChar
+import Random.String as RandomString
 import Route
 import Session
 
@@ -15,12 +18,27 @@ import Session
 type alias Model =
     { session : Session.Session
     , name : String
+    , errors : Errors
     }
 
 
-init : Session.Session -> ( Model, Cmd Msg )
-init session =
-    ( Model session "", Cmd.none )
+type alias Errors =
+    List String
+
+
+init : Session.Session -> Maybe Errors -> ( Model, Cmd Msg )
+init session errors =
+    ( initialModel session <| Maybe.withDefault [] errors
+    , Cmd.none
+    )
+
+
+initialModel : Session.Session -> Errors -> Model
+initialModel session errors =
+    { session = session
+    , name = ""
+    , errors = errors
+    }
 
 
 
@@ -31,55 +49,25 @@ view : Model -> { title : String, content : Html Msg }
 view model =
     { title = "Home"
     , content =
-        homeGridContainer model
+        div []
+            [ errorList model.errors
+            , h1 [ Attr.class "text-center mb-8 mt-20" ] [ text "Chatterbox" ]
+            , inputForm model
+            , formButton
+            ]
     }
 
 
-homeGridContainer : Model -> Html Msg
-homeGridContainer model =
-    Grid.gridContainer homeGrid
-        [ Attr.class "home-container" ]
-        [ Grid.gridItem mainContent h1 [ Attr.class "heading" ] [ text (welcomeText model) ]
-        , nameInput model
+inputForm : Model -> Html Msg
+inputForm model =
+    form
+        [ Event.onSubmit SubmitName
+        , Attr.class "flex flex-row px-4"
         ]
-
-
-welcomeText : Model -> String
-welcomeText model =
-    let
-        base =
-            "Welcome"
-    in
-    if String.isEmpty model.name then
-        base ++ "!"
-
-    else
-        base ++ ", " ++ model.name ++ "!"
-
-
-nameInput : Model -> Html Msg
-nameInput model =
-    Grid.gridItem nameInputItem
-        form
-        [ Attr.class "name-input-form"
-        , Event.onSubmit SubmitName
-        ]
-        [ chatNameInput model
-        , button
-            [ Attr.class "enter-chat-button"
-            , Attr.type_ "button"
-            , Event.onClick SubmitName
-            ]
-            [ text "Enter" ]
-        ]
-
-
-chatNameInput : Model -> Html Msg
-chatNameInput model =
-    div [ Attr.class "icon-input" ]
-        [ span [ Attr.class "icon" ] [ text "@" ]
+        [ span [ Attr.class "bg-indigo p-4 text-grey-lighter rounded-bl-lg rounded-tl-lg" ] [ text "@" ]
         , input
             [ Attr.placeholder "Enter your name"
+            , Attr.class "border-solid text-lg flex-1 p-4 border-indigo border-1 rounded-br-lg rounded-tr-lg name-input"
             , Attr.value model.name
             , Attr.required True
             , Attr.autofocus True
@@ -89,26 +77,38 @@ chatNameInput model =
         ]
 
 
-
--- HOME STYLES
-
-
-homeGrid : Grid.Grid
-homeGrid =
-    Grid.makeTemplateAreaGrid
-        "50px 1fr 50px"
-        "50px 1fr 50px"
-        (Grid.gridTemplateProperty ( [ "header", "main", "input" ], 3 ))
-
-
-mainContent : Grid.GridItem
-mainContent =
-    Grid.makeAreaGridItem "main"
+formButton : Html Msg
+formButton =
+    div [ Attr.class "text-center" ]
+        [ button
+            [ Attr.class "border-solid bg-teal-dark hover:bg-teal-darker text-grey-lighter rounded-lg py-4 px-8 mt-8"
+            , Attr.type_ "button"
+            , Event.onClick SubmitName
+            ]
+            [ text "Enter" ]
+        ]
 
 
-nameInputItem : Grid.GridItem
-nameInputItem =
-    Grid.blankGridItem
+errorList : Errors -> Html Msg
+errorList errors =
+    shouldRender
+        (List.length errors > 0)
+        (div
+            []
+            [ ul [ Attr.class " text-center text-grey-lightest errors p-8 bg-red-light" ] <| List.map listItem errors ]
+        )
+
+
+listItem : String -> Html Msg
+listItem message =
+    li [] [ text message ]
+
+
+
+-- PORTS
+
+
+port storeUser : E.Value -> Cmd msg
 
 
 
@@ -118,6 +118,7 @@ nameInputItem =
 type Msg
     = EnterName String
     | SubmitName
+    | GenerateRandomId String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -128,8 +129,42 @@ update msg model =
 
         SubmitName ->
             ( model
-            , Route.pushUrl (Session.navKey model.session) (Route.Chat (Just model.name))
+            , generateRandomId
             )
+
+        GenerateRandomId id ->
+            ( model
+            , Cmd.batch
+                [ storeUser <| encodeUserData ( id, model.name )
+                , Route.pushUrl (Session.navKey model.session) (Route.Chat <| Just model.name)
+                ]
+            )
+
+
+
+-- HELPERS
+
+
+shouldRender : Bool -> Html Msg -> Html Msg
+shouldRender cond html =
+    if cond then
+        html
+
+    else
+        text ""
+
+
+generateRandomId : Cmd Msg
+generateRandomId =
+    Random.generate GenerateRandomId <| RandomString.string 20 RandomChar.latin
+
+
+encodeUserData : ( String, String ) -> E.Value
+encodeUserData ( id, name ) =
+    E.object
+        [ ( "id", E.string id )
+        , ( "name", E.string name )
+        ]
 
 
 

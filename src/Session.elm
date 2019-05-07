@@ -1,4 +1,4 @@
-module Session exposing (Session(..), chatId, chatName, init, navKey, sessionType)
+module Session exposing (Session(..), chatName, init, navKey, roomName)
 
 import Browser.Navigation as Nav
 
@@ -9,14 +9,19 @@ import Browser.Navigation as Nav
 
 type Session
     = Guest Nav.Key
-    | LoggedIn (Maybe ChatId) ChatName Nav.Key
+    | LoggedIn (Maybe RoomName) ChatName Nav.Key
 
 
-type alias ChatId =
-    String
+
+-- type alias ChatId =
+--     String
 
 
 type alias ChatName =
+    String
+
+
+type alias RoomName =
     String
 
 
@@ -39,18 +44,18 @@ navKey session =
             key
 
 
-chatName : Session -> Maybe ChatName
+chatName : Session -> ChatName
 chatName session =
     case session of
         Guest _ ->
-            Nothing
+            ""
 
         LoggedIn _ name _ ->
-            Just name
+            name
 
 
-chatId : Session -> Maybe ChatId
-chatId session =
+roomName : Session -> Maybe RoomName
+roomName session =
     case session of
         Guest _ ->
             Nothing
@@ -58,17 +63,7 @@ chatId session =
         LoggedIn id _ _ ->
             case id of
                 Nothing ->
-                    Nothing
+                    Just "default"
 
                 Just realId ->
                     Just realId
-
-
-sessionType : Session -> String
-sessionType session =
-    case session of
-        Guest _ ->
-            "Guest"
-
-        LoggedIn _ _ _ ->
-            "Logged In"

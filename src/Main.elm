@@ -21,7 +21,7 @@ main =
         { init = init
         , view = view
         , update = update
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = subscriptions
         , onUrlRequest = UrlRequested
         , onUrlChange = UrlChanged
         }
@@ -40,28 +40,33 @@ type Model
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
-    resolveRoute (Route.fromUrl url) key (Redirect (Session.Guest key))
+    resolveRoute (Route.fromUrl url) key (Redirect <| Session.Guest key)
 
 
 resolveRoute : Route.Route -> Nav.Key -> Model -> ( Model, Cmd Msg )
 resolveRoute route key model =
     case route of
         Route.Home ->
-            Home.init (Session.init key)
+            Home.init (Session.init key) (Just [])
                 |> resolveWith Home GoToHome model
 
         Route.Chat name ->
             case name of
                 Nothing ->
-                    Home.init (Session.init key)
+                    Home.init (Session.init key) (Just [ "You must have a name to chat!" ])
                         |> resolveWith Home GoToHome model
 
                 Just chatName ->
-                    Chat.init (Session.LoggedIn (Just "") chatName key)
-                        |> resolveWith Chat GoToChat model
+                    if validChatName chatName then
+                        Chat.init (Session.LoggedIn Nothing chatName key)
+                            |> resolveWith Chat GoToChat model
+
+                    else
+                        Home.init (Session.init key) (Just [ "Invalid chat name" ])
+                            |> resolveWith Home GoToHome model
 
         _ ->
-            Home.init (Session.init key)
+            Home.init (Session.init key) (Just [])
                 |> resolveWith Home GoToHome model
 
 
@@ -112,6 +117,20 @@ view model =
 
 
 
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    case model of
+        Chat chat ->
+            Sub.map GoToChat (Chat.subscriptions chat)
+
+        _ ->
+            Sub.none
+
+
+
 --UPDATE
 
 
@@ -151,7 +170,7 @@ update msg model =
             )
 
         ( _, _ ) ->
-            -- Do nothing and return the current state of the app
+            -- Do nothing upon unkown command and return the current state of the app
             ( model, Cmd.none )
 
 
@@ -165,3 +184,12 @@ resolveWith toModel toMsg model ( subModel, subCmd ) =
     ( toModel subModel
     , Cmd.map toMsg subCmd
     )
+
+
+
+-- HELPERS
+
+
+validChatName : String -> Bool
+validChatName name =
+    not <| String.isEmpty name

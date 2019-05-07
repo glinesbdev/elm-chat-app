@@ -80,6 +80,271 @@ function A9(fun, a, b, c, d, e, f, g, h, i) {
 console.warn('Compiled in DEV mode. Follow the advice at https://elm-lang.org/0.19.0/optimize for better performance and smaller assets.');
 
 
+var _List_Nil_UNUSED = { $: 0 };
+var _List_Nil = { $: '[]' };
+
+function _List_Cons_UNUSED(hd, tl) { return { $: 1, a: hd, b: tl }; }
+function _List_Cons(hd, tl) { return { $: '::', a: hd, b: tl }; }
+
+
+var _List_cons = F2(_List_Cons);
+
+function _List_fromArray(arr)
+{
+	var out = _List_Nil;
+	for (var i = arr.length; i--; )
+	{
+		out = _List_Cons(arr[i], out);
+	}
+	return out;
+}
+
+function _List_toArray(xs)
+{
+	for (var out = []; xs.b; xs = xs.b) // WHILE_CONS
+	{
+		out.push(xs.a);
+	}
+	return out;
+}
+
+var _List_map2 = F3(function(f, xs, ys)
+{
+	for (var arr = []; xs.b && ys.b; xs = xs.b, ys = ys.b) // WHILE_CONSES
+	{
+		arr.push(A2(f, xs.a, ys.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_map3 = F4(function(f, xs, ys, zs)
+{
+	for (var arr = []; xs.b && ys.b && zs.b; xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
+	{
+		arr.push(A3(f, xs.a, ys.a, zs.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_map4 = F5(function(f, ws, xs, ys, zs)
+{
+	for (var arr = []; ws.b && xs.b && ys.b && zs.b; ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
+	{
+		arr.push(A4(f, ws.a, xs.a, ys.a, zs.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_map5 = F6(function(f, vs, ws, xs, ys, zs)
+{
+	for (var arr = []; vs.b && ws.b && xs.b && ys.b && zs.b; vs = vs.b, ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
+	{
+		arr.push(A5(f, vs.a, ws.a, xs.a, ys.a, zs.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_sortBy = F2(function(f, xs)
+{
+	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
+		return _Utils_cmp(f(a), f(b));
+	}));
+});
+
+var _List_sortWith = F2(function(f, xs)
+{
+	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
+		var ord = A2(f, a, b);
+		return ord === elm$core$Basics$EQ ? 0 : ord === elm$core$Basics$LT ? -1 : 1;
+	}));
+});
+
+
+
+// EQUALITY
+
+function _Utils_eq(x, y)
+{
+	for (
+		var pair, stack = [], isEqual = _Utils_eqHelp(x, y, 0, stack);
+		isEqual && (pair = stack.pop());
+		isEqual = _Utils_eqHelp(pair.a, pair.b, 0, stack)
+		)
+	{}
+
+	return isEqual;
+}
+
+function _Utils_eqHelp(x, y, depth, stack)
+{
+	if (depth > 100)
+	{
+		stack.push(_Utils_Tuple2(x,y));
+		return true;
+	}
+
+	if (x === y)
+	{
+		return true;
+	}
+
+	if (typeof x !== 'object' || x === null || y === null)
+	{
+		typeof x === 'function' && _Debug_crash(5);
+		return false;
+	}
+
+	/**/
+	if (x.$ === 'Set_elm_builtin')
+	{
+		x = elm$core$Set$toList(x);
+		y = elm$core$Set$toList(y);
+	}
+	if (x.$ === 'RBNode_elm_builtin' || x.$ === 'RBEmpty_elm_builtin')
+	{
+		x = elm$core$Dict$toList(x);
+		y = elm$core$Dict$toList(y);
+	}
+	//*/
+
+	/**_UNUSED/
+	if (x.$ < 0)
+	{
+		x = elm$core$Dict$toList(x);
+		y = elm$core$Dict$toList(y);
+	}
+	//*/
+
+	for (var key in x)
+	{
+		if (!_Utils_eqHelp(x[key], y[key], depth + 1, stack))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+var _Utils_equal = F2(_Utils_eq);
+var _Utils_notEqual = F2(function(a, b) { return !_Utils_eq(a,b); });
+
+
+
+// COMPARISONS
+
+// Code in Generate/JavaScript.hs, Basics.js, and List.js depends on
+// the particular integer values assigned to LT, EQ, and GT.
+
+function _Utils_cmp(x, y, ord)
+{
+	if (typeof x !== 'object')
+	{
+		return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
+	}
+
+	/**/
+	if (x instanceof String)
+	{
+		var a = x.valueOf();
+		var b = y.valueOf();
+		return a === b ? 0 : a < b ? -1 : 1;
+	}
+	//*/
+
+	/**_UNUSED/
+	if (typeof x.$ === 'undefined')
+	//*/
+	/**/
+	if (x.$[0] === '#')
+	//*/
+	{
+		return (ord = _Utils_cmp(x.a, y.a))
+			? ord
+			: (ord = _Utils_cmp(x.b, y.b))
+				? ord
+				: _Utils_cmp(x.c, y.c);
+	}
+
+	// traverse conses until end of a list or a mismatch
+	for (; x.b && y.b && !(ord = _Utils_cmp(x.a, y.a)); x = x.b, y = y.b) {} // WHILE_CONSES
+	return ord || (x.b ? /*GT*/ 1 : y.b ? /*LT*/ -1 : /*EQ*/ 0);
+}
+
+var _Utils_lt = F2(function(a, b) { return _Utils_cmp(a, b) < 0; });
+var _Utils_le = F2(function(a, b) { return _Utils_cmp(a, b) < 1; });
+var _Utils_gt = F2(function(a, b) { return _Utils_cmp(a, b) > 0; });
+var _Utils_ge = F2(function(a, b) { return _Utils_cmp(a, b) >= 0; });
+
+var _Utils_compare = F2(function(x, y)
+{
+	var n = _Utils_cmp(x, y);
+	return n < 0 ? elm$core$Basics$LT : n ? elm$core$Basics$GT : elm$core$Basics$EQ;
+});
+
+
+// COMMON VALUES
+
+var _Utils_Tuple0_UNUSED = 0;
+var _Utils_Tuple0 = { $: '#0' };
+
+function _Utils_Tuple2_UNUSED(a, b) { return { a: a, b: b }; }
+function _Utils_Tuple2(a, b) { return { $: '#2', a: a, b: b }; }
+
+function _Utils_Tuple3_UNUSED(a, b, c) { return { a: a, b: b, c: c }; }
+function _Utils_Tuple3(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
+
+function _Utils_chr_UNUSED(c) { return c; }
+function _Utils_chr(c) { return new String(c); }
+
+
+// RECORDS
+
+function _Utils_update(oldRecord, updatedFields)
+{
+	var newRecord = {};
+
+	for (var key in oldRecord)
+	{
+		newRecord[key] = oldRecord[key];
+	}
+
+	for (var key in updatedFields)
+	{
+		newRecord[key] = updatedFields[key];
+	}
+
+	return newRecord;
+}
+
+
+// APPEND
+
+var _Utils_append = F2(_Utils_ap);
+
+function _Utils_ap(xs, ys)
+{
+	// append Strings
+	if (typeof xs === 'string')
+	{
+		return xs + ys;
+	}
+
+	// append Lists
+	if (!xs.b)
+	{
+		return ys;
+	}
+	var root = _List_Cons(xs.a, ys);
+	xs = xs.b
+	for (var curr = root; xs.b; xs = xs.b) // WHILE_CONS
+	{
+		curr = curr.b = _List_Cons(xs.a, ys);
+	}
+	return root;
+}
+
+
+
 var _JsArray_empty = [];
 
 function _JsArray_singleton(value)
@@ -228,87 +493,6 @@ var _JsArray_appendN = F3(function(n, dest, source)
     }
 
     return result;
-});
-
-
-
-var _List_Nil_UNUSED = { $: 0 };
-var _List_Nil = { $: '[]' };
-
-function _List_Cons_UNUSED(hd, tl) { return { $: 1, a: hd, b: tl }; }
-function _List_Cons(hd, tl) { return { $: '::', a: hd, b: tl }; }
-
-
-var _List_cons = F2(_List_Cons);
-
-function _List_fromArray(arr)
-{
-	var out = _List_Nil;
-	for (var i = arr.length; i--; )
-	{
-		out = _List_Cons(arr[i], out);
-	}
-	return out;
-}
-
-function _List_toArray(xs)
-{
-	for (var out = []; xs.b; xs = xs.b) // WHILE_CONS
-	{
-		out.push(xs.a);
-	}
-	return out;
-}
-
-var _List_map2 = F3(function(f, xs, ys)
-{
-	for (var arr = []; xs.b && ys.b; xs = xs.b, ys = ys.b) // WHILE_CONSES
-	{
-		arr.push(A2(f, xs.a, ys.a));
-	}
-	return _List_fromArray(arr);
-});
-
-var _List_map3 = F4(function(f, xs, ys, zs)
-{
-	for (var arr = []; xs.b && ys.b && zs.b; xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
-	{
-		arr.push(A3(f, xs.a, ys.a, zs.a));
-	}
-	return _List_fromArray(arr);
-});
-
-var _List_map4 = F5(function(f, ws, xs, ys, zs)
-{
-	for (var arr = []; ws.b && xs.b && ys.b && zs.b; ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
-	{
-		arr.push(A4(f, ws.a, xs.a, ys.a, zs.a));
-	}
-	return _List_fromArray(arr);
-});
-
-var _List_map5 = F6(function(f, vs, ws, xs, ys, zs)
-{
-	for (var arr = []; vs.b && ws.b && xs.b && ys.b && zs.b; vs = vs.b, ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
-	{
-		arr.push(A5(f, vs.a, ws.a, xs.a, ys.a, zs.a));
-	}
-	return _List_fromArray(arr);
-});
-
-var _List_sortBy = F2(function(f, xs)
-{
-	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
-		return _Utils_cmp(f(a), f(b));
-	}));
-});
-
-var _List_sortWith = F2(function(f, xs)
-{
-	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
-		var ord = A2(f, a, b);
-		return ord === elm$core$Basics$EQ ? 0 : ord === elm$core$Basics$LT ? -1 : 1;
-	}));
 });
 
 
@@ -609,381 +793,6 @@ function _Debug_regionToString(region)
 
 
 
-// EQUALITY
-
-function _Utils_eq(x, y)
-{
-	for (
-		var pair, stack = [], isEqual = _Utils_eqHelp(x, y, 0, stack);
-		isEqual && (pair = stack.pop());
-		isEqual = _Utils_eqHelp(pair.a, pair.b, 0, stack)
-		)
-	{}
-
-	return isEqual;
-}
-
-function _Utils_eqHelp(x, y, depth, stack)
-{
-	if (depth > 100)
-	{
-		stack.push(_Utils_Tuple2(x,y));
-		return true;
-	}
-
-	if (x === y)
-	{
-		return true;
-	}
-
-	if (typeof x !== 'object' || x === null || y === null)
-	{
-		typeof x === 'function' && _Debug_crash(5);
-		return false;
-	}
-
-	/**/
-	if (x.$ === 'Set_elm_builtin')
-	{
-		x = elm$core$Set$toList(x);
-		y = elm$core$Set$toList(y);
-	}
-	if (x.$ === 'RBNode_elm_builtin' || x.$ === 'RBEmpty_elm_builtin')
-	{
-		x = elm$core$Dict$toList(x);
-		y = elm$core$Dict$toList(y);
-	}
-	//*/
-
-	/**_UNUSED/
-	if (x.$ < 0)
-	{
-		x = elm$core$Dict$toList(x);
-		y = elm$core$Dict$toList(y);
-	}
-	//*/
-
-	for (var key in x)
-	{
-		if (!_Utils_eqHelp(x[key], y[key], depth + 1, stack))
-		{
-			return false;
-		}
-	}
-	return true;
-}
-
-var _Utils_equal = F2(_Utils_eq);
-var _Utils_notEqual = F2(function(a, b) { return !_Utils_eq(a,b); });
-
-
-
-// COMPARISONS
-
-// Code in Generate/JavaScript.hs, Basics.js, and List.js depends on
-// the particular integer values assigned to LT, EQ, and GT.
-
-function _Utils_cmp(x, y, ord)
-{
-	if (typeof x !== 'object')
-	{
-		return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
-	}
-
-	/**/
-	if (x instanceof String)
-	{
-		var a = x.valueOf();
-		var b = y.valueOf();
-		return a === b ? 0 : a < b ? -1 : 1;
-	}
-	//*/
-
-	/**_UNUSED/
-	if (typeof x.$ === 'undefined')
-	//*/
-	/**/
-	if (x.$[0] === '#')
-	//*/
-	{
-		return (ord = _Utils_cmp(x.a, y.a))
-			? ord
-			: (ord = _Utils_cmp(x.b, y.b))
-				? ord
-				: _Utils_cmp(x.c, y.c);
-	}
-
-	// traverse conses until end of a list or a mismatch
-	for (; x.b && y.b && !(ord = _Utils_cmp(x.a, y.a)); x = x.b, y = y.b) {} // WHILE_CONSES
-	return ord || (x.b ? /*GT*/ 1 : y.b ? /*LT*/ -1 : /*EQ*/ 0);
-}
-
-var _Utils_lt = F2(function(a, b) { return _Utils_cmp(a, b) < 0; });
-var _Utils_le = F2(function(a, b) { return _Utils_cmp(a, b) < 1; });
-var _Utils_gt = F2(function(a, b) { return _Utils_cmp(a, b) > 0; });
-var _Utils_ge = F2(function(a, b) { return _Utils_cmp(a, b) >= 0; });
-
-var _Utils_compare = F2(function(x, y)
-{
-	var n = _Utils_cmp(x, y);
-	return n < 0 ? elm$core$Basics$LT : n ? elm$core$Basics$GT : elm$core$Basics$EQ;
-});
-
-
-// COMMON VALUES
-
-var _Utils_Tuple0_UNUSED = 0;
-var _Utils_Tuple0 = { $: '#0' };
-
-function _Utils_Tuple2_UNUSED(a, b) { return { a: a, b: b }; }
-function _Utils_Tuple2(a, b) { return { $: '#2', a: a, b: b }; }
-
-function _Utils_Tuple3_UNUSED(a, b, c) { return { a: a, b: b, c: c }; }
-function _Utils_Tuple3(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
-
-function _Utils_chr_UNUSED(c) { return c; }
-function _Utils_chr(c) { return new String(c); }
-
-
-// RECORDS
-
-function _Utils_update(oldRecord, updatedFields)
-{
-	var newRecord = {};
-
-	for (var key in oldRecord)
-	{
-		newRecord[key] = oldRecord[key];
-	}
-
-	for (var key in updatedFields)
-	{
-		newRecord[key] = updatedFields[key];
-	}
-
-	return newRecord;
-}
-
-
-// APPEND
-
-var _Utils_append = F2(_Utils_ap);
-
-function _Utils_ap(xs, ys)
-{
-	// append Strings
-	if (typeof xs === 'string')
-	{
-		return xs + ys;
-	}
-
-	// append Lists
-	if (!xs.b)
-	{
-		return ys;
-	}
-	var root = _List_Cons(xs.a, ys);
-	xs = xs.b
-	for (var curr = root; xs.b; xs = xs.b) // WHILE_CONS
-	{
-		curr = curr.b = _List_Cons(xs.a, ys);
-	}
-	return root;
-}
-
-
-
-// TASKS
-
-function _Scheduler_succeed(value)
-{
-	return {
-		$: 0,
-		a: value
-	};
-}
-
-function _Scheduler_fail(error)
-{
-	return {
-		$: 1,
-		a: error
-	};
-}
-
-function _Scheduler_binding(callback)
-{
-	return {
-		$: 2,
-		b: callback,
-		c: null
-	};
-}
-
-var _Scheduler_andThen = F2(function(callback, task)
-{
-	return {
-		$: 3,
-		b: callback,
-		d: task
-	};
-});
-
-var _Scheduler_onError = F2(function(callback, task)
-{
-	return {
-		$: 4,
-		b: callback,
-		d: task
-	};
-});
-
-function _Scheduler_receive(callback)
-{
-	return {
-		$: 5,
-		b: callback
-	};
-}
-
-
-// PROCESSES
-
-var _Scheduler_guid = 0;
-
-function _Scheduler_rawSpawn(task)
-{
-	var proc = {
-		$: 0,
-		e: _Scheduler_guid++,
-		f: task,
-		g: null,
-		h: []
-	};
-
-	_Scheduler_enqueue(proc);
-
-	return proc;
-}
-
-function _Scheduler_spawn(task)
-{
-	return _Scheduler_binding(function(callback) {
-		callback(_Scheduler_succeed(_Scheduler_rawSpawn(task)));
-	});
-}
-
-function _Scheduler_rawSend(proc, msg)
-{
-	proc.h.push(msg);
-	_Scheduler_enqueue(proc);
-}
-
-var _Scheduler_send = F2(function(proc, msg)
-{
-	return _Scheduler_binding(function(callback) {
-		_Scheduler_rawSend(proc, msg);
-		callback(_Scheduler_succeed(_Utils_Tuple0));
-	});
-});
-
-function _Scheduler_kill(proc)
-{
-	return _Scheduler_binding(function(callback) {
-		var task = proc.f;
-		if (task.$ === 2 && task.c)
-		{
-			task.c();
-		}
-
-		proc.f = null;
-
-		callback(_Scheduler_succeed(_Utils_Tuple0));
-	});
-}
-
-
-/* STEP PROCESSES
-
-type alias Process =
-  { $ : tag
-  , id : unique_id
-  , root : Task
-  , stack : null | { $: SUCCEED | FAIL, a: callback, b: stack }
-  , mailbox : [msg]
-  }
-
-*/
-
-
-var _Scheduler_working = false;
-var _Scheduler_queue = [];
-
-
-function _Scheduler_enqueue(proc)
-{
-	_Scheduler_queue.push(proc);
-	if (_Scheduler_working)
-	{
-		return;
-	}
-	_Scheduler_working = true;
-	while (proc = _Scheduler_queue.shift())
-	{
-		_Scheduler_step(proc);
-	}
-	_Scheduler_working = false;
-}
-
-
-function _Scheduler_step(proc)
-{
-	while (proc.f)
-	{
-		var rootTag = proc.f.$;
-		if (rootTag === 0 || rootTag === 1)
-		{
-			while (proc.g && proc.g.$ !== rootTag)
-			{
-				proc.g = proc.g.i;
-			}
-			if (!proc.g)
-			{
-				return;
-			}
-			proc.f = proc.g.b(proc.f.a);
-			proc.g = proc.g.i;
-		}
-		else if (rootTag === 2)
-		{
-			proc.f.c = proc.f.b(function(newRoot) {
-				proc.f = newRoot;
-				_Scheduler_enqueue(proc);
-			});
-			return;
-		}
-		else if (rootTag === 5)
-		{
-			if (proc.h.length === 0)
-			{
-				return;
-			}
-			proc.f = proc.f.b(proc.h.shift());
-		}
-		else // if (rootTag === 3 || rootTag === 4)
-		{
-			proc.g = {
-				$: rootTag === 3 ? 0 : 1,
-				b: proc.f.b,
-				i: proc.g
-			};
-			proc.f = proc.f.d;
-		}
-	}
-}
-
-
-
 // MATH
 
 var _Basics_add = F2(function(a, b) { return a + b; });
@@ -1041,89 +850,6 @@ function _Basics_not(bool) { return !bool; }
 var _Basics_and = F2(function(a, b) { return a && b; });
 var _Basics_or  = F2(function(a, b) { return a || b; });
 var _Basics_xor = F2(function(a, b) { return a !== b; });
-
-
-
-var _Bitwise_and = F2(function(a, b)
-{
-	return a & b;
-});
-
-var _Bitwise_or = F2(function(a, b)
-{
-	return a | b;
-});
-
-var _Bitwise_xor = F2(function(a, b)
-{
-	return a ^ b;
-});
-
-function _Bitwise_complement(a)
-{
-	return ~a;
-};
-
-var _Bitwise_shiftLeftBy = F2(function(offset, a)
-{
-	return a << offset;
-});
-
-var _Bitwise_shiftRightBy = F2(function(offset, a)
-{
-	return a >> offset;
-});
-
-var _Bitwise_shiftRightZfBy = F2(function(offset, a)
-{
-	return a >>> offset;
-});
-
-
-
-function _Time_now(millisToPosix)
-{
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(millisToPosix(Date.now())));
-	});
-}
-
-var _Time_setInterval = F2(function(interval, task)
-{
-	return _Scheduler_binding(function(callback)
-	{
-		var id = setInterval(function() { _Scheduler_rawSpawn(task); }, interval);
-		return function() { clearInterval(id); };
-	});
-});
-
-function _Time_here()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(
-			A2(elm$time$Time$customZone, -(new Date().getTimezoneOffset()), _List_Nil)
-		));
-	});
-}
-
-
-function _Time_getZoneName()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		try
-		{
-			var name = elm$time$Time$Name(Intl.DateTimeFormat().resolvedOptions().timeZone);
-		}
-		catch (e)
-		{
-			var name = elm$time$Time$Offset(new Date().getTimezoneOffset());
-		}
-		callback(_Scheduler_succeed(name));
-	});
-}
 
 
 
@@ -1918,6 +1644,197 @@ var _Json_encodeNull = _Json_wrap(null);
 
 
 
+// TASKS
+
+function _Scheduler_succeed(value)
+{
+	return {
+		$: 0,
+		a: value
+	};
+}
+
+function _Scheduler_fail(error)
+{
+	return {
+		$: 1,
+		a: error
+	};
+}
+
+function _Scheduler_binding(callback)
+{
+	return {
+		$: 2,
+		b: callback,
+		c: null
+	};
+}
+
+var _Scheduler_andThen = F2(function(callback, task)
+{
+	return {
+		$: 3,
+		b: callback,
+		d: task
+	};
+});
+
+var _Scheduler_onError = F2(function(callback, task)
+{
+	return {
+		$: 4,
+		b: callback,
+		d: task
+	};
+});
+
+function _Scheduler_receive(callback)
+{
+	return {
+		$: 5,
+		b: callback
+	};
+}
+
+
+// PROCESSES
+
+var _Scheduler_guid = 0;
+
+function _Scheduler_rawSpawn(task)
+{
+	var proc = {
+		$: 0,
+		e: _Scheduler_guid++,
+		f: task,
+		g: null,
+		h: []
+	};
+
+	_Scheduler_enqueue(proc);
+
+	return proc;
+}
+
+function _Scheduler_spawn(task)
+{
+	return _Scheduler_binding(function(callback) {
+		callback(_Scheduler_succeed(_Scheduler_rawSpawn(task)));
+	});
+}
+
+function _Scheduler_rawSend(proc, msg)
+{
+	proc.h.push(msg);
+	_Scheduler_enqueue(proc);
+}
+
+var _Scheduler_send = F2(function(proc, msg)
+{
+	return _Scheduler_binding(function(callback) {
+		_Scheduler_rawSend(proc, msg);
+		callback(_Scheduler_succeed(_Utils_Tuple0));
+	});
+});
+
+function _Scheduler_kill(proc)
+{
+	return _Scheduler_binding(function(callback) {
+		var task = proc.f;
+		if (task.$ === 2 && task.c)
+		{
+			task.c();
+		}
+
+		proc.f = null;
+
+		callback(_Scheduler_succeed(_Utils_Tuple0));
+	});
+}
+
+
+/* STEP PROCESSES
+
+type alias Process =
+  { $ : tag
+  , id : unique_id
+  , root : Task
+  , stack : null | { $: SUCCEED | FAIL, a: callback, b: stack }
+  , mailbox : [msg]
+  }
+
+*/
+
+
+var _Scheduler_working = false;
+var _Scheduler_queue = [];
+
+
+function _Scheduler_enqueue(proc)
+{
+	_Scheduler_queue.push(proc);
+	if (_Scheduler_working)
+	{
+		return;
+	}
+	_Scheduler_working = true;
+	while (proc = _Scheduler_queue.shift())
+	{
+		_Scheduler_step(proc);
+	}
+	_Scheduler_working = false;
+}
+
+
+function _Scheduler_step(proc)
+{
+	while (proc.f)
+	{
+		var rootTag = proc.f.$;
+		if (rootTag === 0 || rootTag === 1)
+		{
+			while (proc.g && proc.g.$ !== rootTag)
+			{
+				proc.g = proc.g.i;
+			}
+			if (!proc.g)
+			{
+				return;
+			}
+			proc.f = proc.g.b(proc.f.a);
+			proc.g = proc.g.i;
+		}
+		else if (rootTag === 2)
+		{
+			proc.f.c = proc.f.b(function(newRoot) {
+				proc.f = newRoot;
+				_Scheduler_enqueue(proc);
+			});
+			return;
+		}
+		else if (rootTag === 5)
+		{
+			if (proc.h.length === 0)
+			{
+				return;
+			}
+			proc.f = proc.f.b(proc.h.shift());
+		}
+		else // if (rootTag === 3 || rootTag === 4)
+		{
+			proc.g = {
+				$: rootTag === 3 ? 0 : 1,
+				b: proc.f.b,
+				i: proc.g
+			};
+			proc.f = proc.f.d;
+		}
+	}
+}
+
+
+
 function _Process_sleep(time)
 {
 	return _Scheduler_binding(function(callback) {
@@ -2412,6 +2329,89 @@ function _Url_percentDecode(string)
 		return elm$core$Maybe$Nothing;
 	}
 }
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
+
+
+
+function _Time_now(millisToPosix)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		callback(_Scheduler_succeed(millisToPosix(Date.now())));
+	});
+}
+
+var _Time_setInterval = F2(function(interval, task)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		var id = setInterval(function() { _Scheduler_rawSpawn(task); }, interval);
+		return function() { clearInterval(id); };
+	});
+});
+
+function _Time_here()
+{
+	return _Scheduler_binding(function(callback)
+	{
+		callback(_Scheduler_succeed(
+			A2(elm$time$Time$customZone, -(new Date().getTimezoneOffset()), _List_Nil)
+		));
+	});
+}
+
+
+function _Time_getZoneName()
+{
+	return _Scheduler_binding(function(callback)
+	{
+		try
+		{
+			var name = elm$time$Time$Name(Intl.DateTimeFormat().resolvedOptions().timeZone);
+		}
+		catch (e)
+		{
+			var name = elm$time$Time$Offset(new Date().getTimezoneOffset());
+		}
+		callback(_Scheduler_succeed(name));
+	});
+}
+
 
 
 
@@ -4419,51 +4419,33 @@ var author$project$Main$UrlRequested = function (a) {
 var author$project$Main$Redirect = function (a) {
 	return {$: 'Redirect', a: a};
 };
-var author$project$Chat$Model = F4(
-	function (session, messages, pendingMessage, id) {
-		return {id: id, messages: messages, pendingMessage: pendingMessage, session: session};
+var elm$core$List$foldl = F3(
+	function (func, acc, list) {
+		foldl:
+		while (true) {
+			if (!list.b) {
+				return acc;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				var $temp$func = func,
+					$temp$acc = A2(func, x, acc),
+					$temp$list = xs;
+				func = $temp$func;
+				acc = $temp$acc;
+				list = $temp$list;
+				continue foldl;
+			}
+		}
 	});
-var author$project$Chat$GenerateRandomId = function (a) {
-	return {$: 'GenerateRandomId', a: a};
-};
-var elm$core$Basics$apL = F2(
-	function (f, x) {
-		return f(x);
-	});
-var elm$core$Basics$identity = function (x) {
-	return x;
-};
-var elm$random$Random$Generate = function (a) {
-	return {$: 'Generate', a: a};
-};
-var elm$core$Elm$JsArray$foldr = _JsArray_foldr;
-var elm$core$Array$foldr = F3(
-	function (func, baseCase, _n0) {
-		var tree = _n0.c;
-		var tail = _n0.d;
-		var helper = F2(
-			function (node, acc) {
-				if (node.$ === 'SubTree') {
-					var subTree = node.a;
-					return A3(elm$core$Elm$JsArray$foldr, helper, acc, subTree);
-				} else {
-					var values = node.a;
-					return A3(elm$core$Elm$JsArray$foldr, func, acc, values);
-				}
-			});
-		return A3(
-			elm$core$Elm$JsArray$foldr,
-			helper,
-			A3(elm$core$Elm$JsArray$foldr, func, baseCase, tail),
-			tree);
+var elm$core$Array$branchFactor = 32;
+var elm$core$Array$Array_elm_builtin = F4(
+	function (a, b, c, d) {
+		return {$: 'Array_elm_builtin', a: a, b: b, c: c, d: d};
 	});
 var elm$core$Basics$EQ = {$: 'EQ'};
-var elm$core$Basics$LT = {$: 'LT'};
-var elm$core$List$cons = _List_cons;
-var elm$core$Array$toList = function (array) {
-	return A3(elm$core$Array$foldr, elm$core$List$cons, _List_Nil, array);
-};
 var elm$core$Basics$GT = {$: 'GT'};
+var elm$core$Basics$LT = {$: 'LT'};
 var elm$core$Dict$foldr = F3(
 	function (func, acc, t) {
 		foldr:
@@ -4489,6 +4471,7 @@ var elm$core$Dict$foldr = F3(
 			}
 		}
 	});
+var elm$core$List$cons = _List_cons;
 var elm$core$Dict$toList = function (dict) {
 	return A3(
 		elm$core$Dict$foldr,
@@ -4516,71 +4499,30 @@ var elm$core$Set$toList = function (_n0) {
 	var dict = _n0.a;
 	return elm$core$Dict$keys(dict);
 };
-var elm$core$Task$andThen = _Scheduler_andThen;
-var elm$core$Task$succeed = _Scheduler_succeed;
-var elm$core$Basics$add = _Basics_add;
-var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
-var elm$random$Random$Seed = F2(
-	function (a, b) {
-		return {$: 'Seed', a: a, b: b};
+var elm$core$Elm$JsArray$foldr = _JsArray_foldr;
+var elm$core$Array$foldr = F3(
+	function (func, baseCase, _n0) {
+		var tree = _n0.c;
+		var tail = _n0.d;
+		var helper = F2(
+			function (node, acc) {
+				if (node.$ === 'SubTree') {
+					var subTree = node.a;
+					return A3(elm$core$Elm$JsArray$foldr, helper, acc, subTree);
+				} else {
+					var values = node.a;
+					return A3(elm$core$Elm$JsArray$foldr, func, acc, values);
+				}
+			});
+		return A3(
+			elm$core$Elm$JsArray$foldr,
+			helper,
+			A3(elm$core$Elm$JsArray$foldr, func, baseCase, tail),
+			tree);
 	});
-var elm$core$Basics$mul = _Basics_mul;
-var elm$random$Random$next = function (_n0) {
-	var state0 = _n0.a;
-	var incr = _n0.b;
-	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
+var elm$core$Array$toList = function (array) {
+	return A3(elm$core$Array$foldr, elm$core$List$cons, _List_Nil, array);
 };
-var elm$random$Random$initialSeed = function (x) {
-	var _n0 = elm$random$Random$next(
-		A2(elm$random$Random$Seed, 0, 1013904223));
-	var state1 = _n0.a;
-	var incr = _n0.b;
-	var state2 = (state1 + x) >>> 0;
-	return elm$random$Random$next(
-		A2(elm$random$Random$Seed, state2, incr));
-};
-var elm$time$Time$Name = function (a) {
-	return {$: 'Name', a: a};
-};
-var elm$time$Time$Offset = function (a) {
-	return {$: 'Offset', a: a};
-};
-var elm$time$Time$Zone = F2(
-	function (a, b) {
-		return {$: 'Zone', a: a, b: b};
-	});
-var elm$time$Time$customZone = elm$time$Time$Zone;
-var elm$time$Time$Posix = function (a) {
-	return {$: 'Posix', a: a};
-};
-var elm$time$Time$millisToPosix = elm$time$Time$Posix;
-var elm$time$Time$now = _Time_now(elm$time$Time$millisToPosix);
-var elm$time$Time$posixToMillis = function (_n0) {
-	var millis = _n0.a;
-	return millis;
-};
-var elm$random$Random$init = A2(
-	elm$core$Task$andThen,
-	function (time) {
-		return elm$core$Task$succeed(
-			elm$random$Random$initialSeed(
-				elm$time$Time$posixToMillis(time)));
-	},
-	elm$time$Time$now);
-var elm$core$Basics$False = {$: 'False'};
-var elm$core$Basics$True = {$: 'True'};
-var elm$core$Result$isOk = function (result) {
-	if (result.$ === 'Ok') {
-		return true;
-	} else {
-		return false;
-	}
-};
-var elm$core$Array$branchFactor = 32;
-var elm$core$Array$Array_elm_builtin = F4(
-	function (a, b, c, d) {
-		return {$: 'Array_elm_builtin', a: a, b: b, c: c, d: d};
-	});
 var elm$core$Basics$ceiling = _Basics_ceiling;
 var elm$core$Basics$fdiv = _Basics_fdiv;
 var elm$core$Basics$logBase = F2(
@@ -4599,25 +4541,6 @@ var elm$core$Array$SubTree = function (a) {
 	return {$: 'SubTree', a: a};
 };
 var elm$core$Elm$JsArray$initializeFromList = _JsArray_initializeFromList;
-var elm$core$List$foldl = F3(
-	function (func, acc, list) {
-		foldl:
-		while (true) {
-			if (!list.b) {
-				return acc;
-			} else {
-				var x = list.a;
-				var xs = list.b;
-				var $temp$func = func,
-					$temp$acc = A2(func, x, acc),
-					$temp$list = xs;
-				func = $temp$func;
-				acc = $temp$acc;
-				list = $temp$list;
-				continue foldl;
-			}
-		}
-	});
 var elm$core$List$reverse = function (list) {
 	return A3(elm$core$List$foldl, elm$core$List$cons, _List_Nil, list);
 };
@@ -4668,12 +4591,18 @@ var elm$core$Array$treeFromBuilder = F2(
 			}
 		}
 	});
+var elm$core$Basics$add = _Basics_add;
+var elm$core$Basics$apL = F2(
+	function (f, x) {
+		return f(x);
+	});
 var elm$core$Basics$floor = _Basics_floor;
 var elm$core$Basics$gt = _Utils_gt;
 var elm$core$Basics$max = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) > 0) ? x : y;
 	});
+var elm$core$Basics$mul = _Basics_mul;
 var elm$core$Basics$sub = _Basics_sub;
 var elm$core$Elm$JsArray$length = _JsArray_length;
 var elm$core$Array$builderToArray = F2(
@@ -4699,6 +4628,7 @@ var elm$core$Array$builderToArray = F2(
 				builder.tail);
 		}
 	});
+var elm$core$Basics$False = {$: 'False'};
 var elm$core$Basics$idiv = _Basics_idiv;
 var elm$core$Basics$lt = _Utils_lt;
 var elm$core$Elm$JsArray$initialize = _JsArray_initialize;
@@ -4750,6 +4680,14 @@ var elm$core$Result$Err = function (a) {
 };
 var elm$core$Result$Ok = function (a) {
 	return {$: 'Ok', a: a};
+};
+var elm$core$Basics$True = {$: 'True'};
+var elm$core$Result$isOk = function (result) {
+	if (result.$ === 'Ok') {
+		return true;
+	} else {
+		return false;
+	}
 };
 var elm$json$Json$Decode$Failure = F2(
 	function (a, b) {
@@ -4956,116 +4894,213 @@ var elm$json$Json$Decode$errorToStringHelp = F2(
 			}
 		}
 	});
-var elm$core$Platform$sendToApp = _Platform_sendToApp;
-var elm$random$Random$step = F2(
-	function (_n0, seed) {
-		var generator = _n0.a;
-		return generator(seed);
+var elm$json$Json$Encode$object = function (pairs) {
+	return _Json_wrap(
+		A3(
+			elm$core$List$foldl,
+			F2(
+				function (_n0, obj) {
+					var k = _n0.a;
+					var v = _n0.b;
+					return A3(_Json_addField, k, v, obj);
+				}),
+			_Json_emptyObject(_Utils_Tuple0),
+			pairs));
+};
+var elm$json$Json$Encode$string = _Json_wrap;
+var author$project$Chat$chatPageLoaded = _Platform_outgoingPort(
+	'chatPageLoaded',
+	function ($) {
+		return elm$json$Json$Encode$object(
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					'chatName',
+					elm$json$Json$Encode$string($.chatName)),
+					_Utils_Tuple2(
+					'roomName',
+					elm$json$Json$Encode$string($.roomName))
+				]));
 	});
-var elm$random$Random$onEffects = F3(
-	function (router, commands, seed) {
-		if (!commands.b) {
-			return elm$core$Task$succeed(seed);
+var author$project$Chat$Room = F3(
+	function (id, name, userIds) {
+		return {id: id, name: name, userIds: userIds};
+	});
+var author$project$Session$chatName = function (session) {
+	if (session.$ === 'Guest') {
+		return '';
+	} else {
+		var name = session.b;
+		return name;
+	}
+};
+var author$project$Chat$initialModel = function (session) {
+	return {
+		chatName: author$project$Session$chatName(session),
+		messages: _List_Nil,
+		pendingMessage: '',
+		room: A3(author$project$Chat$Room, 'IIVY2snGny1UkBvgGqQB', '', _List_Nil),
+		session: session,
+		userId: ''
+	};
+};
+var author$project$Session$roomName = function (session) {
+	if (session.$ === 'Guest') {
+		return elm$core$Maybe$Nothing;
+	} else {
+		var id = session.a;
+		if (id.$ === 'Nothing') {
+			return elm$core$Maybe$Just('default');
 		} else {
-			var generator = commands.a.a;
-			var rest = commands.b;
-			var _n1 = A2(elm$random$Random$step, generator, seed);
-			var value = _n1.a;
-			var newSeed = _n1.b;
-			return A2(
-				elm$core$Task$andThen,
-				function (_n2) {
-					return A3(elm$random$Random$onEffects, router, rest, newSeed);
-				},
-				A2(elm$core$Platform$sendToApp, router, value));
+			var realId = id.a;
+			return elm$core$Maybe$Just(realId);
+		}
+	}
+};
+var elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
 		}
 	});
-var elm$random$Random$onSelfMsg = F3(
-	function (_n0, _n1, seed) {
-		return elm$core$Task$succeed(seed);
-	});
-var elm$random$Random$Generator = function (a) {
-	return {$: 'Generator', a: a};
+var author$project$Chat$roomName = function (session) {
+	return A2(
+		elm$core$Maybe$withDefault,
+		'default',
+		author$project$Session$roomName(session));
 };
-var elm$random$Random$map = F2(
-	function (func, _n0) {
-		var genA = _n0.a;
-		return elm$random$Random$Generator(
-			function (seed0) {
-				var _n1 = genA(seed0);
-				var a = _n1.a;
-				var seed1 = _n1.b;
-				return _Utils_Tuple2(
-					func(a),
-					seed1);
-			});
-	});
-var elm$random$Random$cmdMap = F2(
-	function (func, _n0) {
-		var generator = _n0.a;
-		return elm$random$Random$Generate(
-			A2(elm$random$Random$map, func, generator));
-	});
-_Platform_effectManagers['Random'] = _Platform_createManager(elm$random$Random$init, elm$random$Random$onEffects, elm$random$Random$onSelfMsg, elm$random$Random$cmdMap);
-var elm$random$Random$command = _Platform_leaf('Random');
-var elm$random$Random$generate = F2(
-	function (tagger, generator) {
-		return elm$random$Random$command(
-			elm$random$Random$Generate(
-				A2(elm$random$Random$map, tagger, generator)));
-	});
-var elm$core$Char$fromCode = _Char_fromCode;
-var elm$core$Basics$negate = function (n) {
-	return -n;
+var author$project$Chat$init = function (session) {
+	return _Utils_Tuple2(
+		author$project$Chat$initialModel(session),
+		author$project$Chat$chatPageLoaded(
+			{
+				chatName: author$project$Session$chatName(session),
+				roomName: author$project$Chat$roomName(session)
+			}));
 };
-var elm$core$Bitwise$and = _Bitwise_and;
-var elm$core$Bitwise$xor = _Bitwise_xor;
-var elm$random$Random$peel = function (_n0) {
-	var state = _n0.a;
-	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
-	return ((word >>> 22) ^ word) >>> 0;
+var author$project$Home$initialModel = F2(
+	function (session, errors) {
+		return {errors: errors, name: '', session: session};
+	});
+var elm$core$Platform$Cmd$batch = _Platform_batch;
+var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
+var author$project$Home$init = F2(
+	function (session, errors) {
+		return _Utils_Tuple2(
+			A2(
+				author$project$Home$initialModel,
+				session,
+				A2(elm$core$Maybe$withDefault, _List_Nil, errors)),
+			elm$core$Platform$Cmd$none);
+	});
+var author$project$Main$Chat = function (a) {
+	return {$: 'Chat', a: a};
 };
-var elm$random$Random$int = F2(
-	function (a, b) {
-		return elm$random$Random$Generator(
-			function (seed0) {
-				var _n0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
-				var lo = _n0.a;
-				var hi = _n0.b;
-				var range = (hi - lo) + 1;
-				if (!((range - 1) & range)) {
-					return _Utils_Tuple2(
-						(((range - 1) & elm$random$Random$peel(seed0)) >>> 0) + lo,
-						elm$random$Random$next(seed0));
+var author$project$Main$GoToChat = function (a) {
+	return {$: 'GoToChat', a: a};
+};
+var author$project$Main$GoToHome = function (a) {
+	return {$: 'GoToHome', a: a};
+};
+var author$project$Main$Home = function (a) {
+	return {$: 'Home', a: a};
+};
+var elm$core$Platform$Cmd$map = _Platform_map;
+var author$project$Main$resolveWith = F4(
+	function (toModel, toMsg, model, _n0) {
+		var subModel = _n0.a;
+		var subCmd = _n0.b;
+		return _Utils_Tuple2(
+			toModel(subModel),
+			A2(elm$core$Platform$Cmd$map, toMsg, subCmd));
+	});
+var elm$core$Basics$not = _Basics_not;
+var elm$core$String$isEmpty = function (string) {
+	return string === '';
+};
+var author$project$Main$validChatName = function (name) {
+	return !elm$core$String$isEmpty(name);
+};
+var author$project$Session$LoggedIn = F3(
+	function (a, b, c) {
+		return {$: 'LoggedIn', a: a, b: b, c: c};
+	});
+var author$project$Session$Guest = function (a) {
+	return {$: 'Guest', a: a};
+};
+var author$project$Session$init = function (key) {
+	return author$project$Session$Guest(key);
+};
+var author$project$Main$resolveRoute = F3(
+	function (route, key, model) {
+		switch (route.$) {
+			case 'Home':
+				return A4(
+					author$project$Main$resolveWith,
+					author$project$Main$Home,
+					author$project$Main$GoToHome,
+					model,
+					A2(
+						author$project$Home$init,
+						author$project$Session$init(key),
+						elm$core$Maybe$Just(_List_Nil)));
+			case 'Chat':
+				var name = route.a;
+				if (name.$ === 'Nothing') {
+					return A4(
+						author$project$Main$resolveWith,
+						author$project$Main$Home,
+						author$project$Main$GoToHome,
+						model,
+						A2(
+							author$project$Home$init,
+							author$project$Session$init(key),
+							elm$core$Maybe$Just(
+								_List_fromArray(
+									['You must have a name to chat!']))));
 				} else {
-					var threshhold = (((-range) >>> 0) % range) >>> 0;
-					var accountForBias = function (seed) {
-						accountForBias:
-						while (true) {
-							var x = elm$random$Random$peel(seed);
-							var seedN = elm$random$Random$next(seed);
-							if (_Utils_cmp(x, threshhold) < 0) {
-								var $temp$seed = seedN;
-								seed = $temp$seed;
-								continue accountForBias;
-							} else {
-								return _Utils_Tuple2((x % range) + lo, seedN);
-							}
-						}
-					};
-					return accountForBias(seed0);
+					var chatName = name.a;
+					return author$project$Main$validChatName(chatName) ? A4(
+						author$project$Main$resolveWith,
+						author$project$Main$Chat,
+						author$project$Main$GoToChat,
+						model,
+						author$project$Chat$init(
+							A3(author$project$Session$LoggedIn, elm$core$Maybe$Nothing, chatName, key))) : A4(
+						author$project$Main$resolveWith,
+						author$project$Main$Home,
+						author$project$Main$GoToHome,
+						model,
+						A2(
+							author$project$Home$init,
+							author$project$Session$init(key),
+							elm$core$Maybe$Just(
+								_List_fromArray(
+									['Invalid chat name']))));
 				}
-			});
+			default:
+				return A4(
+					author$project$Main$resolveWith,
+					author$project$Main$Home,
+					author$project$Main$GoToHome,
+					model,
+					A2(
+						author$project$Home$init,
+						author$project$Session$init(key),
+						elm$core$Maybe$Just(_List_Nil)));
+		}
 	});
-var elm_community$random_extra$Random$Char$char = F2(
-	function (start, end) {
-		return A2(
-			elm$random$Random$map,
-			elm$core$Char$fromCode,
-			A2(elm$random$Random$int, start, end));
-	});
-var elm_community$random_extra$Random$Char$lowerCaseLatin = A2(elm_community$random_extra$Random$Char$char, 97, 122);
-var elm_community$random_extra$Random$Char$upperCaseLatin = A2(elm_community$random_extra$Random$Char$char, 65, 90);
+var author$project$Route$NotFound = {$: 'NotFound'};
+var author$project$Route$Chat = function (a) {
+	return {$: 'Chat', a: a};
+};
+var author$project$Route$Home = {$: 'Home'};
+var elm$core$Basics$identity = function (x) {
+	return x;
+};
 var elm$core$List$foldrHelper = F4(
 	function (fn, acc, ctr, ls) {
 		if (!ls.b) {
@@ -5135,243 +5170,6 @@ var elm$core$List$map = F2(
 			_List_Nil,
 			xs);
 	});
-var elm$core$Basics$abs = function (n) {
-	return (n < 0) ? (-n) : n;
-};
-var elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
-var elm$core$List$sum = function (numbers) {
-	return A3(elm$core$List$foldl, elm$core$Basics$add, 0, numbers);
-};
-var elm$core$Tuple$second = function (_n0) {
-	var y = _n0.b;
-	return y;
-};
-var elm$random$Random$andThen = F2(
-	function (callback, _n0) {
-		var genA = _n0.a;
-		return elm$random$Random$Generator(
-			function (seed) {
-				var _n1 = genA(seed);
-				var result = _n1.a;
-				var newSeed = _n1.b;
-				var _n2 = callback(result);
-				var genB = _n2.a;
-				return genB(newSeed);
-			});
-	});
-var elm$random$Random$float = F2(
-	function (a, b) {
-		return elm$random$Random$Generator(
-			function (seed0) {
-				var seed1 = elm$random$Random$next(seed0);
-				var range = elm$core$Basics$abs(b - a);
-				var n1 = elm$random$Random$peel(seed1);
-				var n0 = elm$random$Random$peel(seed0);
-				var lo = (134217727 & n1) * 1.0;
-				var hi = (67108863 & n0) * 1.0;
-				var val = ((hi * 1.34217728e8) + lo) / 9.007199254740992e15;
-				var scaled = (val * range) + a;
-				return _Utils_Tuple2(
-					scaled,
-					elm$random$Random$next(seed1));
-			});
-	});
-var elm_community$random_extra$Random$Extra$frequency = F2(
-	function (head, pairs) {
-		var total = elm$core$List$sum(
-			A2(
-				elm$core$List$map,
-				A2(elm$core$Basics$composeL, elm$core$Basics$abs, elm$core$Tuple$first),
-				A2(elm$core$List$cons, head, pairs)));
-		var pick = F2(
-			function (someChoices, n) {
-				pick:
-				while (true) {
-					if (someChoices.b) {
-						var _n1 = someChoices.a;
-						var k = _n1.a;
-						var g = _n1.b;
-						var rest = someChoices.b;
-						if (_Utils_cmp(n, k) < 1) {
-							return g;
-						} else {
-							var $temp$someChoices = rest,
-								$temp$n = n - k;
-							someChoices = $temp$someChoices;
-							n = $temp$n;
-							continue pick;
-						}
-					} else {
-						return head.b;
-					}
-				}
-			});
-		return A2(
-			elm$random$Random$andThen,
-			pick(
-				A2(elm$core$List$cons, head, pairs)),
-			A2(elm$random$Random$float, 0, total));
-	});
-var elm_community$random_extra$Random$Extra$choices = F2(
-	function (hd, gens) {
-		return A2(
-			elm_community$random_extra$Random$Extra$frequency,
-			_Utils_Tuple2(1, hd),
-			A2(
-				elm$core$List$map,
-				function (g) {
-					return _Utils_Tuple2(1, g);
-				},
-				gens));
-	});
-var elm_community$random_extra$Random$Char$latin = A2(
-	elm_community$random_extra$Random$Extra$choices,
-	elm_community$random_extra$Random$Char$lowerCaseLatin,
-	_List_fromArray(
-		[elm_community$random_extra$Random$Char$upperCaseLatin]));
-var elm$core$String$fromList = _String_fromList;
-var elm$random$Random$listHelp = F4(
-	function (revList, n, gen, seed) {
-		listHelp:
-		while (true) {
-			if (n < 1) {
-				return _Utils_Tuple2(revList, seed);
-			} else {
-				var _n0 = gen(seed);
-				var value = _n0.a;
-				var newSeed = _n0.b;
-				var $temp$revList = A2(elm$core$List$cons, value, revList),
-					$temp$n = n - 1,
-					$temp$gen = gen,
-					$temp$seed = newSeed;
-				revList = $temp$revList;
-				n = $temp$n;
-				gen = $temp$gen;
-				seed = $temp$seed;
-				continue listHelp;
-			}
-		}
-	});
-var elm$random$Random$list = F2(
-	function (n, _n0) {
-		var gen = _n0.a;
-		return elm$random$Random$Generator(
-			function (seed) {
-				return A4(elm$random$Random$listHelp, _List_Nil, n, gen, seed);
-			});
-	});
-var elm_community$random_extra$Random$String$string = F2(
-	function (stringLength, charGenerator) {
-		return A2(
-			elm$random$Random$map,
-			elm$core$String$fromList,
-			A2(elm$random$Random$list, stringLength, charGenerator));
-	});
-var author$project$Chat$generateRandomChatId = A2(
-	elm$random$Random$generate,
-	author$project$Chat$GenerateRandomId,
-	A2(elm_community$random_extra$Random$String$string, 10, elm_community$random_extra$Random$Char$latin));
-var author$project$Chat$init = function (session) {
-	return _Utils_Tuple2(
-		A4(author$project$Chat$Model, session, _List_Nil, '', ''),
-		author$project$Chat$generateRandomChatId);
-};
-var author$project$Home$Model = F2(
-	function (session, name) {
-		return {name: name, session: session};
-	});
-var elm$core$Platform$Cmd$batch = _Platform_batch;
-var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
-var author$project$Home$init = function (session) {
-	return _Utils_Tuple2(
-		A2(author$project$Home$Model, session, ''),
-		elm$core$Platform$Cmd$none);
-};
-var author$project$Main$Chat = function (a) {
-	return {$: 'Chat', a: a};
-};
-var author$project$Main$GoToChat = function (a) {
-	return {$: 'GoToChat', a: a};
-};
-var author$project$Main$GoToHome = function (a) {
-	return {$: 'GoToHome', a: a};
-};
-var author$project$Main$Home = function (a) {
-	return {$: 'Home', a: a};
-};
-var elm$core$Platform$Cmd$map = _Platform_map;
-var author$project$Main$resolveWith = F4(
-	function (toModel, toMsg, model, _n0) {
-		var subModel = _n0.a;
-		var subCmd = _n0.b;
-		return _Utils_Tuple2(
-			toModel(subModel),
-			A2(elm$core$Platform$Cmd$map, toMsg, subCmd));
-	});
-var author$project$Session$LoggedIn = F3(
-	function (a, b, c) {
-		return {$: 'LoggedIn', a: a, b: b, c: c};
-	});
-var author$project$Session$Guest = function (a) {
-	return {$: 'Guest', a: a};
-};
-var author$project$Session$init = function (key) {
-	return author$project$Session$Guest(key);
-};
-var author$project$Main$resolveRoute = F3(
-	function (route, key, model) {
-		switch (route.$) {
-			case 'Home':
-				return A4(
-					author$project$Main$resolveWith,
-					author$project$Main$Home,
-					author$project$Main$GoToHome,
-					model,
-					author$project$Home$init(
-						author$project$Session$init(key)));
-			case 'Chat':
-				var name = route.a;
-				if (name.$ === 'Nothing') {
-					return A4(
-						author$project$Main$resolveWith,
-						author$project$Main$Home,
-						author$project$Main$GoToHome,
-						model,
-						author$project$Home$init(
-							author$project$Session$init(key)));
-				} else {
-					var chatName = name.a;
-					return A4(
-						author$project$Main$resolveWith,
-						author$project$Main$Chat,
-						author$project$Main$GoToChat,
-						model,
-						author$project$Chat$init(
-							A3(
-								author$project$Session$LoggedIn,
-								elm$core$Maybe$Just(''),
-								chatName,
-								key)));
-				}
-			default:
-				return A4(
-					author$project$Main$resolveWith,
-					author$project$Main$Home,
-					author$project$Main$GoToHome,
-					model,
-					author$project$Home$init(
-						author$project$Session$init(key)));
-		}
-	});
-var author$project$Route$NotFound = {$: 'NotFound'};
-var author$project$Route$Chat = function (a) {
-	return {$: 'Chat', a: a};
-};
-var author$project$Route$Home = {$: 'Home'};
 var elm$url$Url$Parser$Parser = function (a) {
 	return {$: 'Parser', a: a};
 };
@@ -5541,15 +5339,6 @@ var elm$core$Dict$get = F2(
 						continue get;
 				}
 			}
-		}
-	});
-var elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
 		}
 	});
 var elm$url$Url$Parser$Internal$Parser = function (a) {
@@ -6208,29 +5997,403 @@ var author$project$Main$init = F3(
 			author$project$Main$Redirect(
 				author$project$Session$Guest(key)));
 	});
-var author$project$Session$chatName = function (session) {
-	if (session.$ === 'Guest') {
-		return elm$core$Maybe$Nothing;
+var author$project$Chat$GotMessage = function (a) {
+	return {$: 'GotMessage', a: a};
+};
+var author$project$Chat$GotUserId = function (a) {
+	return {$: 'GotUserId', a: a};
+};
+var elm$json$Json$Decode$andThen = _Json_andThen;
+var elm$json$Json$Decode$field = _Json_decodeField;
+var elm$json$Json$Decode$string = _Json_decodeString;
+var elm$json$Json$Decode$succeed = _Json_succeed;
+var author$project$Chat$getMessage = _Platform_incomingPort(
+	'getMessage',
+	A2(
+		elm$json$Json$Decode$andThen,
+		function (userId) {
+			return A2(
+				elm$json$Json$Decode$andThen,
+				function (roomId) {
+					return A2(
+						elm$json$Json$Decode$andThen,
+						function (id) {
+							return A2(
+								elm$json$Json$Decode$andThen,
+								function (chatName) {
+									return A2(
+										elm$json$Json$Decode$andThen,
+										function (body) {
+											return elm$json$Json$Decode$succeed(
+												{body: body, chatName: chatName, id: id, roomId: roomId, userId: userId});
+										},
+										A2(elm$json$Json$Decode$field, 'body', elm$json$Json$Decode$string));
+								},
+								A2(elm$json$Json$Decode$field, 'chatName', elm$json$Json$Decode$string));
+						},
+						A2(elm$json$Json$Decode$field, 'id', elm$json$Json$Decode$string));
+				},
+				A2(elm$json$Json$Decode$field, 'roomId', elm$json$Json$Decode$string));
+		},
+		A2(elm$json$Json$Decode$field, 'userId', elm$json$Json$Decode$string)));
+var author$project$Chat$getUserId = _Platform_incomingPort('getUserId', elm$json$Json$Decode$string);
+var elm$core$Platform$Sub$batch = _Platform_batch;
+var author$project$Chat$subscriptions = function (model) {
+	return elm$core$Platform$Sub$batch(
+		_List_fromArray(
+			[
+				author$project$Chat$getMessage(
+				function (message) {
+					return author$project$Chat$GotMessage(message);
+				}),
+				author$project$Chat$getUserId(
+				function (userId) {
+					return author$project$Chat$GotUserId(userId);
+				})
+			]));
+};
+var elm$core$Platform$Sub$map = _Platform_map;
+var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
+var author$project$Main$subscriptions = function (model) {
+	if (model.$ === 'Chat') {
+		var chat = model.a;
+		return A2(
+			elm$core$Platform$Sub$map,
+			author$project$Main$GoToChat,
+			author$project$Chat$subscriptions(chat));
 	} else {
-		var name = session.b;
-		return elm$core$Maybe$Just(name);
+		return elm$core$Platform$Sub$none;
 	}
 };
-var author$project$Chat$chatName = function (session) {
-	return A2(
-		elm$core$Maybe$withDefault,
-		'',
-		author$project$Session$chatName(session));
+var author$project$Chat$Message = F5(
+	function (id, userId, body, roomId, chatName) {
+		return {body: body, chatName: chatName, id: id, roomId: roomId, userId: userId};
+	});
+var author$project$Chat$GenerateRandomId = function (a) {
+	return {$: 'GenerateRandomId', a: a};
 };
-var author$project$Session$navKey = function (session) {
-	if (session.$ === 'Guest') {
-		var key = session.a;
-		return key;
-	} else {
-		var key = session.c;
-		return key;
-	}
+var elm$random$Random$Generate = function (a) {
+	return {$: 'Generate', a: a};
 };
+var elm$core$Task$andThen = _Scheduler_andThen;
+var elm$core$Task$succeed = _Scheduler_succeed;
+var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var elm$random$Random$Seed = F2(
+	function (a, b) {
+		return {$: 'Seed', a: a, b: b};
+	});
+var elm$random$Random$next = function (_n0) {
+	var state0 = _n0.a;
+	var incr = _n0.b;
+	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
+};
+var elm$random$Random$initialSeed = function (x) {
+	var _n0 = elm$random$Random$next(
+		A2(elm$random$Random$Seed, 0, 1013904223));
+	var state1 = _n0.a;
+	var incr = _n0.b;
+	var state2 = (state1 + x) >>> 0;
+	return elm$random$Random$next(
+		A2(elm$random$Random$Seed, state2, incr));
+};
+var elm$time$Time$Name = function (a) {
+	return {$: 'Name', a: a};
+};
+var elm$time$Time$Offset = function (a) {
+	return {$: 'Offset', a: a};
+};
+var elm$time$Time$Zone = F2(
+	function (a, b) {
+		return {$: 'Zone', a: a, b: b};
+	});
+var elm$time$Time$customZone = elm$time$Time$Zone;
+var elm$time$Time$Posix = function (a) {
+	return {$: 'Posix', a: a};
+};
+var elm$time$Time$millisToPosix = elm$time$Time$Posix;
+var elm$time$Time$now = _Time_now(elm$time$Time$millisToPosix);
+var elm$time$Time$posixToMillis = function (_n0) {
+	var millis = _n0.a;
+	return millis;
+};
+var elm$random$Random$init = A2(
+	elm$core$Task$andThen,
+	function (time) {
+		return elm$core$Task$succeed(
+			elm$random$Random$initialSeed(
+				elm$time$Time$posixToMillis(time)));
+	},
+	elm$time$Time$now);
+var elm$core$Platform$sendToApp = _Platform_sendToApp;
+var elm$random$Random$step = F2(
+	function (_n0, seed) {
+		var generator = _n0.a;
+		return generator(seed);
+	});
+var elm$random$Random$onEffects = F3(
+	function (router, commands, seed) {
+		if (!commands.b) {
+			return elm$core$Task$succeed(seed);
+		} else {
+			var generator = commands.a.a;
+			var rest = commands.b;
+			var _n1 = A2(elm$random$Random$step, generator, seed);
+			var value = _n1.a;
+			var newSeed = _n1.b;
+			return A2(
+				elm$core$Task$andThen,
+				function (_n2) {
+					return A3(elm$random$Random$onEffects, router, rest, newSeed);
+				},
+				A2(elm$core$Platform$sendToApp, router, value));
+		}
+	});
+var elm$random$Random$onSelfMsg = F3(
+	function (_n0, _n1, seed) {
+		return elm$core$Task$succeed(seed);
+	});
+var elm$random$Random$Generator = function (a) {
+	return {$: 'Generator', a: a};
+};
+var elm$random$Random$map = F2(
+	function (func, _n0) {
+		var genA = _n0.a;
+		return elm$random$Random$Generator(
+			function (seed0) {
+				var _n1 = genA(seed0);
+				var a = _n1.a;
+				var seed1 = _n1.b;
+				return _Utils_Tuple2(
+					func(a),
+					seed1);
+			});
+	});
+var elm$random$Random$cmdMap = F2(
+	function (func, _n0) {
+		var generator = _n0.a;
+		return elm$random$Random$Generate(
+			A2(elm$random$Random$map, func, generator));
+	});
+_Platform_effectManagers['Random'] = _Platform_createManager(elm$random$Random$init, elm$random$Random$onEffects, elm$random$Random$onSelfMsg, elm$random$Random$cmdMap);
+var elm$random$Random$command = _Platform_leaf('Random');
+var elm$random$Random$generate = F2(
+	function (tagger, generator) {
+		return elm$random$Random$command(
+			elm$random$Random$Generate(
+				A2(elm$random$Random$map, tagger, generator)));
+	});
+var elm$core$Char$fromCode = _Char_fromCode;
+var elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var elm$core$Bitwise$and = _Bitwise_and;
+var elm$core$Bitwise$xor = _Bitwise_xor;
+var elm$random$Random$peel = function (_n0) {
+	var state = _n0.a;
+	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
+	return ((word >>> 22) ^ word) >>> 0;
+};
+var elm$random$Random$int = F2(
+	function (a, b) {
+		return elm$random$Random$Generator(
+			function (seed0) {
+				var _n0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
+				var lo = _n0.a;
+				var hi = _n0.b;
+				var range = (hi - lo) + 1;
+				if (!((range - 1) & range)) {
+					return _Utils_Tuple2(
+						(((range - 1) & elm$random$Random$peel(seed0)) >>> 0) + lo,
+						elm$random$Random$next(seed0));
+				} else {
+					var threshhold = (((-range) >>> 0) % range) >>> 0;
+					var accountForBias = function (seed) {
+						accountForBias:
+						while (true) {
+							var x = elm$random$Random$peel(seed);
+							var seedN = elm$random$Random$next(seed);
+							if (_Utils_cmp(x, threshhold) < 0) {
+								var $temp$seed = seedN;
+								seed = $temp$seed;
+								continue accountForBias;
+							} else {
+								return _Utils_Tuple2((x % range) + lo, seedN);
+							}
+						}
+					};
+					return accountForBias(seed0);
+				}
+			});
+	});
+var elm_community$random_extra$Random$Char$char = F2(
+	function (start, end) {
+		return A2(
+			elm$random$Random$map,
+			elm$core$Char$fromCode,
+			A2(elm$random$Random$int, start, end));
+	});
+var elm_community$random_extra$Random$Char$lowerCaseLatin = A2(elm_community$random_extra$Random$Char$char, 97, 122);
+var elm_community$random_extra$Random$Char$upperCaseLatin = A2(elm_community$random_extra$Random$Char$char, 65, 90);
+var elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var elm$core$List$sum = function (numbers) {
+	return A3(elm$core$List$foldl, elm$core$Basics$add, 0, numbers);
+};
+var elm$core$Tuple$second = function (_n0) {
+	var y = _n0.b;
+	return y;
+};
+var elm$random$Random$andThen = F2(
+	function (callback, _n0) {
+		var genA = _n0.a;
+		return elm$random$Random$Generator(
+			function (seed) {
+				var _n1 = genA(seed);
+				var result = _n1.a;
+				var newSeed = _n1.b;
+				var _n2 = callback(result);
+				var genB = _n2.a;
+				return genB(newSeed);
+			});
+	});
+var elm$random$Random$float = F2(
+	function (a, b) {
+		return elm$random$Random$Generator(
+			function (seed0) {
+				var seed1 = elm$random$Random$next(seed0);
+				var range = elm$core$Basics$abs(b - a);
+				var n1 = elm$random$Random$peel(seed1);
+				var n0 = elm$random$Random$peel(seed0);
+				var lo = (134217727 & n1) * 1.0;
+				var hi = (67108863 & n0) * 1.0;
+				var val = ((hi * 1.34217728e8) + lo) / 9.007199254740992e15;
+				var scaled = (val * range) + a;
+				return _Utils_Tuple2(
+					scaled,
+					elm$random$Random$next(seed1));
+			});
+	});
+var elm_community$random_extra$Random$Extra$frequency = F2(
+	function (head, pairs) {
+		var total = elm$core$List$sum(
+			A2(
+				elm$core$List$map,
+				A2(elm$core$Basics$composeL, elm$core$Basics$abs, elm$core$Tuple$first),
+				A2(elm$core$List$cons, head, pairs)));
+		var pick = F2(
+			function (someChoices, n) {
+				pick:
+				while (true) {
+					if (someChoices.b) {
+						var _n1 = someChoices.a;
+						var k = _n1.a;
+						var g = _n1.b;
+						var rest = someChoices.b;
+						if (_Utils_cmp(n, k) < 1) {
+							return g;
+						} else {
+							var $temp$someChoices = rest,
+								$temp$n = n - k;
+							someChoices = $temp$someChoices;
+							n = $temp$n;
+							continue pick;
+						}
+					} else {
+						return head.b;
+					}
+				}
+			});
+		return A2(
+			elm$random$Random$andThen,
+			pick(
+				A2(elm$core$List$cons, head, pairs)),
+			A2(elm$random$Random$float, 0, total));
+	});
+var elm_community$random_extra$Random$Extra$choices = F2(
+	function (hd, gens) {
+		return A2(
+			elm_community$random_extra$Random$Extra$frequency,
+			_Utils_Tuple2(1, hd),
+			A2(
+				elm$core$List$map,
+				function (g) {
+					return _Utils_Tuple2(1, g);
+				},
+				gens));
+	});
+var elm_community$random_extra$Random$Char$latin = A2(
+	elm_community$random_extra$Random$Extra$choices,
+	elm_community$random_extra$Random$Char$lowerCaseLatin,
+	_List_fromArray(
+		[elm_community$random_extra$Random$Char$upperCaseLatin]));
+var elm$core$String$fromList = _String_fromList;
+var elm$random$Random$listHelp = F4(
+	function (revList, n, gen, seed) {
+		listHelp:
+		while (true) {
+			if (n < 1) {
+				return _Utils_Tuple2(revList, seed);
+			} else {
+				var _n0 = gen(seed);
+				var value = _n0.a;
+				var newSeed = _n0.b;
+				var $temp$revList = A2(elm$core$List$cons, value, revList),
+					$temp$n = n - 1,
+					$temp$gen = gen,
+					$temp$seed = newSeed;
+				revList = $temp$revList;
+				n = $temp$n;
+				gen = $temp$gen;
+				seed = $temp$seed;
+				continue listHelp;
+			}
+		}
+	});
+var elm$random$Random$list = F2(
+	function (n, _n0) {
+		var gen = _n0.a;
+		return elm$random$Random$Generator(
+			function (seed) {
+				return A4(elm$random$Random$listHelp, _List_Nil, n, gen, seed);
+			});
+	});
+var elm_community$random_extra$Random$String$string = F2(
+	function (stringLength, charGenerator) {
+		return A2(
+			elm$random$Random$map,
+			elm$core$String$fromList,
+			A2(elm$random$Random$list, stringLength, charGenerator));
+	});
+var author$project$Chat$generateRandomId = A2(
+	elm$random$Random$generate,
+	author$project$Chat$GenerateRandomId,
+	A2(elm_community$random_extra$Random$String$string, 20, elm_community$random_extra$Random$Char$latin));
+var author$project$Chat$messageEncoder = function (message) {
+	return elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'id',
+				elm$json$Json$Encode$string(message.id)),
+				_Utils_Tuple2(
+				'userId',
+				elm$json$Json$Encode$string(message.userId)),
+				_Utils_Tuple2(
+				'roomId',
+				elm$json$Json$Encode$string(message.roomId)),
+				_Utils_Tuple2(
+				'body',
+				elm$json$Json$Encode$string(message.body))
+			]));
+};
+var author$project$Chat$storeMessage = _Platform_outgoingPort('storeMessage', elm$core$Basics$identity);
+var elm$core$String$trim = _String_trim;
 var author$project$Chat$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -6242,30 +6405,62 @@ var author$project$Chat$update = F2(
 						{pendingMessage: message}),
 					elm$core$Platform$Cmd$none);
 			case 'SubmitMessage':
+				return _Utils_Tuple2(model, author$project$Chat$generateRandomId);
+			case 'GenerateRandomId':
+				var id = msg.a;
+				var message = A5(
+					author$project$Chat$Message,
+					id,
+					model.userId,
+					elm$core$String$trim(model.pendingMessage),
+					model.room.id,
+					author$project$Session$chatName(model.session));
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{
-							messages: A2(elm$core$List$cons, model.pendingMessage, model.messages),
-							pendingMessage: ''
-						}),
-					elm$core$Platform$Cmd$none);
-			default:
+						{pendingMessage: ''}),
+					author$project$Chat$storeMessage(
+						author$project$Chat$messageEncoder(message)));
+			case 'GotUserId':
 				var id = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
+						{userId: id}),
+					elm$core$Platform$Cmd$none);
+			default:
+				var message = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
 						{
-							id: id,
-							session: A3(
-								author$project$Session$LoggedIn,
-								elm$core$Maybe$Just(id),
-								author$project$Chat$chatName(model.session),
-								author$project$Session$navKey(model.session))
+							messages: A2(elm$core$List$cons, message, model.messages)
 						}),
 					elm$core$Platform$Cmd$none);
 		}
 	});
+var author$project$Home$encodeUserData = function (_n0) {
+	var id = _n0.a;
+	var name = _n0.b;
+	return elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'id',
+				elm$json$Json$Encode$string(id)),
+				_Utils_Tuple2(
+				'name',
+				elm$json$Json$Encode$string(name))
+			]));
+};
+var author$project$Home$GenerateRandomId = function (a) {
+	return {$: 'GenerateRandomId', a: a};
+};
+var author$project$Home$generateRandomId = A2(
+	elm$random$Random$generate,
+	author$project$Home$GenerateRandomId,
+	A2(elm_community$random_extra$Random$String$string, 20, elm_community$random_extra$Random$Char$latin));
+var author$project$Home$storeUser = _Platform_outgoingPort('storeUser', elm$core$Basics$identity);
 var elm$url$Url$Builder$toQueryPair = function (_n0) {
 	var key = _n0.a;
 	var value = _n0.b;
@@ -6422,7 +6617,6 @@ var elm$core$Task$perform = F2(
 	});
 var elm$json$Json$Decode$map = _Json_map1;
 var elm$json$Json$Decode$map2 = _Json_map2;
-var elm$json$Json$Decode$succeed = _Json_succeed;
 var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 	switch (handler.$) {
 		case 'Normal':
@@ -6449,9 +6643,6 @@ var elm$core$String$startsWith = _String_startsWith;
 var elm$url$Url$Http = {$: 'Http'};
 var elm$url$Url$Https = {$: 'Https'};
 var elm$core$String$indexes = _String_indexes;
-var elm$core$String$isEmpty = function (string) {
-	return string === '';
-};
 var elm$core$String$left = F2(
 	function (n, string) {
 		return (n < 1) ? '' : A3(elm$core$String$slice, 0, n, string);
@@ -6572,23 +6763,43 @@ var author$project$Route$pushUrl = F2(
 			key,
 			author$project$Route$toString(route));
 	});
+var author$project$Session$navKey = function (session) {
+	if (session.$ === 'Guest') {
+		var key = session.a;
+		return key;
+	} else {
+		var key = session.c;
+		return key;
+	}
+};
 var author$project$Home$update = F2(
 	function (msg, model) {
-		if (msg.$ === 'EnterName') {
-			var name = msg.a;
-			return _Utils_Tuple2(
-				_Utils_update(
+		switch (msg.$) {
+			case 'EnterName':
+				var name = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{name: name}),
+					elm$core$Platform$Cmd$none);
+			case 'SubmitName':
+				return _Utils_Tuple2(model, author$project$Home$generateRandomId);
+			default:
+				var id = msg.a;
+				return _Utils_Tuple2(
 					model,
-					{name: name}),
-				elm$core$Platform$Cmd$none);
-		} else {
-			return _Utils_Tuple2(
-				model,
-				A2(
-					author$project$Route$pushUrl,
-					author$project$Session$navKey(model.session),
-					author$project$Route$Chat(
-						elm$core$Maybe$Just(model.name))));
+					elm$core$Platform$Cmd$batch(
+						_List_fromArray(
+							[
+								author$project$Home$storeUser(
+								author$project$Home$encodeUserData(
+									_Utils_Tuple2(id, model.name))),
+								A2(
+								author$project$Route$pushUrl,
+								author$project$Session$navKey(model.session),
+								author$project$Route$Chat(
+									elm$core$Maybe$Just(model.name)))
+							])));
 		}
 	});
 var author$project$Chat$toSession = function (model) {
@@ -6694,31 +6905,49 @@ var author$project$Main$update = F2(
 		}
 		return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 	});
-var author$project$Session$chatId = function (session) {
-	if (session.$ === 'Guest') {
-		return elm$core$Maybe$Nothing;
-	} else {
-		var id = session.a;
-		if (id.$ === 'Nothing') {
-			return elm$core$Maybe$Nothing;
-		} else {
-			var realId = id.a;
-			return elm$core$Maybe$Just(realId);
+var elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
 		}
-	}
-};
-var author$project$Chat$chatId = function (session) {
+	});
+var author$project$Chat$isHacker = function (name) {
 	return A2(
-		elm$core$Maybe$withDefault,
-		'',
-		author$project$Session$chatId(session));
+		elm$core$List$any,
+		function (x) {
+			return A2(elm$core$String$contains, x, name);
+		},
+		_List_fromArray(
+			['<', '>'])) ? 'HAXXOR' : name;
 };
-var elm$core$Basics$not = _Basics_not;
 var elm$html$Html$div = _VirtualDom_node('div');
 var elm$html$Html$p = _VirtualDom_node('p');
 var elm$html$Html$span = _VirtualDom_node('span');
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
+var elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			elm$json$Json$Encode$string(string));
+	});
+var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
 var elm$core$List$filter = F2(
 	function (isGood, list) {
 		return A3(
@@ -6730,15 +6959,6 @@ var elm$core$List$filter = F2(
 			_List_Nil,
 			list);
 	});
-var elm$json$Json$Encode$string = _Json_wrap;
-var elm$html$Html$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			elm$json$Json$Encode$string(string));
-	});
-var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
 var elm$html$Html$Attributes$classList = function (classes) {
 	return elm$html$Html$Attributes$class(
 		A2(
@@ -6758,38 +6978,34 @@ var author$project$Chat$displayedMessage = F2(
 					elm$html$Html$Attributes$classList(
 					_List_fromArray(
 						[
-							_Utils_Tuple2('message', true),
+							_Utils_Tuple2('mt-4', true),
 							_Utils_Tuple2(
 							'text-right',
-							!_Utils_eq(
-								model.id,
-								author$project$Chat$chatId(model.session)))
+							!_Utils_eq(message.userId, model.userId))
 						]))
 				]),
 			_List_fromArray(
 				[
 					A2(
 					elm$html$Html$span,
-					_List_Nil,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class('font-bold')
+						]),
 					_List_fromArray(
 						[
 							elm$html$Html$text(
-							author$project$Chat$chatName(model.session))
+							author$project$Chat$isHacker(message.chatName))
 						])),
 					A2(
 					elm$html$Html$p,
 					_List_fromArray(
 						[
-							elm$html$Html$Attributes$classList(
-							_List_fromArray(
-								[
-									_Utils_Tuple2('mt0', true),
-									_Utils_Tuple2('text-light', true)
-								]))
+							elm$html$Html$Attributes$class('mt-0')
 						]),
 					_List_fromArray(
 						[
-							elm$html$Html$text(message)
+							elm$html$Html$text(message.body)
 						]))
 				]));
 	});
@@ -6798,21 +7014,24 @@ var author$project$Chat$messageBox = function (model) {
 		elm$html$Html$div,
 		_List_fromArray(
 			[
-				elm$html$Html$Attributes$class('message-box')
+				elm$html$Html$Attributes$class('bg-white px-2 -mb-12 overflow-y-scroll flex-1 mt-12 mx-4 message-box')
 			]),
-		A2(
-			elm$core$List$map,
-			function (m) {
-				return A2(author$project$Chat$displayedMessage, model, m);
-			},
-			model.messages));
+		elm$core$List$reverse(
+			A2(
+				elm$core$List$map,
+				function (message) {
+					return A2(author$project$Chat$displayedMessage, model, message);
+				},
+				model.messages)));
 };
 var author$project$Chat$EnterMessage = function (a) {
 	return {$: 'EnterMessage', a: a};
 };
 var author$project$Chat$SubmitMessage = {$: 'SubmitMessage'};
+var author$project$Chat$buttonSvg = 'data:image/svg+xml;utf8,<svg aria-hidden=\"true\" focusable=\"false\" data-prefix=\"fas\" data-icon=\"paper-plane\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path fill=\"rgb(96,111,123)\" d=\"M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z\"></path></svg>';
 var elm$html$Html$button = _VirtualDom_node('button');
 var elm$html$Html$form = _VirtualDom_node('form');
+var elm$html$Html$img = _VirtualDom_node('img');
 var elm$html$Html$input = _VirtualDom_node('input');
 var elm$json$Json$Encode$bool = _Json_wrap;
 var elm$html$Html$Attributes$boolProperty = F2(
@@ -6823,6 +7042,12 @@ var elm$html$Html$Attributes$boolProperty = F2(
 			elm$json$Json$Encode$bool(bool));
 	});
 var elm$html$Html$Attributes$autofocus = elm$html$Html$Attributes$boolProperty('autofocus');
+var elm$html$Html$Attributes$src = function (url) {
+	return A2(
+		elm$html$Html$Attributes$stringProperty,
+		'src',
+		_VirtualDom_noJavaScriptOrHtmlUri(url));
+};
 var elm$html$Html$Attributes$type_ = elm$html$Html$Attributes$stringProperty('type');
 var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
 var elm$virtual_dom$VirtualDom$Normal = function (a) {
@@ -6855,12 +7080,10 @@ var elm$html$Html$Events$stopPropagationOn = F2(
 			event,
 			elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
 	});
-var elm$json$Json$Decode$field = _Json_decodeField;
 var elm$json$Json$Decode$at = F2(
 	function (fields, decoder) {
 		return A3(elm$core$List$foldr, elm$json$Json$Decode$field, decoder, fields);
 	});
-var elm$json$Json$Decode$string = _Json_decodeString;
 var elm$html$Html$Events$targetValue = A2(
 	elm$json$Json$Decode$at,
 	_List_fromArray(
@@ -6903,7 +7126,7 @@ var author$project$Chat$messageInput = function (model) {
 		_List_fromArray(
 			[
 				elm$html$Html$Events$onSubmit(author$project$Chat$SubmitMessage),
-				elm$html$Html$Attributes$class('message-input')
+				elm$html$Html$Attributes$class('flex my-20')
 			]),
 		_List_fromArray(
 			[
@@ -6914,7 +7137,7 @@ var author$project$Chat$messageInput = function (model) {
 						elm$html$Html$Events$onInput(author$project$Chat$EnterMessage),
 						elm$html$Html$Attributes$value(model.pendingMessage),
 						elm$html$Html$Attributes$autofocus(true),
-						elm$html$Html$Attributes$class('message-input-box')
+						elm$html$Html$Attributes$class('mx-4 flex-1 p-4 text-lg')
 					]),
 				_List_Nil),
 				A2(
@@ -6923,11 +7146,18 @@ var author$project$Chat$messageInput = function (model) {
 					[
 						elm$html$Html$Events$onClick(author$project$Chat$SubmitMessage),
 						elm$html$Html$Attributes$type_('button'),
-						elm$html$Html$Attributes$class('message-submit')
+						elm$html$Html$Attributes$class('bg-green-lighter mr-4 p-4')
 					]),
 				_List_fromArray(
 					[
-						elm$html$Html$text('Send')
+						A2(
+						elm$html$Html$img,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$src(author$project$Chat$buttonSvg),
+								elm$html$Html$Attributes$class('w-4')
+							]),
+						_List_Nil)
 					]))
 			]));
 };
@@ -6936,14 +7166,17 @@ var author$project$Chat$view = function (model) {
 	return {
 		content: A2(
 			elm$html$Html$div,
-			_List_Nil,
+			_List_fromArray(
+				[
+					elm$html$Html$Attributes$class('flex flex-col h-screen')
+				]),
 			_List_fromArray(
 				[
 					A2(
 					elm$html$Html$h1,
 					_List_fromArray(
 						[
-							elm$html$Html$Attributes$class('chat-heading')
+							elm$html$Html$Attributes$class('text-center mt-8')
 						]),
 					_List_fromArray(
 						[
@@ -6955,271 +7188,73 @@ var author$project$Chat$view = function (model) {
 		title: 'Chat Room'
 	};
 };
-var author$project$Css$CssGrid$Single = function (a) {
-	return {$: 'Single', a: a};
-};
-var author$project$Css$CssGrid$getGridAutoColumns = function (_n0) {
-	var definition = _n0.a;
-	return author$project$Css$CssGrid$Single(definition.gridAutoColumns);
-};
-var author$project$Css$CssGrid$getGridAutoFlow = function (_n0) {
-	var definition = _n0.a;
-	return author$project$Css$CssGrid$Single(definition.gridAutoFlow);
-};
-var author$project$Css$CssGrid$getGridAutoRows = function (_n0) {
-	var definition = _n0.a;
-	return author$project$Css$CssGrid$Single(definition.gridAutoRows);
-};
-var author$project$Css$CssGrid$Multiple = function (a) {
-	return {$: 'Multiple', a: a};
-};
-var author$project$Css$CssGrid$getGridTemplate = function (_n0) {
-	var definition = _n0.a;
-	return author$project$Css$CssGrid$Multiple(definition.gridTemplate);
-};
-var author$project$Css$CssGrid$getGridTemplateArea = function (_n0) {
-	var definition = _n0.a;
-	return author$project$Css$CssGrid$Multiple(definition.gridTemplateArea);
-};
-var author$project$Css$CssGrid$getGridTemplateColumns = function (_n0) {
-	var definition = _n0.a;
-	return author$project$Css$CssGrid$Single(definition.gridTemplateColumns);
-};
-var author$project$Css$CssGrid$getGridTemplateRows = function (_n0) {
-	var definition = _n0.a;
-	return author$project$Css$CssGrid$Single(definition.gridTemplateRows);
-};
-var elm$core$String$concat = function (strings) {
-	return A2(elm$core$String$join, '', strings);
-};
-var elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var elm$html$Html$Attributes$style = elm$virtual_dom$VirtualDom$style;
-var author$project$Css$CssGrid$maybeCssAttribute = F2(
-	function (name, attribute) {
-		switch (attribute.$) {
-			case 'Single':
-				var attr = attribute.a;
-				return elm$core$Maybe$Just(
-					A2(elm$html$Html$Attributes$style, name, attr));
-			case 'Multiple':
-				var list = attribute.a;
-				if (!list.b) {
-					return elm$core$Maybe$Nothing;
-				} else {
-					return elm$core$Maybe$Just(
-						A2(
-							elm$html$Html$Attributes$style,
-							name,
-							elm$core$String$concat(
-								A2(
-									elm$core$List$map,
-									function (attr) {
-										return '\'' + (attr + '\'');
-									},
-									list))));
-				}
-			default:
-				return elm$core$Maybe$Nothing;
-		}
-	});
-var elm$core$List$maybeCons = F3(
-	function (f, mx, xs) {
-		var _n0 = f(mx);
-		if (_n0.$ === 'Just') {
-			var x = _n0.a;
-			return A2(elm$core$List$cons, x, xs);
-		} else {
-			return xs;
-		}
-	});
-var elm$core$List$filterMap = F2(
-	function (f, xs) {
-		return A3(
-			elm$core$List$foldr,
-			elm$core$List$maybeCons(f),
-			_List_Nil,
-			xs);
-	});
-var author$project$Css$CssGrid$gridAttributes = function (grid) {
+var elm$html$Html$li = _VirtualDom_node('li');
+var author$project$Home$listItem = function (message) {
 	return A2(
-		elm$core$List$filterMap,
-		elm$core$Basics$identity,
+		elm$html$Html$li,
+		_List_Nil,
 		_List_fromArray(
 			[
-				elm$core$Maybe$Just(
-				A2(elm$html$Html$Attributes$style, 'display', 'grid')),
-				A2(
-				author$project$Css$CssGrid$maybeCssAttribute,
-				'grid-template-columns',
-				author$project$Css$CssGrid$getGridTemplateColumns(grid)),
-				A2(
-				author$project$Css$CssGrid$maybeCssAttribute,
-				'grid-template-rows',
-				author$project$Css$CssGrid$getGridTemplateRows(grid)),
-				A2(
-				author$project$Css$CssGrid$maybeCssAttribute,
-				'grid-template-areas',
-				author$project$Css$CssGrid$getGridTemplateArea(grid)),
-				A2(
-				author$project$Css$CssGrid$maybeCssAttribute,
-				'grid-template',
-				author$project$Css$CssGrid$getGridTemplate(grid)),
-				A2(
-				author$project$Css$CssGrid$maybeCssAttribute,
-				'grid-auto-flow',
-				author$project$Css$CssGrid$getGridAutoFlow(grid)),
-				A2(
-				author$project$Css$CssGrid$maybeCssAttribute,
-				'grid-auto-columns',
-				author$project$Css$CssGrid$getGridAutoColumns(grid)),
-				A2(
-				author$project$Css$CssGrid$maybeCssAttribute,
-				'grid-auto-rows',
-				author$project$Css$CssGrid$getGridAutoRows(grid))
+				elm$html$Html$text(message)
 			]));
 };
-var author$project$Css$CssGrid$gridContainer = F3(
-	function (grid, attributes, children) {
-		return A2(
+var author$project$Home$shouldRender = F2(
+	function (cond, html) {
+		return cond ? html : elm$html$Html$text('');
+	});
+var elm$html$Html$ul = _VirtualDom_node('ul');
+var author$project$Home$errorList = function (errors) {
+	return A2(
+		author$project$Home$shouldRender,
+		elm$core$List$length(errors) > 0,
+		A2(
 			elm$html$Html$div,
-			_Utils_ap(
-				author$project$Css$CssGrid$gridAttributes(grid),
-				attributes),
-			children);
-	});
-var author$project$Css$CssGrid$getGridArea = function (_n0) {
-	var item = _n0.a;
-	return author$project$Css$CssGrid$Single(item.gridArea);
-};
-var author$project$Css$CssGrid$getGridColumnEnd = function (_n0) {
-	var item = _n0.a;
-	return author$project$Css$CssGrid$Single(item.gridColumnEnd);
-};
-var author$project$Css$CssGrid$getGridColumnStart = function (_n0) {
-	var item = _n0.a;
-	return author$project$Css$CssGrid$Single(item.gridColumnStart);
-};
-var author$project$Css$CssGrid$getGridRowEnd = function (_n0) {
-	var item = _n0.a;
-	return author$project$Css$CssGrid$Single(item.gridRowEnd);
-};
-var author$project$Css$CssGrid$getGridRowStart = function (_n0) {
-	var item = _n0.a;
-	return author$project$Css$CssGrid$Single(item.gridRowStart);
-};
-var author$project$Css$CssGrid$gridItemAttributes = function (item) {
-	return A2(
-		elm$core$List$filterMap,
-		elm$core$Basics$identity,
-		_List_fromArray(
-			[
-				A2(
-				author$project$Css$CssGrid$maybeCssAttribute,
-				'grid-column-start',
-				author$project$Css$CssGrid$getGridColumnStart(item)),
-				A2(
-				author$project$Css$CssGrid$maybeCssAttribute,
-				'grid-column-end',
-				author$project$Css$CssGrid$getGridColumnEnd(item)),
-				A2(
-				author$project$Css$CssGrid$maybeCssAttribute,
-				'grid-row-start',
-				author$project$Css$CssGrid$getGridRowStart(item)),
-				A2(
-				author$project$Css$CssGrid$maybeCssAttribute,
-				'grid-row-end',
-				author$project$Css$CssGrid$getGridRowEnd(item)),
-				A2(
-				author$project$Css$CssGrid$maybeCssAttribute,
-				'grid-area',
-				author$project$Css$CssGrid$getGridArea(item))
-			]));
-};
-var author$project$Css$CssGrid$gridItem = F4(
-	function (item, html, attributes, children) {
-		return A2(
-			html,
-			_Utils_ap(
-				author$project$Css$CssGrid$gridItemAttributes(item),
-				attributes),
-			children);
-	});
-var elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
-var elm$core$String$repeatHelp = F3(
-	function (n, chunk, result) {
-		return (n <= 0) ? result : A3(
-			elm$core$String$repeatHelp,
-			n >> 1,
-			_Utils_ap(chunk, chunk),
-			(!(n & 1)) ? result : _Utils_ap(result, chunk));
-	});
-var elm$core$String$repeat = F2(
-	function (n, chunk) {
-		return A3(elm$core$String$repeatHelp, n, chunk, '');
-	});
-var author$project$Css$CssGrid$repeatTemplateStrings = F2(
-	function (strings, amount) {
-		return A2(
-			elm$core$List$map,
-			function (p) {
-				return A2(elm$core$String$repeat, amount, p + ' ');
-			},
-			strings);
-	});
-var author$project$Css$CssGrid$gridTemplateProperty = function (_n0) {
-	var props = _n0.a;
-	var amount = _n0.b;
-	return A3(
-		elm$core$List$foldl,
-		elm$core$List$cons,
-		A2(author$project$Css$CssGrid$repeatTemplateStrings, props, amount),
-		_List_Nil);
-};
-var author$project$Css$CssGrid$Grid = function (a) {
-	return {$: 'Grid', a: a};
-};
-var author$project$Css$CssGrid$makeGrid = F7(
-	function (tCols, tRows, tArea, t, aF, aC, aR) {
-		return author$project$Css$CssGrid$Grid(
-			{gridAutoColumns: aC, gridAutoFlow: aF, gridAutoRows: aR, gridTemplate: t, gridTemplateArea: tArea, gridTemplateColumns: tCols, gridTemplateRows: tRows});
-	});
-var author$project$Css$CssGrid$makeTemplateAreaGrid = F3(
-	function (tCols, tRows, tArea) {
-		return A7(author$project$Css$CssGrid$makeGrid, tCols, tRows, tArea, _List_Nil, '', '', '');
-	});
-var author$project$Home$homeGrid = A3(
-	author$project$Css$CssGrid$makeTemplateAreaGrid,
-	'50px 1fr 50px',
-	'50px 1fr 50px',
-	author$project$Css$CssGrid$gridTemplateProperty(
-		_Utils_Tuple2(
+			_List_Nil,
 			_List_fromArray(
-				['header', 'main', 'input']),
-			3)));
-var author$project$Css$CssGrid$GridItem = function (a) {
-	return {$: 'GridItem', a: a};
+				[
+					A2(
+					elm$html$Html$ul,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class(' text-center text-grey-lightest errors p-8 bg-red-light')
+						]),
+					A2(elm$core$List$map, author$project$Home$listItem, errors))
+				])));
 };
-var author$project$Css$CssGrid$makeGridItem = F5(
-	function (gColS, gColE, gRowS, gRowE, gA) {
-		return author$project$Css$CssGrid$GridItem(
-			{gridArea: gA, gridColumnEnd: gColE, gridColumnStart: gColS, gridRowEnd: gRowE, gridRowStart: gRowS});
-	});
-var author$project$Css$CssGrid$makeAreaGridItem = function (area) {
-	return A5(author$project$Css$CssGrid$makeGridItem, '', '', '', '', area);
-};
-var author$project$Home$mainContent = author$project$Css$CssGrid$makeAreaGridItem('main');
 var author$project$Home$SubmitName = {$: 'SubmitName'};
+var author$project$Home$formButton = A2(
+	elm$html$Html$div,
+	_List_fromArray(
+		[
+			elm$html$Html$Attributes$class('text-center')
+		]),
+	_List_fromArray(
+		[
+			A2(
+			elm$html$Html$button,
+			_List_fromArray(
+				[
+					elm$html$Html$Attributes$class('border-solid bg-teal-dark hover:bg-teal-darker text-grey-lighter rounded-lg py-4 px-8 mt-8'),
+					elm$html$Html$Attributes$type_('button'),
+					elm$html$Html$Events$onClick(author$project$Home$SubmitName)
+				]),
+			_List_fromArray(
+				[
+					elm$html$Html$text('Enter')
+				]))
+		]));
 var author$project$Home$EnterName = function (a) {
 	return {$: 'EnterName', a: a};
 };
 var elm$html$Html$Attributes$placeholder = elm$html$Html$Attributes$stringProperty('placeholder');
 var elm$html$Html$Attributes$required = elm$html$Html$Attributes$boolProperty('required');
-var author$project$Home$chatNameInput = function (model) {
+var author$project$Home$inputForm = function (model) {
 	return A2(
-		elm$html$Html$div,
+		elm$html$Html$form,
 		_List_fromArray(
 			[
-				elm$html$Html$Attributes$class('icon-input')
+				elm$html$Html$Events$onSubmit(author$project$Home$SubmitName),
+				elm$html$Html$Attributes$class('flex flex-row px-4')
 			]),
 		_List_fromArray(
 			[
@@ -7227,7 +7262,7 @@ var author$project$Home$chatNameInput = function (model) {
 				elm$html$Html$span,
 				_List_fromArray(
 					[
-						elm$html$Html$Attributes$class('icon')
+						elm$html$Html$Attributes$class('bg-indigo p-4 text-grey-lighter rounded-bl-lg rounded-tl-lg')
 					]),
 				_List_fromArray(
 					[
@@ -7238,6 +7273,7 @@ var author$project$Home$chatNameInput = function (model) {
 				_List_fromArray(
 					[
 						elm$html$Html$Attributes$placeholder('Enter your name'),
+						elm$html$Html$Attributes$class('border-solid text-lg flex-1 p-4 border-indigo border-1 rounded-br-lg rounded-tr-lg name-input'),
 						elm$html$Html$Attributes$value(model.name),
 						elm$html$Html$Attributes$required(true),
 						elm$html$Html$Attributes$autofocus(true),
@@ -7246,68 +7282,27 @@ var author$project$Home$chatNameInput = function (model) {
 				_List_Nil)
 			]));
 };
-var author$project$Css$CssGrid$blankGridItem = A5(author$project$Css$CssGrid$makeGridItem, '', '', '', '', '');
-var author$project$Home$nameInputItem = author$project$Css$CssGrid$blankGridItem;
-var author$project$Home$nameInput = function (model) {
-	return A4(
-		author$project$Css$CssGrid$gridItem,
-		author$project$Home$nameInputItem,
-		elm$html$Html$form,
-		_List_fromArray(
-			[
-				elm$html$Html$Attributes$class('name-input-form'),
-				elm$html$Html$Events$onSubmit(author$project$Home$SubmitName)
-			]),
-		_List_fromArray(
-			[
-				author$project$Home$chatNameInput(model),
-				A2(
-				elm$html$Html$button,
-				_List_fromArray(
-					[
-						elm$html$Html$Attributes$class('enter-chat-button'),
-						elm$html$Html$Attributes$type_('button'),
-						elm$html$Html$Events$onClick(author$project$Home$SubmitName)
-					]),
-				_List_fromArray(
-					[
-						elm$html$Html$text('Enter')
-					]))
-			]));
-};
-var author$project$Home$welcomeText = function (model) {
-	var base = 'Welcome';
-	return elm$core$String$isEmpty(model.name) ? (base + '!') : (base + (', ' + (model.name + '!')));
-};
-var author$project$Home$homeGridContainer = function (model) {
-	return A3(
-		author$project$Css$CssGrid$gridContainer,
-		author$project$Home$homeGrid,
-		_List_fromArray(
-			[
-				elm$html$Html$Attributes$class('home-container')
-			]),
-		_List_fromArray(
-			[
-				A4(
-				author$project$Css$CssGrid$gridItem,
-				author$project$Home$mainContent,
-				elm$html$Html$h1,
-				_List_fromArray(
-					[
-						elm$html$Html$Attributes$class('heading')
-					]),
-				_List_fromArray(
-					[
-						elm$html$Html$text(
-						author$project$Home$welcomeText(model))
-					])),
-				author$project$Home$nameInput(model)
-			]));
-};
 var author$project$Home$view = function (model) {
 	return {
-		content: author$project$Home$homeGridContainer(model),
+		content: A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					author$project$Home$errorList(model.errors),
+					A2(
+					elm$html$Html$h1,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class('text-center mb-8 mt-20')
+						]),
+					_List_fromArray(
+						[
+							elm$html$Html$text('Chatterbox')
+						])),
+					author$project$Home$inputForm(model),
+					author$project$Home$formButton
+				])),
 		title: 'Home'
 	};
 };
@@ -7325,12 +7320,39 @@ var author$project$Page$notFound = {
 		]),
 	title: 'Not Found'
 };
+var elm$html$Html$footer = _VirtualDom_node('footer');
+var elm$html$Html$main_ = _VirtualDom_node('main');
 var author$project$Page$viewer = function (_n0) {
 	var title = _n0.title;
 	var content = _n0.content;
 	return {
 		body: _List_fromArray(
-			[content]),
+			[
+				A2(
+				elm$html$Html$main_,
+				_List_Nil,
+				_List_fromArray(
+					[content])),
+				A2(
+				elm$html$Html$footer,
+				_List_fromArray(
+					[
+						elm$html$Html$Attributes$class('absolute pin-b-8 pin-x')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$p,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$class('text-center text-grey-darker')
+							]),
+						_List_fromArray(
+							[
+								elm$html$Html$text('Made with ♥️ using Elm © 2019')
+							]))
+					]))
+			]),
 		title: title + ' - Elm Chat'
 	};
 };
@@ -7370,18 +7392,7 @@ var author$project$Main$view = function (model) {
 	}
 };
 var elm$browser$Browser$application = _Browser_application;
-var elm$core$Platform$Sub$batch = _Platform_batch;
-var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
 var author$project$Main$main = elm$browser$Browser$application(
-	{
-		init: author$project$Main$init,
-		onUrlChange: author$project$Main$UrlChanged,
-		onUrlRequest: author$project$Main$UrlRequested,
-		subscriptions: function (_n0) {
-			return elm$core$Platform$Sub$none;
-		},
-		update: author$project$Main$update,
-		view: author$project$Main$view
-	});
+	{init: author$project$Main$init, onUrlChange: author$project$Main$UrlChanged, onUrlRequest: author$project$Main$UrlRequested, subscriptions: author$project$Main$subscriptions, update: author$project$Main$update, view: author$project$Main$view});
 _Platform_export({'Main':{'init':author$project$Main$main(
 	elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));
