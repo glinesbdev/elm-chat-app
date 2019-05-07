@@ -1,1 +1,7446 @@
-!function(n){"use strict";function r(n,r,t){return t.a=n,t.f=r,t}function a(t){return r(2,t,function(r){return function(n){return t(r,n)}})}function e(e){return r(3,e,function(t){return function(r){return function(n){return e(t,r,n)}}})}function t(u){return r(4,u,function(e){return function(t){return function(r){return function(n){return u(e,t,r,n)}}}})}function u(i){return r(5,i,function(u){return function(e){return function(t){return function(r){return function(n){return i(u,e,t,r,n)}}}}})}function i(o){return r(6,o,function(i){return function(u){return function(e){return function(t){return function(r){return function(n){return o(i,u,e,t,r,n)}}}}}})}function o(a){return r(7,a,function(o){return function(i){return function(u){return function(e){return function(t){return function(r){return function(n){return a(o,i,u,e,t,r,n)}}}}}}})}function d(n,r,t){return 2===n.a?n.f(r,t):n(r)(t)}function l(n,r,t,e){return 3===n.a?n.f(r,t,e):n(r)(t)(e)}function v(n,r,t,e,u){return 4===n.a?n.f(r,t,e,u):n(r)(t)(e)(u)}function b(n,r,t,e,u,i){return 5===n.a?n.f(r,t,e,u,i):n(r)(t)(e)(u)(i)}function c(n,r,t,e,u,i,o){return 6===n.a?n.f(r,t,e,u,i,o):n(r)(t)(e)(u)(i)(o)}function s(n,r,t,e,u,i,o,a){return 7===n.a?n.f(r,t,e,u,i,o,a):n(r)(t)(e)(u)(i)(o)(a)}console.warn("Compiled in DEV mode. Follow the advice at https://elm-lang.org/0.19.0/optimize for better performance and smaller assets.");var m={$:"[]"};function h(n,r){return{$:"::",a:n,b:r}}var f=a(h);function g(n){for(var r=m,t=n.length;t--;)r=h(n[t],r);return r}function p(n){for(var r=[];n.b;n=n.b)r.push(n.a);return r}var $=e(function(n,r,t){for(var e=[];r.b&&t.b;r=r.b,t=t.b)e.push(d(n,r.a,t.a));return g(e)});function y(n,r){for(var t,e=[],u=_(n,r,0,e);u&&(t=e.pop());u=_(t.a,t.b,0,e));return u}function _(n,r,t,e){if(100<t)return e.push(B(n,r)),!0;if(n===r)return!0;if("object"!=typeof n||null===n||null===r)return"function"==typeof n&&D(5),!1;for(var u in"Set_elm_builtin"===n.$&&(n=wt(n),r=wt(r)),"RBNode_elm_builtin"!==n.$&&"RBEmpty_elm_builtin"!==n.$||(n=_t(n),r=_t(r)),n)if(!_(n[u],r[u],t+1,e))return!1;return!0}function w(n,r,t){if("object"!=typeof n)return n===r?0:n<r?-1:1;if(n instanceof String){var e=n.valueOf(),u=r.valueOf();return e===u?0:e<u?-1:1}if("#"===n.$[0])return(t=w(n.a,r.a))?t:(t=w(n.b,r.b))?t:w(n.c,r.c);for(;n.b&&r.b&&!(t=w(n.a,r.a));n=n.b,r=r.b);return t||(n.b?1:r.b?-1:0)}var N=a(function(n,r){var t=w(n,r);return t<0?pt:t?gt:ht}),R={$:"#0"};function B(n,r){return{$:"#2",a:n,b:r}}function E(n){return new String(n)}function x(n,r){var t={};for(var e in n)t[e]=n[e];for(var e in r)t[e]=r[e];return t}function k(n,r){if("string"==typeof n)return n+r;if(!n.b)return r;var t=h(n.a,r);n=n.b;for(var e=t;n.b;n=n.b)e=e.b=h(n.a,r);return t}var I=e(function(n,r,t){for(var e=Array(n),u=0;u<n;u++)e[u]=t(r+u);return e}),A=a(function(n,r){for(var t=Array(n),e=0;e<n&&r.b;e++)t[e]=r.a,r=r.b;return t.length=e,B(t,r)}),C=e(function(n,r,t){for(var e=t.length-1;0<=e;e--)r=d(n,t[e],r);return r});function j(n){return function n(r,t){if("function"==typeof t)return F(r,"<function>");if("boolean"==typeof t)return T(r,t?"True":"False");if("number"==typeof t)return S(r,t+"");if(t instanceof String)return M(r,"'"+L(t,!0)+"'");if("string"==typeof t)return O(r,'"'+L(t,!1)+'"');if("object"==typeof t&&"$"in t){var e=t.$;if("number"==typeof e)return F(r,"<internals>");if("#"===e[0]){var u=[];for(var i in t)"$"!==i&&u.push(n(r,t[i]));return"("+u.join(",")+")"}if("Set_elm_builtin"===e)return T(r,"Set")+G(r,".fromList")+" "+n(r,wt(t));if("RBNode_elm_builtin"===e||"RBEmpty_elm_builtin"===e)return T(r,"Dict")+G(r,".fromList")+" "+n(r,_t(t));if("Array_elm_builtin"===e)return T(r,"Array")+G(r,".fromList")+" "+n(r,Bt(t));if("::"===e||"[]"===e){var u="[";for(t.b&&(u+=n(r,t.a),t=t.b);t.b;t=t.b)u+=","+n(r,t.a);return u+"]"}var u="";for(var o in t)if("$"!==o){var a=n(r,t[o]),f=a[0],c="{"===f||"("===f||"["===f||"<"===f||'"'===f||a.indexOf(" ")<0;u+=" "+(c?a:"("+a+")")}return T(r,e)+u}if("function"==typeof DataView&&t instanceof DataView)return O(r,"<"+t.byteLength+" bytes>");if("function"==typeof File&&t instanceof File)return F(r,"<"+t.name+">");if("object"==typeof t){var u=[];for(var s in t){var l="_"===s[0]?s.slice(1):s;u.push(G(r,l)+" = "+n(r,t[s]))}return 0===u.length?"{}":"{ "+u.join(", ")+" }"}return F(r,"<internals>")}(!1,n)}function L(n,r){var t=n.replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/\t/g,"\\t").replace(/\r/g,"\\r").replace(/\v/g,"\\v").replace(/\0/g,"\\0");return r?t.replace(/\'/g,"\\'"):t.replace(/\"/g,'\\"')}function T(n,r){return n?"[96m"+r+"[0m":r}function S(n,r){return n?"[95m"+r+"[0m":r}function O(n,r){return n?"[93m"+r+"[0m":r}function M(n,r){return n?"[92m"+r+"[0m":r}function G(n,r){return n?"[37m"+r+"[0m":r}function F(n,r){return n?"[94m"+r+"[0m":r}function D(n,r,t,e,u){switch(n){case 0:throw Error('What node should I take over? In JavaScript I need something like:\n\n    Elm.Main.init({\n        node: document.getElementById("elm-node")\n    })\n\nYou need to do this with any Browser.sandbox or Browser.element program.');case 1:throw Error("Browser.application programs cannot handle URLs like this:\n\n    "+document.location.href+"\n\nWhat is the root? The root of your file system? Try looking at this program with `elm reactor` or some other server.");case 2:throw Error("Problem with the flags given to your Elm program on initialization.\n\n"+r);case 3:throw Error("There can only be one port named `"+r+"`, but your program has multiple.");case 4:throw Error("Trying to send an unexpected type of value through port `"+r+"`:\n"+t);case 5:throw Error('Trying to use `(==)` on functions.\nThere is no way to know if functions are "the same" in the Elm sense.\nRead more about this at https://package.elm-lang.org/packages/elm/core/latest/Basics#== which describes why it is this way and what the better version will look like.');case 6:throw Error("Your page is loading multiple Elm scripts with a module named "+r+". Maybe a duplicate script is getting loaded accidentally? If not, rename one of them so I know which is which!");case 8:var i=e;throw Error("TODO in module `"+r+"` "+P(t)+"\n\n"+i);case 9:var o=e;i=u;throw Error("TODO in module `"+r+"` from the `case` expression "+P(t)+"\n\nIt received the following value:\n\n    "+j(o).replace("\n","\n    ")+"\n\nBut the branch that handles it says:\n\n    "+i.replace("\n","\n    "));case 10:throw Error("Bug in https://github.com/elm/virtual-dom/issues");case 11:throw Error("Cannot perform mod 0. Division by zero error.")}}function P(n){return n.start.line===n.end.line?"on line "+n.start.line:"on lines "+n.start.line+" through "+n.end.line}var q=a(function(n,r){return n+r});var U=Math.ceil,z=Math.floor,H=Math.log;var J=a(function(n,r){return r.split(n)}),Y=a(function(n,r){return r.join(n)}),Q=e(function(n,r,t){return t.slice(n,r)});var V=a(function(n,r){for(var t=r.length;t--;){var e=r[t],u=r.charCodeAt(t);if(u<56320||57343<u||(e=r[--t]+e),!n(E(e)))return!1}return!0}),K=a(function(n,r){return-1<r.indexOf(n)}),W=a(function(n,r){return 0==r.indexOf(n)}),X=a(function(n,r){var t=n.length;if(t<1)return m;for(var e=0,u=[];-1<(e=r.indexOf(n,e));)u.push(e),e+=t;return g(u)});function Z(n){return{$:2,b:n}}Z(function(n){return"number"!=typeof n?ln("an INT",n):-2147483647<n&&n<2147483647&&(0|n)===n?Jt(n):!isFinite(n)||n%1?ln("an INT",n):Jt(n)}),Z(function(n){return"boolean"==typeof n?Jt(n):ln("a BOOL",n)}),Z(function(n){return"number"==typeof n?Jt(n):ln("a FLOAT",n)}),Z(function(n){return Jt(mn(n))});var nn=Z(function(n){return"string"==typeof n?Jt(n):n instanceof String?Jt(n+""):ln("a STRING",n)});var rn=a(function(n,r){return{$:6,d:n,b:r}});function tn(n,r){return{$:9,f:n,g:r}}var en=a(function(n,r){return{$:10,b:r,h:n}});var un=a(function(n,r){return tn(n,[r])}),on=a(function(n,r){return an(n,hn(r))});function an(n,r){switch(n.$){case 2:return n.b(r);case 5:return null===r?Jt(n.c):ln("null",r);case 3:return cn(r)?fn(n.b,r,g):ln("a LIST",r);case 4:return cn(r)?fn(n.b,r,sn):ln("an ARRAY",r);case 6:var t=n.d;if("object"!=typeof r||null===r||!(t in r))return ln("an OBJECT with a field named `"+t+"`",r);var e=an(n.b,r[t]);return Yt(e)?e:Ht(d(Vt,t,e.a));case 7:var u=n.e;if(!cn(r))return ln("an ARRAY",r);if(r.length<=u)return ln("a LONGER array. Need index "+u+" but only see "+r.length+" entries",r);e=an(n.b,r[u]);return Yt(e)?e:Ht(d(Kt,u,e.a));case 8:if("object"!=typeof r||null===r||cn(r))return ln("an OBJECT",r);var i=m;for(var o in r)if(r.hasOwnProperty(o)){e=an(n.b,r[o]);if(!Yt(e))return Ht(d(Vt,o,e.a));i=h(B(o,e.a),i)}return Jt(jt(i));case 9:for(var a=n.f,f=n.g,c=0;c<f.length;c++){e=an(f[c],r);if(!Yt(e))return e;a=a(e.a)}return Jt(a);case 10:e=an(n.b,r);return Yt(e)?an(n.h(e.a),r):e;case 11:for(var s=m,l=n.g;l.b;l=l.b){e=an(l.a,r);if(Yt(e))return e;s=h(e.a,s)}return Ht(Wt(jt(s)));case 1:return Ht(d(Qt,n.a,mn(r)));case 0:return Jt(n.a)}}function fn(n,r,t){for(var e=r.length,u=Array(e),i=0;i<e;i++){var o=an(n,r[i]);if(!Yt(o))return Ht(d(Kt,i,o.a));u[i]=o.a}return Jt(t(u))}function cn(n){return Array.isArray(n)||"undefined"!=typeof FileList&&n instanceof FileList}function sn(r){return d(qt,r.length,function(n){return r[n]})}function ln(n,r){return Ht(d(Qt,"Expecting "+n,mn(r)))}function dn(n,r){if(n===r)return!0;if(n.$!==r.$)return!1;switch(n.$){case 0:case 1:return n.a===r.a;case 2:return n.b===r.b;case 5:return n.c===r.c;case 3:case 4:case 8:return dn(n.b,r.b);case 6:return n.d===r.d&&dn(n.b,r.b);case 7:return n.e===r.e&&dn(n.b,r.b);case 9:return n.f===r.f&&vn(n.g,r.g);case 10:return n.h===r.h&&dn(n.b,r.b);case 11:return vn(n.g,r.g)}}function vn(n,r){var t=n.length;if(t!==r.length)return!1;for(var e=0;e<t;e++)if(!dn(n[e],r[e]))return!1;return!0}var bn=a(function(n,r){return JSON.stringify(hn(r),null,n)+""});function mn(n){return{$:0,a:n}}function hn(n){return n.a}var gn=e(function(n,r,t){return t[n]=hn(r),t});mn(null);function pn(n){return{$:0,a:n}}function $n(n){return{$:2,b:n,c:null}}var yn=a(function(n,r){return{$:3,b:n,d:r}});var _n=0;function wn(n){var r={$:0,e:_n++,f:n,g:null,h:[]};return xn(r),r}function Nn(r){return $n(function(n){n(pn(wn(r)))})}function Rn(n,r){n.h.push(r),xn(n)}var Bn=!1,En=[];function xn(n){if(En.push(n),!Bn){for(Bn=!0;n=En.shift();)kn(n);Bn=!1}}function kn(r){for(;r.f;){var n=r.f.$;if(0===n||1===n){for(;r.g&&r.g.$!==n;)r.g=r.g.i;if(!r.g)return;r.f=r.g.b(r.f.a),r.g=r.g.i}else{if(2===n)return void(r.f.c=r.f.b(function(n){r.f=n,xn(r)}));if(5===n){if(0===r.h.length)return;r.f=r.f.b(r.h.shift())}else r.g={$:3===n?0:1,b:r.f.b,i:r.g},r.f=r.f.d}}}function In(n,r,t,e,u,i){var o=d(on,n,mn(r?r.flags:void 0));Yt(o)||D(2,function(n){return se(n)}(o.a));var a={},f=(o=t(o.a)).a,c=i(l,f),s=function(n,r){var t;for(var e in An){var u=An[e];u.a&&((t=t||{})[e]=u.a(e,r)),n[e]=jn(u,r)}return t}(a,l);function l(n,r){c(f=(o=d(e,n,f)).a,r),Mn(a,o.b,u(f))}return Mn(a,o.b,u(f)),s?{ports:s}:{}}var An={};function Cn(n,r,t,e,u){return{b:n,c:r,d:t,e:e,f:u}}function jn(n,r){var e={g:r,h:void 0},u=n.c,i=n.d,o=n.e,a=n.f;function f(t){return d(yn,f,function(n){return{$:5,b:n}}(function(n){var r=n.a;return 0===n.$?l(i,e,r,t):o&&a?v(u,e,r.i,r.j,t):l(u,e,o?r.i:r.j,t)}))}return e.h=wn(d(yn,f,n.b))}var Ln=a(function(r,t){return $n(function(n){r.g(t),n(pn(R))})});function Tn(r){return function(n){return{$:1,k:r,l:n}}}function Sn(n){return{$:2,m:n}}var On=a(function(n,r){return{$:3,n:n,o:r}});function Mn(n,r,t){var e={};for(var u in Gn(!0,r,e,null),Gn(!1,t,e,null),n)Rn(n[u],{$:"fx",a:e[u]||{i:m,j:m}})}function Gn(n,r,t,e){switch(r.$){case 1:var u=r.k,i=function(n,r,t,e){function u(n){for(var r=t;r;r=r.q)n=r.p(n);return n}return d(n?An[r].e:An[r].f,u,e)}(n,u,e,r.l);return void(t[u]=function(n,r,t){return t=t||{i:m,j:m},n?t.i=h(r,t.i):t.j=h(r,t.j),t}(n,i,t[u]));case 2:for(var o=r.m;o.b;o=o.b)Gn(n,o.a,t,e);return;case 3:return void Gn(n,r.o,t,{p:r.n,q:e})}}function Fn(n){An[n]&&D(3,n)}function Dn(n,r){return Fn(n),An[n]={e:Pn,r:r,a:qn},Tn(n)}var Pn=a(function(n,r){return r});function qn(n){var i=[],o=An[n].r,a=function(t){return $n(function(n){var r=setTimeout(function(){n(pn(R))},t);return function(){clearTimeout(r)}})}(0);return An[n].b=a,An[n].c=e(function(n,r){for(;r.b;r=r.b)for(var t=i,e=hn(o(r.a)),u=0;u<t.length;u++)t[u](e);return a}),{subscribe:function(n){i.push(n)},unsubscribe:function(n){var r=(i=i.slice()).indexOf(n);r<0||i.splice(r,1)}}}function Un(n,r){return Fn(n),An[n]={f:zn,r:r,a:Hn},Tn(n)}var zn=a(function(r,t){return function(n){return r(t(n))}});function Hn(u,i){var o=m,a=An[u].r,t=pn(null);return An[u].b=t,An[u].c=e(function(n,r){return o=r,t}),{send:function(n){var r=d(on,a,mn(n));Yt(r)||D(4,u,r.a);for(var t=r.a,e=o;e.b;e=e.b)i(e.a(t))}}}var Jn;var Yn="undefined"!=typeof document?document:{};function Qn(n,r){n.appendChild(r)}function Vn(n){return{$:0,a:n}}var Kn=a(function(i,o){return a(function(n,r){for(var t=[],e=0;r.b;r=r.b){var u=r.a;e+=u.b||0,t.push(u)}return e+=t.length,{$:1,c:o,d:tr(n),e:t,f:i,b:e}})})(void 0);a(function(i,o){return a(function(n,r){for(var t=[],e=0;r.b;r=r.b){var u=r.a;e+=u.b.b||0,t.push(u)}return e+=t.length,{$:2,c:o,d:tr(n),e:t,f:i,b:e}})})(void 0);var Wn=a(function(n,r){return{$:4,j:n,k:r,b:1+(r.b||0)}});var Xn=a(function(n,r){return{$:"a0",n:n,o:r}}),Zn=a(function(n,r){return{$:"a2",n:n,o:r}}),nr=a(function(n,r){return{$:"a3",n:n,o:r}});var rr;function tr(n){for(var r={};n.b;n=n.b){var t=n.a,e=t.$,u=t.n,i=t.o;if("a2"!==e){var o=r[e]||(r[e]={});"a3"===e&&"class"===u?er(o,u,i):o[u]=i}else"className"===u?er(r,u,hn(i)):r[u]=hn(i)}return r}function er(n,r,t){var e=n[r];n[r]=e?e+" "+t:t}function ur(n,r){var t=n.$;if(5===t)return ur(n.k||(n.k=n.m()),r);if(0===t)return Yn.createTextNode(n.a);if(4===t){for(var e=n.k,u=n.j;4===e.$;)"object"!=typeof u?u=[u,e.j]:u.push(e.j),e=e.k;var i={j:u,p:r};return(o=ur(e,i)).elm_event_node_ref=i,o}if(3===t)return ir(o=n.h(n.g),r,n.d),o;var o=n.f?Yn.createElementNS(n.f,n.c):Yn.createElement(n.c);Jn&&"a"==n.c&&o.addEventListener("click",Jn(o)),ir(o,r,n.d);for(var a=n.e,f=0;f<a.length;f++)Qn(o,ur(1===t?a[f]:a[f].b,r));return o}function ir(n,r,t){for(var e in t){var u=t[e];"a1"===e?or(n,u):"a0"===e?cr(n,r,u):"a3"===e?ar(n,u):"a4"===e?fr(n,u):("value"!==e&&"checked"!==e||n[e]!==u)&&(n[e]=u)}}function or(n,r){var t=n.style;for(var e in r)t[e]=r[e]}function ar(n,r){for(var t in r){var e=r[t];void 0!==e?n.setAttribute(t,e):n.removeAttribute(t)}}function fr(n,r){for(var t in r){var e=r[t],u=e.f,i=e.o;void 0!==i?n.setAttributeNS(u,t,i):n.removeAttributeNS(u,t)}}function cr(n,r,t){var e=n.elmFs||(n.elmFs={});for(var u in t){var i=t[u],o=e[u];if(i){if(o){if(o.q.$===i.$){o.q=i;continue}n.removeEventListener(u,o)}o=sr(r,i),n.addEventListener(u,o,rr&&{passive:ki(i)<2}),e[u]=o}else n.removeEventListener(u,o),e[u]=void 0}}try{window.addEventListener("t",null,Object.defineProperty({},"passive",{get:function(){rr=!0}}))}catch(n){}function sr(s,n){function l(n){var r=l.q,t=an(r.a,n);if(Yt(t)){for(var e,u=ki(r),i=t.a,o=u?u<3?i.a:i.message:i,a=1==u?i.b:3==u&&i.stopPropagation,f=(a&&n.stopPropagation(),(2==u?i.b:3==u&&i.preventDefault)&&n.preventDefault(),s);e=f.j;){if("function"==typeof e)o=e(o);else for(var c=e.length;c--;)o=e[c](o);f=f.p}f(o,a)}}return l.q=n,l}function lr(n,r){return n.$==r.$&&dn(n.a,r.a)}function dr(n,r){var t=[];return br(n,r,t,0),t}function vr(n,r,t,e){var u={$:r,r:t,s:e,t:void 0,u:void 0};return n.push(u),u}function br(n,r,t,e){if(n!==r){var u=n.$,i=r.$;if(u!==i){if(1!==u||2!==i)return void vr(t,0,e,r);r=function(n){for(var r=n.e,t=r.length,e=Array(t),u=0;u<t;u++)e[u]=r[u].b;return{$:1,c:n.c,d:n.d,e:e,f:n.f,b:n.b}}(r),i=1}switch(i){case 5:for(var o=n.l,a=r.l,f=o.length,c=f===a.length;c&&f--;)c=o[f]===a[f];if(c)return void(r.k=n.k);r.k=r.m();var s=[];return br(n.k,r.k,s,0),void(0<s.length&&vr(t,1,e,s));case 4:for(var l=n.j,d=r.j,v=!1,b=n.k;4===b.$;)v=!0,"object"!=typeof l?l=[l,b.j]:l.push(b.j),b=b.k;for(var m=r.k;4===m.$;)v=!0,"object"!=typeof d?d=[d,m.j]:d.push(m.j),m=m.k;return v&&l.length!==d.length?void vr(t,0,e,r):((v?function(n,r){for(var t=0;t<n.length;t++)if(n[t]!==r[t])return!1;return!0}(l,d):l===d)||vr(t,2,e,d),void br(b,m,t,e+1));case 0:return void(n.a!==r.a&&vr(t,3,e,r.a));case 1:return void mr(n,r,t,e,gr);case 2:return void mr(n,r,t,e,pr);case 3:if(n.h!==r.h)return void vr(t,0,e,r);var h=hr(n.d,r.d);h&&vr(t,4,e,h);var g=r.i(n.g,r.g);return void(g&&vr(t,5,e,g))}}}function mr(n,r,t,e,u){if(n.c===r.c&&n.f===r.f){var i=hr(n.d,r.d);i&&vr(t,4,e,i),u(n,r,t,e)}else vr(t,0,e,r)}function hr(n,r,t){var e;for(var u in n)if("a1"!==u&&"a0"!==u&&"a3"!==u&&"a4"!==u)if(u in r){var i=n[u],o=r[u];i===o&&"value"!==u&&"checked"!==u||"a0"===t&&lr(i,o)||((e=e||{})[u]=o)}else(e=e||{})[u]=t?"a1"===t?"":"a0"===t||"a3"===t?void 0:{f:n[u].f,o:void 0}:"string"==typeof n[u]?"":null;else{var a=hr(n[u],r[u]||{},u);a&&((e=e||{})[u]=a)}for(var f in r)f in n||((e=e||{})[f]=r[f]);return e}function gr(n,r,t,e){var u=n.e,i=r.e,o=u.length,a=i.length;a<o?vr(t,6,e,{v:a,i:o-a}):o<a&&vr(t,7,e,{v:o,e:i});for(var f=o<a?o:a,c=0;c<f;c++){var s=u[c];br(s,i[c],t,++e),e+=s.b||0}}function pr(n,r,t,e){for(var u=[],i={},o=[],a=n.e,f=r.e,c=a.length,s=f.length,l=0,d=0,v=e;l<c&&d<s;){var b=(E=a[l]).a,m=(x=f[d]).a,h=E.b,g=x.b,p=void 0,$=void 0;if(b!==m){var y=a[l+1],_=f[d+1];if(y){var w=y.a,N=y.b;$=m===w}if(_){var R=_.a,B=_.b;p=b===R}if(p&&$)br(h,B,u,++v),yr(i,u,b,g,d,o),v+=h.b||0,_r(i,u,b,N,++v),v+=N.b||0,l+=2,d+=2;else if(p)v++,yr(i,u,m,g,d,o),br(h,B,u,v),v+=h.b||0,l+=1,d+=2;else if($)_r(i,u,b,h,++v),v+=h.b||0,br(N,g,u,++v),v+=N.b||0,l+=2,d+=1;else{if(!y||w!==R)break;_r(i,u,b,h,++v),yr(i,u,m,g,d,o),v+=h.b||0,br(N,B,u,++v),v+=N.b||0,l+=2,d+=2}}else br(h,g,u,++v),v+=h.b||0,l++,d++}for(;l<c;){var E;_r(i,u,(E=a[l]).a,h=E.b,++v),v+=h.b||0,l++}for(;d<s;){var x,k=k||[];yr(i,u,(x=f[d]).a,x.b,void 0,k),d++}(0<u.length||0<o.length||k)&&vr(t,8,e,{w:u,x:o,y:k})}var $r="_elmW6BL";function yr(n,r,t,e,u,i){var o=n[t];if(!o)return i.push({r:u,A:o={c:0,z:e,r:u,s:void 0}}),void(n[t]=o);if(1===o.c){i.push({r:u,A:o}),o.c=2;var a=[];return br(o.z,e,a,o.r),o.r=u,void(o.s.s={w:a,A:o})}yr(n,r,t+$r,e,u,i)}function _r(n,r,t,e,u){var i=n[t];if(i){if(0===i.c){i.c=2;var o=[];return br(e,i.z,o,u),void vr(r,9,u,{w:o,A:i})}_r(n,r,t+$r,e,u)}else{var a=vr(r,9,u,void 0);n[t]={c:1,z:e,r:u,s:a}}}function wr(n,r,t,e){!function n(r,t,e,u,i,o,a){var f=e[u];var c=f.r;for(;c===i;){var s=f.$;if(1===s)wr(r,t.k,f.s,a);else if(8===s){f.t=r,f.u=a;var l=f.s.w;0<l.length&&n(r,t,l,0,i,o,a)}else if(9===s){f.t=r,f.u=a;var d=f.s;if(d){d.A.s=r;var l=d.w;0<l.length&&n(r,t,l,0,i,o,a)}}else f.t=r,f.u=a;if(!(f=e[++u])||(c=f.r)>o)return u}var v=t.$;if(4===v){for(var b=t.k;4===b.$;)b=b.k;return n(r,b,e,u,i+1,o,r.elm_event_node_ref)}var m=t.e;var h=r.childNodes;for(var g=0;g<m.length;g++){var p=1===v?m[g]:m[g].b,$=++i+(p.b||0);if(i<=c&&c<=$&&(u=n(h[g],p,e,u,i,$,a),!(f=e[u])||(c=f.r)>o))return u;i=$}return u}(n,r,t,0,0,r.b,e)}function Nr(n,r,t,e){return 0===t.length?n:(wr(n,r,t,e),Rr(n,t))}function Rr(n,r){for(var t=0;t<r.length;t++){var e=r[t],u=e.t,i=Br(u,e);u===n&&(n=i)}return n}function Br(n,r){switch(r.$){case 0:return function(n,r,t){var e=n.parentNode,u=ur(r,t);u.elm_event_node_ref||(u.elm_event_node_ref=n.elm_event_node_ref);e&&u!==n&&e.replaceChild(u,n);return u}(n,r.s,r.u);case 4:return ir(n,r.u,r.s),n;case 3:return n.replaceData(0,n.length,r.s),n;case 1:return Rr(n,r.s);case 2:return n.elm_event_node_ref?n.elm_event_node_ref.j=r.s:n.elm_event_node_ref={j:r.s,p:r.u},n;case 6:for(var t=r.s,e=0;e<t.i;e++)n.removeChild(n.childNodes[t.v]);return n;case 7:for(var u=(t=r.s).e,i=n.childNodes[e=t.v];e<u.length;e++)n.insertBefore(ur(u[e],r.u),i);return n;case 9:if(!(t=r.s))return n.parentNode.removeChild(n),n;var o=t.A;return void 0!==o.r&&n.parentNode.removeChild(n),o.s=Rr(n,t.w),n;case 8:return function(n,r){var t=r.s,e=function(n,r){if(!n)return;for(var t=Yn.createDocumentFragment(),e=0;e<n.length;e++){var u=n[e],i=u.A;Qn(t,2===i.c?i.s:ur(i.z,r.u))}return t}(t.y,r);n=Rr(n,t.w);for(var u=t.x,i=0;i<u.length;i++){var o=u[i],a=o.A,f=2===a.c?a.s:ur(a.z,r.u);n.insertBefore(f,n.childNodes[o.r])}e&&Qn(n,e);return n}(n,r);case 5:return r.s(n);default:D(10)}}function Er(n){if(3===n.nodeType)return Vn(n.textContent);if(1!==n.nodeType)return Vn("");for(var r=m,t=n.attributes,e=t.length;e--;){var u=t[e];r=h(d(nr,u.name,u.value),r)}var i=n.tagName.toLowerCase(),o=m,a=n.childNodes;for(e=a.length;e--;)o=h(Er(a[e]),o);return l(Kn,i,r,o)}var xr=t(function(r,n,t,e){return In(n,e,r.init,r.update,r.subscriptions,function(u,n){var i=r.setup&&r.setup(u),o=r.view,a=Yn.title,f=Yn.body,c=Er(f);return Ir(n,function(n){Jn=i;var r=o(n),t=Kn("body")(m)(r.body),e=dr(c,t);f=Nr(f,c,e,u),c=t,Jn=0,a!==r.title&&(Yn.title=a=r.title)})})}),kr=("undefined"!=typeof cancelAnimationFrame&&cancelAnimationFrame,"undefined"!=typeof requestAnimationFrame?requestAnimationFrame:function(n){return setTimeout(n,1e3/60)});function Ir(t,e){e(t);var u=0;function i(){u=1===u?0:(kr(i),e(t),1)}return function(n,r){t=n,r?(e(t),2===u&&(u=1)):(0===u&&kr(i),u=2)}}function Ar(){return zi(Yn.location.href).a||D(1)}var Cr=a(function(n,r){return d(Ei,oi,$n(function(){history.pushState({},"",r),n()}))}),jr=a(function(n,r){return d(Ei,oi,$n(function(){history.replaceState({},"",r),n()}))}),Lr={addEventListener:function(){},removeEventListener:function(){}},Tr=("undefined"!=typeof document&&document,"undefined"!=typeof window?window:Lr);function Sr(n){return{$:"Redirect",a:n}}function Or(n){return n.a}function Mr(n){var r=Xt(n);return 97<=r&&r<=122}function Gr(n){var r=Xt(n);return r<=90&&65<=r}function Fr(n){return Mr(n)||Gr(n)}function Dr(n){return Mr(n)||Gr(n)||function(n){var r=Xt(n);return r<=57&&48<=r}(n)}function Pr(n){return l(bt,a(function(n,r){return r+1}),0,n)}function qr(n){return d(ie,"\n    ",d(ae,"\n",n))}function Ur(n){return mn(l(bt,a(function(n,r){return l(gn,n.a,n.b,r)}),{},n))}function zr(n){return"Guest"===n.$?"":n.b}function Hr(n){return d(me,"default",function(n){if("Guest"===n.$)return zt;var r=n.a;return Ut("Nothing"===r.$?"default":r.a)}(n))}function Jr(n){return B(function(n){return{chatName:zr(n),messages:m,pendingMessage:"",room:l(be,"IIVY2snGny1UkBvgGqQB","",m),session:n,userId:""}}(n),ve({chatName:zr(n),roomName:Hr(n)}))}function Yr(n){return{$:"Chat",a:n}}function Qr(n){return{$:"GoToChat",a:n}}function Vr(n){return{$:"GoToHome",a:n}}function Kr(n){return{$:"Home",a:n}}function Wr(n){return""===n}function Xr(n){return{$:"Guest",a:n}}function Zr(n){return Xr(n)}function nt(n){return{$:"Chat",a:n}}function rt(n){return n}function tt(n){return{$:"Parser",a:n}}function et(f){return tt(function(n){var r=n.visited,t=n.unvisited,e=n.params,u=n.frag,i=n.value;if(t.b){var o=t.a,a=t.b;return y(o,f)?g([b(Ie,d(yt,o,r),a,e,u,i)]):m}return m})}function ut(n){if("RBNode_elm_builtin"!==n.$||"RBNode_elm_builtin"!==n.d.$||"RBNode_elm_builtin"!==n.e.$)return n;if("RBNode_elm_builtin"===n.e.d.$&&"Red"===n.e.d.a.$){var r=n.d,t=n.e,e=t.b,u=t.c,i=(s=t.d,s.d),o=s.e,a=t.e;return b(He,Je,s.b,s.c,b(He,ze,n.b,n.c,b(He,Je,r.b,r.c,r.d,r.e),i),b(He,ze,e,u,o,a))}var f=n.d,c=n.e,s=(e=c.b,u=c.c,c.d);return a=c.e,b(He,ze,n.b,n.c,b(He,Je,f.b,f.c,f.d,f.e),b(He,Je,e,u,s,a))}function it(n){if("RBNode_elm_builtin"!==n.$||"RBNode_elm_builtin"!==n.d.$||"RBNode_elm_builtin"!==n.e.$)return n;if("RBNode_elm_builtin"===n.d.d.$&&"Red"===n.d.d.a.$){var r=n.b,t=n.c,e=n.d,u=e.d,i=e.e,o=n.e,a=o.b,f=o.c,c=o.d,s=o.e;return b(He,Je,e.b,e.c,b(He,ze,u.b,u.c,u.d,u.e),b(He,ze,r,t,i,b(He,Je,a,f,c,s)))}var l=n.d,d=l.d,v=n.e;return a=v.b,f=v.c,c=v.d,s=v.e,b(He,ze,r=n.b,t=n.c,b(He,Je,l.b,l.c,d,i=l.e),b(He,Je,a,f,c,s))}function ot(n){return d(me,Re,d(iu,De,n))}function at(n){return{$:"GenerateRandomId",a:n}}function ft(n){return{$:"Generate",a:n}}function ct(n){var r=n.b;return d(yu,1664525*n.a+r>>>0,r)}function st(n){return{$:"Generator",a:n}}var lt,dt,vt,bt=e(function(n,r,t){for(;;){if(!t.b)return r;var e=t.b,u=n,i=d(n,t.a,r);n=u,r=i,t=e}}),mt=t(function(n,r,t,e){return{$:"Array_elm_builtin",a:n,b:r,c:t,d:e}}),ht={$:"EQ"},gt={$:"GT"},pt={$:"LT"},$t=e(function(n,r,t){for(;;){if("RBEmpty_elm_builtin"===t.$)return r;var e=t.d,u=n,i=l(n,t.b,t.c,l($t,n,r,t.e));n=u,r=i,t=e}}),yt=f,_t=function(n){return l($t,e(function(n,r,t){return d(yt,B(n,r),t)}),m,n)},wt=function(n){return function(n){return l($t,e(function(n,r,t){return d(yt,n,t)}),m,n)}(n.a)},Nt=C,Rt=e(function(t,n,r){var e=r.c,u=r.d,i=a(function(n,r){return l(Nt,"SubTree"!==n.$?t:i,r,n.a)});return l(Nt,i,l(Nt,t,n,u),e)}),Bt=function(n){return l(Rt,yt,m,n)},Et=U,xt=a(function(n,r){return H(r)/H(n)}),kt=Et(d(xt,2,32)),It=[],At=v(mt,0,kt,It,It),Ct=A,jt=function(n){return l(bt,yt,m,n)},Lt=a(function(n,r){for(;;){var t=d(Ct,32,n),e=t.b,u=d(yt,{$:"SubTree",a:t.a},r);if(!e.b)return jt(u);n=e,r=u}}),Tt=a(function(n,r){for(;;){var t=Et(r/32);if(1===t)return d(Ct,32,n).a;n=d(Lt,n,m),r=t}}),St=q,Ot=z,Mt=a(function(n,r){return 0<w(n,r)?n:r}),Gt=function(n){return n.length},Ft=a(function(n,r){if(r.nodeListSize){var t=32*r.nodeListSize,e=Ot(d(xt,32,t-1)),u=n?jt(r.nodeList):r.nodeList,i=d(Tt,u,r.nodeListSize);return v(mt,Gt(r.tail)+t,d(Mt,5,e*kt),i,r.tail)}return v(mt,Gt(r.tail),kt,It,r.tail)}),Dt=I,Pt=u(function(n,r,t,e,u){for(;;){if(r<0)return d(Ft,!1,{nodeList:e,nodeListSize:t/32|0,tail:u});var i={$:"Leaf",a:l(Dt,32,r,n)};n=n,r=r-32,t=t,e=d(yt,i,e),u=u}}),qt=a(function(n,r){if(0<n){var t=n%32;return b(Pt,r,n-t-32,n,m,l(Dt,t,n-t,r))}return At}),Ut=function(n){return{$:"Just",a:n}},zt={$:"Nothing"},Ht=function(n){return{$:"Err",a:n}},Jt=function(n){return{$:"Ok",a:n}},Yt=function(n){return"Ok"===n.$},Qt=a(function(n,r){return{$:"Failure",a:n,b:r}}),Vt=a(function(n,r){return{$:"Field",a:n,b:r}}),Kt=a(function(n,r){return{$:"Index",a:n,b:r}}),Wt=function(n){return{$:"OneOf",a:n}},Xt=function(n){var r=n.charCodeAt(0);return r<55296||56319<r?r:1024*(r-55296)+n.charCodeAt(1)-56320+65536},Zt=$,ne=e(function(n,r,t){for(;;){if(1<=w(n,r))return t;var e=n,u=r-1,i=d(yt,r,t);n=e,r=u,t=i}}),re=a(function(n,r){return l(ne,n,r,m)}),te=a(function(n,r){return l(Zt,n,d(re,0,Pr(r)-1),r)}),ee=V,ue=function(n){return n+""},ie=a(function(n,r){return d(Y,n,p(r))}),oe=function(n){var r=n.charCodeAt(0);return r?Ut(r<55296||56319<r?B(E(n[0]),n.slice(1)):B(E(n[0]+n[1]),n.slice(2))):zt},ae=a(function(n,r){return g(d(J,n,r))}),fe=bn,ce=a(function(n,r){return"\n\n("+ue(n+1)+") "+qr(se(r))}),se=function(n){return d(le,n,m)},le=a(function(n,r){n:for(;;)switch(n.$){case"Field":var e=n.a,t=n.b,u=function(){var n=oe(e);if("Nothing"===n.$)return!1;var r=n.a,t=r.b;return Fr(r.a)&&d(ee,Dr,t)}();n=t,r=d(yt,u?"."+e:"['"+e+"']",r);continue n;case"Index":t=n.b;var i="["+ue(n.a)+"]";n=t,r=d(yt,i,r);continue n;case"OneOf":var o=n.a;if(o.b){if(o.b.b){var a=(r.b?"The Json.Decode.oneOf at json"+d(ie,"",jt(r)):"Json.Decode.oneOf")+" failed in the following "+ue(Pr(o))+" ways:";return d(ie,"\n\n",d(yt,a,d(te,ce,o)))}n=t=o.a,r=r;continue n}return"Ran into a Json.Decode.oneOf with no possibilities"+(r.b?" at json"+d(ie,"",jt(r)):"!");default:var f=n.a,c=n.b;return(a=r.b?"Problem with the value at json"+d(ie,"",jt(r))+":\n\n    ":"Problem with the given value:\n\n")+(qr(d(fe,4,c))+"\n\n")+f}}),de=mn,ve=Dn("chatPageLoaded",function(n){return Ur(g([B("chatName",de(n.chatName)),B("roomName",de(n.roomName))]))}),be=e(function(n,r,t){return{id:n,name:r,userIds:t}}),me=a(function(n,r){return"Just"!==r.$?n:r.a}),he=a(function(n,r){return{errors:r,name:"",session:n}}),ge=Sn,pe=ge(m),$e=a(function(n,r){return B(d(he,n,d(me,m,r)),pe)}),ye=On,_e=t(function(n,r,t,e){var u=e.b;return B(n(e.a),d(ye,r,u))}),we=e(function(n,r,t){return{$:"LoggedIn",a:n,b:r,c:t}}),Ne=e(function(n,r,t){switch(n.$){case"Home":return v(_e,Kr,Vr,t,d($e,Zr(r),Ut(m)));case"Chat":var e=n.a;if("Nothing"===e.$)return v(_e,Kr,Vr,t,d($e,Zr(r),Ut(g(["You must have a name to chat!"]))));var u=e.a;return function(n){return!Wr(n)}(u)?v(_e,Yr,Qr,t,Jr(l(we,zt,u,r))):v(_e,Kr,Vr,t,d($e,Zr(r),Ut(g(["Invalid chat name"]))));default:return v(_e,Kr,Vr,t,d($e,Zr(r),Ut(m)))}}),Re={$:"NotFound"},Be={$:"Home"},Ee=t(function(n,r,t,e){if(e.b){var u=e.a,i=e.b;if(i.b){var o=i.a,a=i.b;if(a.b){var f=a.a,c=a.b;if(c.b){var s=c.b;return d(n,u,d(n,o,d(n,f,d(n,c.a,500<t?l(bt,n,r,jt(s)):v(Ee,n,r,t+1,s)))))}return d(n,u,d(n,o,d(n,f,r)))}return d(n,u,d(n,o,r))}return d(n,u,r)}return r}),xe=e(function(n,r,t){return v(Ee,n,r,0,t)}),ke=a(function(t,n){return l(xe,a(function(n,r){return d(yt,t(n),r)}),m,n)}),Ie=u(function(n,r,t,e,u){return{frag:e,params:t,unvisited:r,value:u,visited:n}}),Ae=a(function(n,r){return b(Ie,r.visited,r.unvisited,r.params,r.frag,n(r.value))}),Ce=a(function(i,n){var o=n.a;return tt(function(n){var r=n.visited,t=n.unvisited,e=n.params,u=n.frag;return d(ke,Ae(n.value),o(b(Ie,r,t,e,u,i)))})}),je=a(function(n,r){return r.b?l(xe,yt,r,n):n}),Le=a(function(n,r){return function(n){return l(xe,je,m,n)}(d(ke,n,r))}),Te=a(function(n,r){var t=n.a,e=r.a;return tt(function(n){return d(Le,e,t(n))})}),Se=a(function(n,r){return d(Te,n,function(n){var t=n.a;return tt(function(n){var r=n.params;return g([b(Ie,n.visited,n.unvisited,r,n.frag,(0,n.value)(t(r)))])})}(r))}),Oe=tt(function(n){return g([n])}),Me=N,Ge=a(function(n,r){n:for(;;){if("RBEmpty_elm_builtin"===r.$)return zt;var t=r.c,e=r.d,u=r.e;switch(d(Me,n,r.b).$){case"LT":n=n,r=e;continue n;case"EQ":return Ut(t);default:n=n,r=u;continue n}}}),Fe=a(function(r,t){return function(n){return{$:"Parser",a:n}}(function(n){return t(d(me,m,d(Ge,r,n)))})}),De=(lt=g([d(Ce,Be,Oe),d(Ce,nt,d(Se,et("chat"),(dt="name",d(Fe,dt,function(n){return!n.b||n.b.b?zt:Ut(n.a)})))),d(Ce,Re,et("not-found"))]),tt(function(r){return d(Le,function(n){return(0,n.a)(r)},lt)})),Pe=function(n){return n.b&&(""!==n.a||n.b.b)?d(yt,n.a,Pe(n.b)):m},qe={$:"RBEmpty_elm_builtin"},Ue=qe,ze={$:"Black"},He=u(function(n,r,t,e,u){return{$:"RBNode_elm_builtin",a:n,b:r,c:t,d:e,e:u}}),Je={$:"Red"},Ye=u(function(n,r,t,e,u){if("RBNode_elm_builtin"===u.$&&"Red"===u.a.$){var i=u.b,o=u.c,a=u.d,f=u.e;if("RBNode_elm_builtin"!==e.$||"Red"!==e.a.$)return b(He,n,i,o,b(He,Je,r,t,e,a),f);return b(He,Je,r,t,b(He,ze,e.b,e.c,e.d,s=e.e),b(He,ze,i,o,a,f))}if("RBNode_elm_builtin"!==e.$||"Red"!==e.a.$||"RBNode_elm_builtin"!==e.d.$||"Red"!==e.d.a.$)return b(He,n,r,t,e,u);var c=e.d,s=e.e;return b(He,Je,e.b,e.c,b(He,ze,c.b,c.c,c.d,c.e),b(He,ze,r,t,s,u))}),Qe=e(function(n,r,t){if("RBEmpty_elm_builtin"===t.$)return b(He,Je,n,r,qe,qe);var e=t.a,u=t.b,i=t.c,o=t.d,a=t.e;switch(d(Me,n,u).$){case"LT":return b(Ye,e,u,i,l(Qe,n,r,o),a);case"EQ":return b(He,e,u,r,o,a);default:return b(Ye,e,u,i,o,l(Qe,n,r,a))}}),Ve=e(function(n,r,t){var e=l(Qe,n,r,t);if("RBNode_elm_builtin"!==e.$||"Red"!==e.a.$)return e;return b(He,ze,e.b,e.c,e.d,e.e)}),Ke=o(function(n,r,t,e,u,i,o){if("RBNode_elm_builtin"===i.$&&"Red"===i.a.$){return b(He,t,i.b,i.c,i.d,b(He,Je,e,u,i.e,o))}n:for(;"RBNode_elm_builtin"===o.$&&"Black"===o.a.$;){if("RBNode_elm_builtin"===o.d.$){if("Black"!==o.d.a.$)break n;return it(r)}return it(r)}return r}),We=function(n){if("RBNode_elm_builtin"!==n.$||"RBNode_elm_builtin"!==n.d.$)return qe;var r=n.a,t=n.b,e=n.c,u=n.d,i=u.d,o=n.e;if("Black"!==u.a.$)return b(He,r,t,e,We(u),o);if("RBNode_elm_builtin"===i.$&&"Red"===i.a.$){return b(He,r,t,e,We(u),o)}var a=ut(n);if("RBNode_elm_builtin"!==a.$)return qe;var f=a.e;return b(Ye,a.a,a.b,a.c,We(a.d),f)},Xe=a(function(n,r){if("RBEmpty_elm_builtin"===r.$)return qe;var t=r.a,e=r.b,u=r.c,i=r.d,o=r.e;if(w(n,e)<0){if("RBNode_elm_builtin"!==i.$||"Black"!==i.a.$)return b(He,t,e,u,d(Xe,n,i),o);var a=i.d;if("RBNode_elm_builtin"===a.$&&"Red"===a.a.$){return b(He,t,e,u,d(Xe,n,i),o)}var f=ut(r);if("RBNode_elm_builtin"!==f.$)return qe;var c=f.e;return b(Ye,f.a,f.b,f.c,d(Xe,n,f.d),c)}return d(Ze,n,s(Ke,n,r,t,e,u,i,o))}),Ze=a(function(n,r){if("RBNode_elm_builtin"!==r.$)return qe;var t=r.a,e=r.b,u=r.c,i=r.d,o=r.e;if(y(n,e)){var a=function(n){for(;;){if("RBNode_elm_builtin"!==n.$||"RBNode_elm_builtin"!==n.d.$)return n;n=n.d}}(o);return"RBNode_elm_builtin"!==a.$?qe:b(Ye,t,a.b,a.c,i,We(o))}return b(Ye,t,e,u,i,d(Xe,n,o))}),nu=a(function(n,r){var t=d(Xe,n,r);if("RBNode_elm_builtin"!==t.$||"Red"!==t.a.$)return t;return b(He,ze,t.b,t.c,t.d,t.e)}),ru=e(function(n,r,t){var e=r(d(Ge,n,t));return"Just"!==e.$?d(nu,n,t):l(Ve,n,e.a,t)}),tu=function(n){try{return Ut(decodeURIComponent(n))}catch(n){return zt}},eu=a(function(n,r){return Ut("Nothing"===r.$?g([n]):d(yt,n,r.a))}),uu=a(function(n,r){var t=d(ae,"=",n);if(t.b&&t.b.b&&!t.b.b.b){var e=t.b.a,u=tu(t.a);if("Nothing"===u.$)return r;var i=u.a,o=tu(e);return"Nothing"===o.$?r:l(ru,i,eu(o.a),r)}return r}),iu=a(function(n,r){return function(n){n:for(;;){if(n.b){var r=n.a,t=r.unvisited;if(t.b){if(""!==t.a||t.b.b){n=n.b;continue n}return Ut(r.value)}return Ut(r.value)}return zt}}((0,n.a)(b(Ie,m,function(n){var r=d(ae,"/",n);return Pe(r.b&&""===r.a?r.b:r)}(r.path),function(n){return"Nothing"===n.$?Ue:l(xe,uu,Ue,d(ae,"&",n.a))}(r.query),r.fragment,rt)))}),ou=e(function(n,r,t){return l(Ne,ot(r),t,Sr(Xr(t)))}),au=en,fu=rn,cu=nn,su=function(n){return{$:0,a:n}},lu=Un("getAllMessages",function(n){return{$:3,b:n}}(d(au,function(u){return d(au,function(e){return d(au,function(t){return d(au,function(r){return d(au,function(n){return su({body:n,chatName:r,id:t,roomId:e,userId:u})},d(fu,"body",cu))},d(fu,"chatName",cu))},d(fu,"id",cu))},d(fu,"roomId",cu))},d(fu,"userId",cu)))),du=Un("getMessage",d(au,function(u){return d(au,function(e){return d(au,function(t){return d(au,function(r){return d(au,function(n){return su({body:n,chatName:r,id:t,roomId:e,userId:u})},d(fu,"body",cu))},d(fu,"chatName",cu))},d(fu,"id",cu))},d(fu,"roomId",cu))},d(fu,"userId",cu))),vu=Un("getUserId",cu),bu=Sn,mu=On,hu=bu(m),gu=u(function(n,r,t,e,u){return{body:t,chatName:u,id:n,roomId:e,userId:r}}),pu=yn,$u=pn,yu=a(function(n,r){return{$:"Seed",a:n,b:r}}),_u=(vt=function(n){return{$:"Posix",a:n}},$n(function(n){n(pn(vt(Date.now())))})),wu=d(pu,function(n){return $u(function(n){var r=ct(d(yu,0,1013904223));return ct(d(yu,r.a+n>>>0,r.b))}(function(n){return n.a}(n)))},_u),Nu=Ln,Ru=a(function(n,r){return(0,n.a)(r)}),Bu=e(function(n,r,t){if(r.b){var e=r.b,u=d(Ru,r.a.a,t),i=u.b;return d(pu,function(){return l(Bu,n,e,i)},d(Nu,n,u.a))}return $u(t)}),Eu=e(function(n,r,t){return $u(t)}),xu=a(function(e,n){var u=n.a;return st(function(n){var r=u(n),t=r.b;return B(e(r.a),t)})});An.Random=Cn(wu,Bu,Eu,a(function(n,r){return ft(d(xu,n,r.a))}));function ku(n){return E(n<0||1114111<n?"�":65535<n?String.fromCharCode(55296+Math.floor((n-=65536)/1024),n%1024+56320):String.fromCharCode(n))}function Iu(n){var r=n.a,t=277803737*(r^r>>>4+(r>>>28));return(t>>>22^t)>>>0}function Au(n){return n<0?-n:n}function Cu(n){return n.b}function ju(n){return p(n).join("")}function Lu(n){return n.a+"="+n.b}function Tu(n){switch(n.$){case"Home":return"home";case"Chat":var r=n.a;if("Nothing"===r.$)return d(ti,g(["/"]),m);var t=r.a;return d(ti,g(["chat"]),g([d(ii,"name",t)]));default:return"not-found"}}function Su(n){return{$:"Perform",a:n}}var Ou=Tn("Random"),Mu=a(function(n,r){return Ou(ft(d(xu,n,r)))}),Gu=a(function(t,o){return st(function(n){var r=w(t,o)<0?B(t,o):B(o,t),e=r.a,u=r.b-e+1;if(u-1&u){var i=(-u>>>0)%u>>>0;return function(n){for(;;){var r=Iu(n),t=ct(n);if(0<=w(r,i))return B(r%u+e,t);n=t}}(n)}return B(((u-1&Iu(n))>>>0)+e,ct(n))})}),Fu=a(function(n,r){return d(xu,ku,d(Gu,n,r))}),Du=d(Fu,97,122),Pu=d(Fu,65,90),qu=e(function(n,r,t){return n(r(t))}),Uu=a(function(e,n){var u=n.a;return st(function(n){var r=u(n),t=r.b;return(0,e(r.a).a)(t)})}),zu=a(function(u,i){return st(function(n){var r=ct(n),t=Au(i-u),e=Iu(r);return B((134217728*(1*(67108863&Iu(n)))+1*(134217727&e))/9007199254740992*t+u,ct(r))})}),Hu=a(function(o,n){var r=function(n){return l(bt,St,0,n)}(d(ke,d(qu,Au,Or),d(yt,o,n)));return d(Uu,a(function(n,r){for(;;){if(!n.b)return o.b;var t=n.a,e=t.a,u=t.b,i=n.b;if(w(r,e)<1)return u;n=i,r=r-e}})(d(yt,o,n)),d(zu,0,r))}),Ju=d(a(function(n,r){return d(Hu,B(1,n),d(ke,function(n){return B(1,n)},r))}),Du,g([Pu])),Yu=t(function(n,r,t,e){for(;;){if(r<1)return B(n,e);var u=t(e),i=u.b;n=d(yt,u.a,n),r=r-1,t=t,e=i}}),Qu=a(function(r,n){var t=n.a;return st(function(n){return v(Yu,m,r,t,n)})}),Vu=a(function(n,r){return d(xu,ju,d(Qu,n,r))}),Ku=d(Mu,at,d(Vu,20,Ju)),Wu=Dn("storeMessage",rt),Xu=function(n){return n.trim()},Zu=a(function(n,r){switch(n.$){case"EnterMessage":return B(x(r,{pendingMessage:t=n.a}),pe);case"SubmitMessage":return B(r,Ku);case"GenerateRandomId":var t=b(gu,n.a,r.userId,Xu(r.pendingMessage),r.room.id,zr(r.session));return B(x(r,{pendingMessage:""}),Wu(function(n){return Ur(g([B("id",de(n.id)),B("userId",de(n.userId)),B("roomId",de(n.roomId)),B("chatName",de(n.chatName)),B("body",de(n.body))]))}(t)));case"GotUserId":return B(x(r,{userId:n.a}),pe);case"GotMessage":return B(x(r,{messages:d(yt,t=n.a,r.messages)}),pe);default:return B(x(r,{messages:n.a}),pe)}}),ni=d(Mu,function(n){return{$:"GenerateRandomId",a:n}},d(Vu,20,Ju)),ri=Dn("storeUser",rt),ti=a(function(n,r){return k(d(ie,"/",n),function(n){return n.b?"?"+d(ie,"&",d(ke,Lu,n)):""}(r))}),ei=function(n){return encodeURIComponent(n)},ui=a(function(n,r){return{$:"QueryParameter",a:n,b:r}}),ii=a(function(n,r){return d(ui,ei(n),ei(r))}),oi=function(n){for(;;){n=n.a}},ai=$u(R),fi=a(function(r,n){return d(pu,function(n){return $u(r(n))},n)}),ci=e(function(t,n,e){return d(pu,function(r){return d(pu,function(n){return $u(d(t,r,n))},e)},n)}),si=a(function(n,r){var t=r.a;return Nn(d(pu,Nu(n),t))});An.Task=Cn(ai,e(function(n,r){return d(fi,function(){return R},function(n){return l(xe,ci(yt),$u(m),n)}(d(ke,si(n),r)))}),e(function(){return $u(R)}),a(function(n,r){return Su(d(fi,n,r.a))}));function li(n){return"Guest"!==n.$?n.c:n.a}function di(n){switch(n.$){case"Redirect":return n.a;case"Home":return function(n){return n.session}(n.a);case"Chat":return function(n){return n.session}(n.a);default:return n.a}}function vi(n){return{$:"EnterMessage",a:n}}function bi(n){return d($o,"click",su(n))}function mi(n){return B(n,!0)}function hi(n){return d(yo,"input",d(xi,mi,d(xi,n,_o)))}function gi(n){return B(n,!0)}function pi(n){return d(wo,"submit",d(xi,gi,su(n)))}function $i(n){return d(co,g([pi(ao),uo("flex my-20")]),g([d(lo,g([hi(vi),go(n.pendingMessage),mo(!0),uo("mx-4 flex-1 p-4 text-lg")]),m),d(fo,g([bi(ao),ho("button"),uo("bg-green-lighter mr-4 p-4")]),g([d(so,g([function(n){return d(eo,"src",function(n){return/^\s*(javascript:|data:text\/html)/i.test(n)?'javascript:alert("This is an XSS vector. Please use ports or web components instead.")':n}(n))}('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="paper-plane" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(96,111,123)" d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z"></path></svg>'),uo("w-4")]),m)]))]))}function yi(n){return{content:d(Zi,g([uo("flex flex-col h-screen")]),g([d(No,g([uo("text-center mt-8")]),g([to("Chat Room")])),function(r){return d(Zi,g([uo("bg-white px-2 -mb-12 overflow-y-scroll flex-1 mt-12 mx-4 message-box")]),jt(d(ke,function(n){return d(oo,r,n)},r.messages)))}(n),$i(n)])),title:"Chat Room"}}function _i(n){return d(Ro,m,g([to(n)]))}function wi(n){return{$:"EnterName",a:n}}function Ni(n){return{content:d(Zi,m,g([function(n){return d(Bo,0<Pr(n),d(Zi,m,g([d(Eo,g([uo(" text-center text-grey-lightest errors p-8 bg-red-light")]),d(ke,_i,n))])))}(n.errors),d(No,g([uo("text-center mb-8 mt-20")]),g([to("Chatterbox")])),function(n){return d(co,g([pi(xo),uo("flex flex-row px-4")]),g([d(ro,g([uo("bg-indigo p-4 text-grey-lighter rounded-bl-lg rounded-tl-lg")]),g([to("@")])),d(lo,g([Io("Enter your name"),uo("border-solid text-lg flex-1 p-4 border-indigo border-1 rounded-br-lg rounded-tr-lg name-input"),go(n.name),Ao(!0),mo(!0),hi(wi)]),m)]))}(n),ko])),title:"Home"}}var Ri,Bi=Tn("Task"),Ei=a(function(n,r){return Bi(Su(d(fi,n,r)))}),xi=un,ki=function(n){switch(n.$){case"Normal":return 0;case"MayStopPropagation":return 1;case"MayPreventDefault":return 2;default:return 3}},Ii=function(n){return n.length},Ai=Q,Ci=a(function(n,r){return n<1?r:l(Ai,n,Ii(r),r)}),ji=W,Li={$:"Http"},Ti={$:"Https"},Si=X,Oi=a(function(n,r){return n<1?"":l(Ai,0,n,r)}),Mi=K,Gi=function(n){for(var r=0,t=n.charCodeAt(0),e=43==t||45==t?1:0,u=e;u<n.length;++u){var i=n.charCodeAt(u);if(i<48||57<i)return zt;r=10*r+i-48}return u==e?zt:Ut(45==t?-r:r)},Fi=i(function(n,r,t,e,u,i){return{fragment:i,host:r,path:e,port_:t,protocol:n,query:u}}),Di=u(function(n,r,t,e,u){if(Wr(u)||d(Mi,"@",u))return zt;var i=d(Si,":",u);if(i.b){if(i.b.b)return zt;var o=i.a,a=Gi(d(Ci,o+1,u));if("Nothing"===a.$)return zt;var f=a;return Ut(c(Fi,n,d(Oi,o,u),f,r,t,e))}return Ut(c(Fi,n,u,zt,r,t,e))}),Pi=t(function(n,r,t,e){if(Wr(e))return zt;var u=d(Si,"/",e);if(u.b){var i=u.a;return b(Di,n,d(Ci,i,e),r,t,d(Oi,i,e))}return b(Di,n,"/",r,t,e)}),qi=e(function(n,r,t){if(Wr(t))return zt;var e=d(Si,"?",t);if(e.b){var u=e.a;return v(Pi,n,Ut(d(Ci,u+1,t)),r,d(Oi,u,t))}return v(Pi,n,zt,r,t)}),Ui=a(function(n,r){if(Wr(r))return zt;var t=d(Si,"#",r);if(t.b){var e=t.a;return l(qi,n,Ut(d(Ci,e+1,r)),d(Oi,e,r))}return l(qi,n,zt,r)}),zi=function(n){return d(ji,"http://",n)?d(Ui,Li,d(Ci,7,n)):d(ji,"https://",n)?d(Ui,Ti,d(Ci,8,n)):zt},Hi=Cr,Ji=a(function(n,r){return d(Hi,n,Tu(r))}),Yi=a(function(n,r){switch(n.$){case"EnterName":return B(x(r,{name:n.a}),pe);case"SubmitName":return B(r,ni);default:return B(r,ge(g([ri(function(n){var r=n.b;return Ur(g([B("id",de(n.a)),B("name",de(r))]))}(B(n.a,r.name))),d(Ji,li(r.session),nt(Ut(r.name)))])))}}),Qi=jr,Vi=a(function(n,r){return d(Qi,n,Tu(r))}),Ki=function(n){return d(Ei,oi,$n(function(){try{Tr.location=n}catch(n){Yn.location.reload(!1)}}))},Wi=a(function(n,r){var t=B(n,r);n:for(;;)switch(t.a.$){case"UrlRequested":var e=t.a.a;return"Internal"!==e.$?B(r,Ki(e.a)):l(Ne,ot(e.a),li(di(r)),r);case"UrlChanged":return l(Ne,ot(t.a.a),li(di(r)),r);case"GoToHome":if("Home"!==t.b.$)break n;return v(_e,Kr,Vr,r,d(Yi,t.a.a,t.b.a));case"GoToChat":if("Chat"!==t.b.$)break n;return v(_e,Yr,Qr,r,d(Zu,t.a.a,t.b.a));default:if("Redirect"!==t.b.$)break n;var u=t.a.a;return B(Sr(u),d(Vi,li(u),Be))}return B(r,pe)}),Xi=a(function(n,r){for(;;){if(!r.b)return!1;var t=r.b;if(n(r.a))return!0;n=n,r=t}}),Zi=Kn("div"),no=Kn("p"),ro=Kn("span"),to=Vn,eo=a(function(n,r){return d(Zn,n,de(r))}),uo=eo("className"),io=a(function(t,n){return l(xe,a(function(n,r){return t(n)?d(yt,n,r):r}),m,n)}),oo=a(function(n,r){return d(Zi,g([function(n){return uo(d(ie," ",d(ke,Or,d(io,Cu,n))))}(g([B("mt-4",!0),B("text-right",!y(r.userId,n.userId))]))]),g([d(ro,g([uo("font-bold")]),g([to(function(r){return d(Xi,function(n){return d(Mi,n,r)},g(["<",">"]))?"HAXXOR":r}(r.chatName))])),d(no,g([uo("mt-0")]),g([to(r.body)]))]))}),ao={$:"SubmitMessage"},fo=Kn("button"),co=Kn("form"),so=Kn("img"),lo=Kn("input"),vo=mn,bo=a(function(n,r){return d(Zn,n,vo(r))}),mo=bo("autofocus"),ho=eo("type"),go=eo("value"),po=Xn,$o=a(function(n,r){return d(po,n,function(n){return{$:"Normal",a:n}}(r))}),yo=a(function(n,r){return d(po,n,function(n){return{$:"MayStopPropagation",a:n}}(r))}),_o=d(a(function(n,r){return l(xe,fu,r,n)}),g(["target","value"]),cu),wo=a(function(n,r){return d(po,n,function(n){return{$:"MayPreventDefault",a:n}}(r))}),No=Kn("h1"),Ro=Kn("li"),Bo=a(function(n,r){return n?r:to("")}),Eo=Kn("ul"),xo={$:"SubmitName"},ko=d(Zi,g([uo("text-center")]),g([d(fo,g([uo("border-solid bg-teal-dark hover:bg-teal-darker text-grey-lighter rounded-lg py-4 px-8 mt-8"),ho("button"),bi(xo)]),g([to("Enter")]))])),Io=eo("placeholder"),Ao=bo("required"),Co={body:m,title:""},jo={body:g([d(No,m,g([to("The page you're looking for doesn't exist.")]))]),title:"Not Found"},Lo=Kn("footer"),To=Kn("main"),So=Wn,Oo=function(r){var n=r.onUrlChange,o=r.onUrlRequest,t=function(){t.a(n(Ar()))};return xr({setup:function(i){return t.a=i,Tr.addEventListener("popstate",t),Tr.navigator.userAgent.indexOf("Trident")<0||Tr.addEventListener("hashchange",t),a(function(n,r){if(!(r.ctrlKey||r.metaKey||r.shiftKey||1<=r.button||n.target||n.hasAttribute("download"))){r.preventDefault();var t=n.href,e=Ar(),u=zi(t).a;i(o(u&&e.protocol===u.protocol&&e.host===u.host&&e.port_.a===u.port_.a?function(n){return{$:"Internal",a:n}}(u):function(n){return{$:"External",a:n}}(t)))}})},init:function(n){return l(r.init,n,Ar(),t)},view:r.view,update:r.update,subscriptions:r.subscriptions})}({init:ou,onUrlChange:function(n){return{$:"UrlChanged",a:n}},onUrlRequest:function(n){return{$:"UrlRequested",a:n}},subscriptions:function(n){if("Chat"!==n.$)return hu;return d(mu,Qr,bu(g([du(function(n){return function(n){return{$:"GotMessage",a:n}}(n)}),vu(function(n){return function(n){return{$:"GotUserId",a:n}}(n)}),lu(function(n){return function(n){return{$:"GotAllMessages",a:n}}(n)})])))},update:Wi,view:function(n){var r=a(function(n,r){var t=function(n){var r=n.title;return{body:g([d(To,m,g([n.content])),d(Lo,g([uo("absolute pin-b-8 pin-x")]),g([d(no,g([uo("text-center text-grey-darker")]),g([to("Made with ♥️ using Elm © 2019")]))]))]),title:r+" - Elm Chat"}}(r),e=t.title,u=t.body;return{body:d(ke,So(n),u),title:e}});switch(n.$){case"Redirect":return Co;case"NotFound":return jo;case"Home":return d(r,Vr,Ni(n.a));default:return d(r,Qr,yi(n.a))}}});Ri={Main:{init:Oo(su(R))(0)}},n.Elm?function n(r,t,e){for(var u in e)u in t?"init"==u?D(6,r):n(r+"."+u,t[u],e[u]):t[u]=e[u]}("Elm",n.Elm,Ri):n.Elm=Ri}(this);
+(function(scope){
+'use strict';
+
+function F(arity, fun, wrapper) {
+  wrapper.a = arity;
+  wrapper.f = fun;
+  return wrapper;
+}
+
+function F2(fun) {
+  return F(2, fun, function(a) { return function(b) { return fun(a,b); }; })
+}
+function F3(fun) {
+  return F(3, fun, function(a) {
+    return function(b) { return function(c) { return fun(a, b, c); }; };
+  });
+}
+function F4(fun) {
+  return F(4, fun, function(a) { return function(b) { return function(c) {
+    return function(d) { return fun(a, b, c, d); }; }; };
+  });
+}
+function F5(fun) {
+  return F(5, fun, function(a) { return function(b) { return function(c) {
+    return function(d) { return function(e) { return fun(a, b, c, d, e); }; }; }; };
+  });
+}
+function F6(fun) {
+  return F(6, fun, function(a) { return function(b) { return function(c) {
+    return function(d) { return function(e) { return function(f) {
+    return fun(a, b, c, d, e, f); }; }; }; }; };
+  });
+}
+function F7(fun) {
+  return F(7, fun, function(a) { return function(b) { return function(c) {
+    return function(d) { return function(e) { return function(f) {
+    return function(g) { return fun(a, b, c, d, e, f, g); }; }; }; }; }; };
+  });
+}
+function F8(fun) {
+  return F(8, fun, function(a) { return function(b) { return function(c) {
+    return function(d) { return function(e) { return function(f) {
+    return function(g) { return function(h) {
+    return fun(a, b, c, d, e, f, g, h); }; }; }; }; }; }; };
+  });
+}
+function F9(fun) {
+  return F(9, fun, function(a) { return function(b) { return function(c) {
+    return function(d) { return function(e) { return function(f) {
+    return function(g) { return function(h) { return function(i) {
+    return fun(a, b, c, d, e, f, g, h, i); }; }; }; }; }; }; }; };
+  });
+}
+
+function A2(fun, a, b) {
+  return fun.a === 2 ? fun.f(a, b) : fun(a)(b);
+}
+function A3(fun, a, b, c) {
+  return fun.a === 3 ? fun.f(a, b, c) : fun(a)(b)(c);
+}
+function A4(fun, a, b, c, d) {
+  return fun.a === 4 ? fun.f(a, b, c, d) : fun(a)(b)(c)(d);
+}
+function A5(fun, a, b, c, d, e) {
+  return fun.a === 5 ? fun.f(a, b, c, d, e) : fun(a)(b)(c)(d)(e);
+}
+function A6(fun, a, b, c, d, e, f) {
+  return fun.a === 6 ? fun.f(a, b, c, d, e, f) : fun(a)(b)(c)(d)(e)(f);
+}
+function A7(fun, a, b, c, d, e, f, g) {
+  return fun.a === 7 ? fun.f(a, b, c, d, e, f, g) : fun(a)(b)(c)(d)(e)(f)(g);
+}
+function A8(fun, a, b, c, d, e, f, g, h) {
+  return fun.a === 8 ? fun.f(a, b, c, d, e, f, g, h) : fun(a)(b)(c)(d)(e)(f)(g)(h);
+}
+function A9(fun, a, b, c, d, e, f, g, h, i) {
+  return fun.a === 9 ? fun.f(a, b, c, d, e, f, g, h, i) : fun(a)(b)(c)(d)(e)(f)(g)(h)(i);
+}
+
+console.warn('Compiled in DEV mode. Follow the advice at https://elm-lang.org/0.19.0/optimize for better performance and smaller assets.');
+
+
+var _List_Nil_UNUSED = { $: 0 };
+var _List_Nil = { $: '[]' };
+
+function _List_Cons_UNUSED(hd, tl) { return { $: 1, a: hd, b: tl }; }
+function _List_Cons(hd, tl) { return { $: '::', a: hd, b: tl }; }
+
+
+var _List_cons = F2(_List_Cons);
+
+function _List_fromArray(arr)
+{
+	var out = _List_Nil;
+	for (var i = arr.length; i--; )
+	{
+		out = _List_Cons(arr[i], out);
+	}
+	return out;
+}
+
+function _List_toArray(xs)
+{
+	for (var out = []; xs.b; xs = xs.b) // WHILE_CONS
+	{
+		out.push(xs.a);
+	}
+	return out;
+}
+
+var _List_map2 = F3(function(f, xs, ys)
+{
+	for (var arr = []; xs.b && ys.b; xs = xs.b, ys = ys.b) // WHILE_CONSES
+	{
+		arr.push(A2(f, xs.a, ys.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_map3 = F4(function(f, xs, ys, zs)
+{
+	for (var arr = []; xs.b && ys.b && zs.b; xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
+	{
+		arr.push(A3(f, xs.a, ys.a, zs.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_map4 = F5(function(f, ws, xs, ys, zs)
+{
+	for (var arr = []; ws.b && xs.b && ys.b && zs.b; ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
+	{
+		arr.push(A4(f, ws.a, xs.a, ys.a, zs.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_map5 = F6(function(f, vs, ws, xs, ys, zs)
+{
+	for (var arr = []; vs.b && ws.b && xs.b && ys.b && zs.b; vs = vs.b, ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
+	{
+		arr.push(A5(f, vs.a, ws.a, xs.a, ys.a, zs.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_sortBy = F2(function(f, xs)
+{
+	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
+		return _Utils_cmp(f(a), f(b));
+	}));
+});
+
+var _List_sortWith = F2(function(f, xs)
+{
+	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
+		var ord = A2(f, a, b);
+		return ord === elm$core$Basics$EQ ? 0 : ord === elm$core$Basics$LT ? -1 : 1;
+	}));
+});
+
+
+
+// EQUALITY
+
+function _Utils_eq(x, y)
+{
+	for (
+		var pair, stack = [], isEqual = _Utils_eqHelp(x, y, 0, stack);
+		isEqual && (pair = stack.pop());
+		isEqual = _Utils_eqHelp(pair.a, pair.b, 0, stack)
+		)
+	{}
+
+	return isEqual;
+}
+
+function _Utils_eqHelp(x, y, depth, stack)
+{
+	if (depth > 100)
+	{
+		stack.push(_Utils_Tuple2(x,y));
+		return true;
+	}
+
+	if (x === y)
+	{
+		return true;
+	}
+
+	if (typeof x !== 'object' || x === null || y === null)
+	{
+		typeof x === 'function' && _Debug_crash(5);
+		return false;
+	}
+
+	/**/
+	if (x.$ === 'Set_elm_builtin')
+	{
+		x = elm$core$Set$toList(x);
+		y = elm$core$Set$toList(y);
+	}
+	if (x.$ === 'RBNode_elm_builtin' || x.$ === 'RBEmpty_elm_builtin')
+	{
+		x = elm$core$Dict$toList(x);
+		y = elm$core$Dict$toList(y);
+	}
+	//*/
+
+	/**_UNUSED/
+	if (x.$ < 0)
+	{
+		x = elm$core$Dict$toList(x);
+		y = elm$core$Dict$toList(y);
+	}
+	//*/
+
+	for (var key in x)
+	{
+		if (!_Utils_eqHelp(x[key], y[key], depth + 1, stack))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+var _Utils_equal = F2(_Utils_eq);
+var _Utils_notEqual = F2(function(a, b) { return !_Utils_eq(a,b); });
+
+
+
+// COMPARISONS
+
+// Code in Generate/JavaScript.hs, Basics.js, and List.js depends on
+// the particular integer values assigned to LT, EQ, and GT.
+
+function _Utils_cmp(x, y, ord)
+{
+	if (typeof x !== 'object')
+	{
+		return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
+	}
+
+	/**/
+	if (x instanceof String)
+	{
+		var a = x.valueOf();
+		var b = y.valueOf();
+		return a === b ? 0 : a < b ? -1 : 1;
+	}
+	//*/
+
+	/**_UNUSED/
+	if (typeof x.$ === 'undefined')
+	//*/
+	/**/
+	if (x.$[0] === '#')
+	//*/
+	{
+		return (ord = _Utils_cmp(x.a, y.a))
+			? ord
+			: (ord = _Utils_cmp(x.b, y.b))
+				? ord
+				: _Utils_cmp(x.c, y.c);
+	}
+
+	// traverse conses until end of a list or a mismatch
+	for (; x.b && y.b && !(ord = _Utils_cmp(x.a, y.a)); x = x.b, y = y.b) {} // WHILE_CONSES
+	return ord || (x.b ? /*GT*/ 1 : y.b ? /*LT*/ -1 : /*EQ*/ 0);
+}
+
+var _Utils_lt = F2(function(a, b) { return _Utils_cmp(a, b) < 0; });
+var _Utils_le = F2(function(a, b) { return _Utils_cmp(a, b) < 1; });
+var _Utils_gt = F2(function(a, b) { return _Utils_cmp(a, b) > 0; });
+var _Utils_ge = F2(function(a, b) { return _Utils_cmp(a, b) >= 0; });
+
+var _Utils_compare = F2(function(x, y)
+{
+	var n = _Utils_cmp(x, y);
+	return n < 0 ? elm$core$Basics$LT : n ? elm$core$Basics$GT : elm$core$Basics$EQ;
+});
+
+
+// COMMON VALUES
+
+var _Utils_Tuple0_UNUSED = 0;
+var _Utils_Tuple0 = { $: '#0' };
+
+function _Utils_Tuple2_UNUSED(a, b) { return { a: a, b: b }; }
+function _Utils_Tuple2(a, b) { return { $: '#2', a: a, b: b }; }
+
+function _Utils_Tuple3_UNUSED(a, b, c) { return { a: a, b: b, c: c }; }
+function _Utils_Tuple3(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
+
+function _Utils_chr_UNUSED(c) { return c; }
+function _Utils_chr(c) { return new String(c); }
+
+
+// RECORDS
+
+function _Utils_update(oldRecord, updatedFields)
+{
+	var newRecord = {};
+
+	for (var key in oldRecord)
+	{
+		newRecord[key] = oldRecord[key];
+	}
+
+	for (var key in updatedFields)
+	{
+		newRecord[key] = updatedFields[key];
+	}
+
+	return newRecord;
+}
+
+
+// APPEND
+
+var _Utils_append = F2(_Utils_ap);
+
+function _Utils_ap(xs, ys)
+{
+	// append Strings
+	if (typeof xs === 'string')
+	{
+		return xs + ys;
+	}
+
+	// append Lists
+	if (!xs.b)
+	{
+		return ys;
+	}
+	var root = _List_Cons(xs.a, ys);
+	xs = xs.b
+	for (var curr = root; xs.b; xs = xs.b) // WHILE_CONS
+	{
+		curr = curr.b = _List_Cons(xs.a, ys);
+	}
+	return root;
+}
+
+
+
+var _JsArray_empty = [];
+
+function _JsArray_singleton(value)
+{
+    return [value];
+}
+
+function _JsArray_length(array)
+{
+    return array.length;
+}
+
+var _JsArray_initialize = F3(function(size, offset, func)
+{
+    var result = new Array(size);
+
+    for (var i = 0; i < size; i++)
+    {
+        result[i] = func(offset + i);
+    }
+
+    return result;
+});
+
+var _JsArray_initializeFromList = F2(function (max, ls)
+{
+    var result = new Array(max);
+
+    for (var i = 0; i < max && ls.b; i++)
+    {
+        result[i] = ls.a;
+        ls = ls.b;
+    }
+
+    result.length = i;
+    return _Utils_Tuple2(result, ls);
+});
+
+var _JsArray_unsafeGet = F2(function(index, array)
+{
+    return array[index];
+});
+
+var _JsArray_unsafeSet = F3(function(index, value, array)
+{
+    var length = array.length;
+    var result = new Array(length);
+
+    for (var i = 0; i < length; i++)
+    {
+        result[i] = array[i];
+    }
+
+    result[index] = value;
+    return result;
+});
+
+var _JsArray_push = F2(function(value, array)
+{
+    var length = array.length;
+    var result = new Array(length + 1);
+
+    for (var i = 0; i < length; i++)
+    {
+        result[i] = array[i];
+    }
+
+    result[length] = value;
+    return result;
+});
+
+var _JsArray_foldl = F3(function(func, acc, array)
+{
+    var length = array.length;
+
+    for (var i = 0; i < length; i++)
+    {
+        acc = A2(func, array[i], acc);
+    }
+
+    return acc;
+});
+
+var _JsArray_foldr = F3(function(func, acc, array)
+{
+    for (var i = array.length - 1; i >= 0; i--)
+    {
+        acc = A2(func, array[i], acc);
+    }
+
+    return acc;
+});
+
+var _JsArray_map = F2(function(func, array)
+{
+    var length = array.length;
+    var result = new Array(length);
+
+    for (var i = 0; i < length; i++)
+    {
+        result[i] = func(array[i]);
+    }
+
+    return result;
+});
+
+var _JsArray_indexedMap = F3(function(func, offset, array)
+{
+    var length = array.length;
+    var result = new Array(length);
+
+    for (var i = 0; i < length; i++)
+    {
+        result[i] = A2(func, offset + i, array[i]);
+    }
+
+    return result;
+});
+
+var _JsArray_slice = F3(function(from, to, array)
+{
+    return array.slice(from, to);
+});
+
+var _JsArray_appendN = F3(function(n, dest, source)
+{
+    var destLen = dest.length;
+    var itemsToCopy = n - destLen;
+
+    if (itemsToCopy > source.length)
+    {
+        itemsToCopy = source.length;
+    }
+
+    var size = destLen + itemsToCopy;
+    var result = new Array(size);
+
+    for (var i = 0; i < destLen; i++)
+    {
+        result[i] = dest[i];
+    }
+
+    for (var i = 0; i < itemsToCopy; i++)
+    {
+        result[i + destLen] = source[i];
+    }
+
+    return result;
+});
+
+
+
+// LOG
+
+var _Debug_log_UNUSED = F2(function(tag, value)
+{
+	return value;
+});
+
+var _Debug_log = F2(function(tag, value)
+{
+	console.log(tag + ': ' + _Debug_toString(value));
+	return value;
+});
+
+
+// TODOS
+
+function _Debug_todo(moduleName, region)
+{
+	return function(message) {
+		_Debug_crash(8, moduleName, region, message);
+	};
+}
+
+function _Debug_todoCase(moduleName, region, value)
+{
+	return function(message) {
+		_Debug_crash(9, moduleName, region, value, message);
+	};
+}
+
+
+// TO STRING
+
+function _Debug_toString_UNUSED(value)
+{
+	return '<internals>';
+}
+
+function _Debug_toString(value)
+{
+	return _Debug_toAnsiString(false, value);
+}
+
+function _Debug_toAnsiString(ansi, value)
+{
+	if (typeof value === 'function')
+	{
+		return _Debug_internalColor(ansi, '<function>');
+	}
+
+	if (typeof value === 'boolean')
+	{
+		return _Debug_ctorColor(ansi, value ? 'True' : 'False');
+	}
+
+	if (typeof value === 'number')
+	{
+		return _Debug_numberColor(ansi, value + '');
+	}
+
+	if (value instanceof String)
+	{
+		return _Debug_charColor(ansi, "'" + _Debug_addSlashes(value, true) + "'");
+	}
+
+	if (typeof value === 'string')
+	{
+		return _Debug_stringColor(ansi, '"' + _Debug_addSlashes(value, false) + '"');
+	}
+
+	if (typeof value === 'object' && '$' in value)
+	{
+		var tag = value.$;
+
+		if (typeof tag === 'number')
+		{
+			return _Debug_internalColor(ansi, '<internals>');
+		}
+
+		if (tag[0] === '#')
+		{
+			var output = [];
+			for (var k in value)
+			{
+				if (k === '$') continue;
+				output.push(_Debug_toAnsiString(ansi, value[k]));
+			}
+			return '(' + output.join(',') + ')';
+		}
+
+		if (tag === 'Set_elm_builtin')
+		{
+			return _Debug_ctorColor(ansi, 'Set')
+				+ _Debug_fadeColor(ansi, '.fromList') + ' '
+				+ _Debug_toAnsiString(ansi, elm$core$Set$toList(value));
+		}
+
+		if (tag === 'RBNode_elm_builtin' || tag === 'RBEmpty_elm_builtin')
+		{
+			return _Debug_ctorColor(ansi, 'Dict')
+				+ _Debug_fadeColor(ansi, '.fromList') + ' '
+				+ _Debug_toAnsiString(ansi, elm$core$Dict$toList(value));
+		}
+
+		if (tag === 'Array_elm_builtin')
+		{
+			return _Debug_ctorColor(ansi, 'Array')
+				+ _Debug_fadeColor(ansi, '.fromList') + ' '
+				+ _Debug_toAnsiString(ansi, elm$core$Array$toList(value));
+		}
+
+		if (tag === '::' || tag === '[]')
+		{
+			var output = '[';
+
+			value.b && (output += _Debug_toAnsiString(ansi, value.a), value = value.b)
+
+			for (; value.b; value = value.b) // WHILE_CONS
+			{
+				output += ',' + _Debug_toAnsiString(ansi, value.a);
+			}
+			return output + ']';
+		}
+
+		var output = '';
+		for (var i in value)
+		{
+			if (i === '$') continue;
+			var str = _Debug_toAnsiString(ansi, value[i]);
+			var c0 = str[0];
+			var parenless = c0 === '{' || c0 === '(' || c0 === '[' || c0 === '<' || c0 === '"' || str.indexOf(' ') < 0;
+			output += ' ' + (parenless ? str : '(' + str + ')');
+		}
+		return _Debug_ctorColor(ansi, tag) + output;
+	}
+
+	if (typeof DataView === 'function' && value instanceof DataView)
+	{
+		return _Debug_stringColor(ansi, '<' + value.byteLength + ' bytes>');
+	}
+
+	if (typeof File === 'function' && value instanceof File)
+	{
+		return _Debug_internalColor(ansi, '<' + value.name + '>');
+	}
+
+	if (typeof value === 'object')
+	{
+		var output = [];
+		for (var key in value)
+		{
+			var field = key[0] === '_' ? key.slice(1) : key;
+			output.push(_Debug_fadeColor(ansi, field) + ' = ' + _Debug_toAnsiString(ansi, value[key]));
+		}
+		if (output.length === 0)
+		{
+			return '{}';
+		}
+		return '{ ' + output.join(', ') + ' }';
+	}
+
+	return _Debug_internalColor(ansi, '<internals>');
+}
+
+function _Debug_addSlashes(str, isChar)
+{
+	var s = str
+		.replace(/\\/g, '\\\\')
+		.replace(/\n/g, '\\n')
+		.replace(/\t/g, '\\t')
+		.replace(/\r/g, '\\r')
+		.replace(/\v/g, '\\v')
+		.replace(/\0/g, '\\0');
+
+	if (isChar)
+	{
+		return s.replace(/\'/g, '\\\'');
+	}
+	else
+	{
+		return s.replace(/\"/g, '\\"');
+	}
+}
+
+function _Debug_ctorColor(ansi, string)
+{
+	return ansi ? '\x1b[96m' + string + '\x1b[0m' : string;
+}
+
+function _Debug_numberColor(ansi, string)
+{
+	return ansi ? '\x1b[95m' + string + '\x1b[0m' : string;
+}
+
+function _Debug_stringColor(ansi, string)
+{
+	return ansi ? '\x1b[93m' + string + '\x1b[0m' : string;
+}
+
+function _Debug_charColor(ansi, string)
+{
+	return ansi ? '\x1b[92m' + string + '\x1b[0m' : string;
+}
+
+function _Debug_fadeColor(ansi, string)
+{
+	return ansi ? '\x1b[37m' + string + '\x1b[0m' : string;
+}
+
+function _Debug_internalColor(ansi, string)
+{
+	return ansi ? '\x1b[94m' + string + '\x1b[0m' : string;
+}
+
+function _Debug_toHexDigit(n)
+{
+	return String.fromCharCode(n < 10 ? 48 + n : 55 + n);
+}
+
+
+// CRASH
+
+
+function _Debug_crash_UNUSED(identifier)
+{
+	throw new Error('https://github.com/elm/core/blob/1.0.0/hints/' + identifier + '.md');
+}
+
+
+function _Debug_crash(identifier, fact1, fact2, fact3, fact4)
+{
+	switch(identifier)
+	{
+		case 0:
+			throw new Error('What node should I take over? In JavaScript I need something like:\n\n    Elm.Main.init({\n        node: document.getElementById("elm-node")\n    })\n\nYou need to do this with any Browser.sandbox or Browser.element program.');
+
+		case 1:
+			throw new Error('Browser.application programs cannot handle URLs like this:\n\n    ' + document.location.href + '\n\nWhat is the root? The root of your file system? Try looking at this program with `elm reactor` or some other server.');
+
+		case 2:
+			var jsonErrorString = fact1;
+			throw new Error('Problem with the flags given to your Elm program on initialization.\n\n' + jsonErrorString);
+
+		case 3:
+			var portName = fact1;
+			throw new Error('There can only be one port named `' + portName + '`, but your program has multiple.');
+
+		case 4:
+			var portName = fact1;
+			var problem = fact2;
+			throw new Error('Trying to send an unexpected type of value through port `' + portName + '`:\n' + problem);
+
+		case 5:
+			throw new Error('Trying to use `(==)` on functions.\nThere is no way to know if functions are "the same" in the Elm sense.\nRead more about this at https://package.elm-lang.org/packages/elm/core/latest/Basics#== which describes why it is this way and what the better version will look like.');
+
+		case 6:
+			var moduleName = fact1;
+			throw new Error('Your page is loading multiple Elm scripts with a module named ' + moduleName + '. Maybe a duplicate script is getting loaded accidentally? If not, rename one of them so I know which is which!');
+
+		case 8:
+			var moduleName = fact1;
+			var region = fact2;
+			var message = fact3;
+			throw new Error('TODO in module `' + moduleName + '` ' + _Debug_regionToString(region) + '\n\n' + message);
+
+		case 9:
+			var moduleName = fact1;
+			var region = fact2;
+			var value = fact3;
+			var message = fact4;
+			throw new Error(
+				'TODO in module `' + moduleName + '` from the `case` expression '
+				+ _Debug_regionToString(region) + '\n\nIt received the following value:\n\n    '
+				+ _Debug_toString(value).replace('\n', '\n    ')
+				+ '\n\nBut the branch that handles it says:\n\n    ' + message.replace('\n', '\n    ')
+			);
+
+		case 10:
+			throw new Error('Bug in https://github.com/elm/virtual-dom/issues');
+
+		case 11:
+			throw new Error('Cannot perform mod 0. Division by zero error.');
+	}
+}
+
+function _Debug_regionToString(region)
+{
+	if (region.start.line === region.end.line)
+	{
+		return 'on line ' + region.start.line;
+	}
+	return 'on lines ' + region.start.line + ' through ' + region.end.line;
+}
+
+
+
+// MATH
+
+var _Basics_add = F2(function(a, b) { return a + b; });
+var _Basics_sub = F2(function(a, b) { return a - b; });
+var _Basics_mul = F2(function(a, b) { return a * b; });
+var _Basics_fdiv = F2(function(a, b) { return a / b; });
+var _Basics_idiv = F2(function(a, b) { return (a / b) | 0; });
+var _Basics_pow = F2(Math.pow);
+
+var _Basics_remainderBy = F2(function(b, a) { return a % b; });
+
+// https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/divmodnote-letter.pdf
+var _Basics_modBy = F2(function(modulus, x)
+{
+	var answer = x % modulus;
+	return modulus === 0
+		? _Debug_crash(11)
+		:
+	((answer > 0 && modulus < 0) || (answer < 0 && modulus > 0))
+		? answer + modulus
+		: answer;
+});
+
+
+// TRIGONOMETRY
+
+var _Basics_pi = Math.PI;
+var _Basics_e = Math.E;
+var _Basics_cos = Math.cos;
+var _Basics_sin = Math.sin;
+var _Basics_tan = Math.tan;
+var _Basics_acos = Math.acos;
+var _Basics_asin = Math.asin;
+var _Basics_atan = Math.atan;
+var _Basics_atan2 = F2(Math.atan2);
+
+
+// MORE MATH
+
+function _Basics_toFloat(x) { return x; }
+function _Basics_truncate(n) { return n | 0; }
+function _Basics_isInfinite(n) { return n === Infinity || n === -Infinity; }
+
+var _Basics_ceiling = Math.ceil;
+var _Basics_floor = Math.floor;
+var _Basics_round = Math.round;
+var _Basics_sqrt = Math.sqrt;
+var _Basics_log = Math.log;
+var _Basics_isNaN = isNaN;
+
+
+// BOOLEANS
+
+function _Basics_not(bool) { return !bool; }
+var _Basics_and = F2(function(a, b) { return a && b; });
+var _Basics_or  = F2(function(a, b) { return a || b; });
+var _Basics_xor = F2(function(a, b) { return a !== b; });
+
+
+
+function _Char_toCode(char)
+{
+	var code = char.charCodeAt(0);
+	if (0xD800 <= code && code <= 0xDBFF)
+	{
+		return (code - 0xD800) * 0x400 + char.charCodeAt(1) - 0xDC00 + 0x10000
+	}
+	return code;
+}
+
+function _Char_fromCode(code)
+{
+	return _Utils_chr(
+		(code < 0 || 0x10FFFF < code)
+			? '\uFFFD'
+			:
+		(code <= 0xFFFF)
+			? String.fromCharCode(code)
+			:
+		(code -= 0x10000,
+			String.fromCharCode(Math.floor(code / 0x400) + 0xD800, code % 0x400 + 0xDC00)
+		)
+	);
+}
+
+function _Char_toUpper(char)
+{
+	return _Utils_chr(char.toUpperCase());
+}
+
+function _Char_toLower(char)
+{
+	return _Utils_chr(char.toLowerCase());
+}
+
+function _Char_toLocaleUpper(char)
+{
+	return _Utils_chr(char.toLocaleUpperCase());
+}
+
+function _Char_toLocaleLower(char)
+{
+	return _Utils_chr(char.toLocaleLowerCase());
+}
+
+
+
+var _String_cons = F2(function(chr, str)
+{
+	return chr + str;
+});
+
+function _String_uncons(string)
+{
+	var word = string.charCodeAt(0);
+	return word
+		? elm$core$Maybe$Just(
+			0xD800 <= word && word <= 0xDBFF
+				? _Utils_Tuple2(_Utils_chr(string[0] + string[1]), string.slice(2))
+				: _Utils_Tuple2(_Utils_chr(string[0]), string.slice(1))
+		)
+		: elm$core$Maybe$Nothing;
+}
+
+var _String_append = F2(function(a, b)
+{
+	return a + b;
+});
+
+function _String_length(str)
+{
+	return str.length;
+}
+
+var _String_map = F2(function(func, string)
+{
+	var len = string.length;
+	var array = new Array(len);
+	var i = 0;
+	while (i < len)
+	{
+		var word = string.charCodeAt(i);
+		if (0xD800 <= word && word <= 0xDBFF)
+		{
+			array[i] = func(_Utils_chr(string[i] + string[i+1]));
+			i += 2;
+			continue;
+		}
+		array[i] = func(_Utils_chr(string[i]));
+		i++;
+	}
+	return array.join('');
+});
+
+var _String_filter = F2(function(isGood, str)
+{
+	var arr = [];
+	var len = str.length;
+	var i = 0;
+	while (i < len)
+	{
+		var char = str[i];
+		var word = str.charCodeAt(i);
+		i++;
+		if (0xD800 <= word && word <= 0xDBFF)
+		{
+			char += str[i];
+			i++;
+		}
+
+		if (isGood(_Utils_chr(char)))
+		{
+			arr.push(char);
+		}
+	}
+	return arr.join('');
+});
+
+function _String_reverse(str)
+{
+	var len = str.length;
+	var arr = new Array(len);
+	var i = 0;
+	while (i < len)
+	{
+		var word = str.charCodeAt(i);
+		if (0xD800 <= word && word <= 0xDBFF)
+		{
+			arr[len - i] = str[i + 1];
+			i++;
+			arr[len - i] = str[i - 1];
+			i++;
+		}
+		else
+		{
+			arr[len - i] = str[i];
+			i++;
+		}
+	}
+	return arr.join('');
+}
+
+var _String_foldl = F3(function(func, state, string)
+{
+	var len = string.length;
+	var i = 0;
+	while (i < len)
+	{
+		var char = string[i];
+		var word = string.charCodeAt(i);
+		i++;
+		if (0xD800 <= word && word <= 0xDBFF)
+		{
+			char += string[i];
+			i++;
+		}
+		state = A2(func, _Utils_chr(char), state);
+	}
+	return state;
+});
+
+var _String_foldr = F3(function(func, state, string)
+{
+	var i = string.length;
+	while (i--)
+	{
+		var char = string[i];
+		var word = string.charCodeAt(i);
+		if (0xDC00 <= word && word <= 0xDFFF)
+		{
+			i--;
+			char = string[i] + char;
+		}
+		state = A2(func, _Utils_chr(char), state);
+	}
+	return state;
+});
+
+var _String_split = F2(function(sep, str)
+{
+	return str.split(sep);
+});
+
+var _String_join = F2(function(sep, strs)
+{
+	return strs.join(sep);
+});
+
+var _String_slice = F3(function(start, end, str) {
+	return str.slice(start, end);
+});
+
+function _String_trim(str)
+{
+	return str.trim();
+}
+
+function _String_trimLeft(str)
+{
+	return str.replace(/^\s+/, '');
+}
+
+function _String_trimRight(str)
+{
+	return str.replace(/\s+$/, '');
+}
+
+function _String_words(str)
+{
+	return _List_fromArray(str.trim().split(/\s+/g));
+}
+
+function _String_lines(str)
+{
+	return _List_fromArray(str.split(/\r\n|\r|\n/g));
+}
+
+function _String_toUpper(str)
+{
+	return str.toUpperCase();
+}
+
+function _String_toLower(str)
+{
+	return str.toLowerCase();
+}
+
+var _String_any = F2(function(isGood, string)
+{
+	var i = string.length;
+	while (i--)
+	{
+		var char = string[i];
+		var word = string.charCodeAt(i);
+		if (0xDC00 <= word && word <= 0xDFFF)
+		{
+			i--;
+			char = string[i] + char;
+		}
+		if (isGood(_Utils_chr(char)))
+		{
+			return true;
+		}
+	}
+	return false;
+});
+
+var _String_all = F2(function(isGood, string)
+{
+	var i = string.length;
+	while (i--)
+	{
+		var char = string[i];
+		var word = string.charCodeAt(i);
+		if (0xDC00 <= word && word <= 0xDFFF)
+		{
+			i--;
+			char = string[i] + char;
+		}
+		if (!isGood(_Utils_chr(char)))
+		{
+			return false;
+		}
+	}
+	return true;
+});
+
+var _String_contains = F2(function(sub, str)
+{
+	return str.indexOf(sub) > -1;
+});
+
+var _String_startsWith = F2(function(sub, str)
+{
+	return str.indexOf(sub) === 0;
+});
+
+var _String_endsWith = F2(function(sub, str)
+{
+	return str.length >= sub.length &&
+		str.lastIndexOf(sub) === str.length - sub.length;
+});
+
+var _String_indexes = F2(function(sub, str)
+{
+	var subLen = sub.length;
+
+	if (subLen < 1)
+	{
+		return _List_Nil;
+	}
+
+	var i = 0;
+	var is = [];
+
+	while ((i = str.indexOf(sub, i)) > -1)
+	{
+		is.push(i);
+		i = i + subLen;
+	}
+
+	return _List_fromArray(is);
+});
+
+
+// TO STRING
+
+function _String_fromNumber(number)
+{
+	return number + '';
+}
+
+
+// INT CONVERSIONS
+
+function _String_toInt(str)
+{
+	var total = 0;
+	var code0 = str.charCodeAt(0);
+	var start = code0 == 0x2B /* + */ || code0 == 0x2D /* - */ ? 1 : 0;
+
+	for (var i = start; i < str.length; ++i)
+	{
+		var code = str.charCodeAt(i);
+		if (code < 0x30 || 0x39 < code)
+		{
+			return elm$core$Maybe$Nothing;
+		}
+		total = 10 * total + code - 0x30;
+	}
+
+	return i == start
+		? elm$core$Maybe$Nothing
+		: elm$core$Maybe$Just(code0 == 0x2D ? -total : total);
+}
+
+
+// FLOAT CONVERSIONS
+
+function _String_toFloat(s)
+{
+	// check if it is a hex, octal, or binary number
+	if (s.length === 0 || /[\sxbo]/.test(s))
+	{
+		return elm$core$Maybe$Nothing;
+	}
+	var n = +s;
+	// faster isNaN check
+	return n === n ? elm$core$Maybe$Just(n) : elm$core$Maybe$Nothing;
+}
+
+function _String_fromList(chars)
+{
+	return _List_toArray(chars).join('');
+}
+
+
+
+
+/**/
+function _Json_errorToString(error)
+{
+	return elm$json$Json$Decode$errorToString(error);
+}
+//*/
+
+
+// CORE DECODERS
+
+function _Json_succeed(msg)
+{
+	return {
+		$: 0,
+		a: msg
+	};
+}
+
+function _Json_fail(msg)
+{
+	return {
+		$: 1,
+		a: msg
+	};
+}
+
+function _Json_decodePrim(decoder)
+{
+	return { $: 2, b: decoder };
+}
+
+var _Json_decodeInt = _Json_decodePrim(function(value) {
+	return (typeof value !== 'number')
+		? _Json_expecting('an INT', value)
+		:
+	(-2147483647 < value && value < 2147483647 && (value | 0) === value)
+		? elm$core$Result$Ok(value)
+		:
+	(isFinite(value) && !(value % 1))
+		? elm$core$Result$Ok(value)
+		: _Json_expecting('an INT', value);
+});
+
+var _Json_decodeBool = _Json_decodePrim(function(value) {
+	return (typeof value === 'boolean')
+		? elm$core$Result$Ok(value)
+		: _Json_expecting('a BOOL', value);
+});
+
+var _Json_decodeFloat = _Json_decodePrim(function(value) {
+	return (typeof value === 'number')
+		? elm$core$Result$Ok(value)
+		: _Json_expecting('a FLOAT', value);
+});
+
+var _Json_decodeValue = _Json_decodePrim(function(value) {
+	return elm$core$Result$Ok(_Json_wrap(value));
+});
+
+var _Json_decodeString = _Json_decodePrim(function(value) {
+	return (typeof value === 'string')
+		? elm$core$Result$Ok(value)
+		: (value instanceof String)
+			? elm$core$Result$Ok(value + '')
+			: _Json_expecting('a STRING', value);
+});
+
+function _Json_decodeList(decoder) { return { $: 3, b: decoder }; }
+function _Json_decodeArray(decoder) { return { $: 4, b: decoder }; }
+
+function _Json_decodeNull(value) { return { $: 5, c: value }; }
+
+var _Json_decodeField = F2(function(field, decoder)
+{
+	return {
+		$: 6,
+		d: field,
+		b: decoder
+	};
+});
+
+var _Json_decodeIndex = F2(function(index, decoder)
+{
+	return {
+		$: 7,
+		e: index,
+		b: decoder
+	};
+});
+
+function _Json_decodeKeyValuePairs(decoder)
+{
+	return {
+		$: 8,
+		b: decoder
+	};
+}
+
+function _Json_mapMany(f, decoders)
+{
+	return {
+		$: 9,
+		f: f,
+		g: decoders
+	};
+}
+
+var _Json_andThen = F2(function(callback, decoder)
+{
+	return {
+		$: 10,
+		b: decoder,
+		h: callback
+	};
+});
+
+function _Json_oneOf(decoders)
+{
+	return {
+		$: 11,
+		g: decoders
+	};
+}
+
+
+// DECODING OBJECTS
+
+var _Json_map1 = F2(function(f, d1)
+{
+	return _Json_mapMany(f, [d1]);
+});
+
+var _Json_map2 = F3(function(f, d1, d2)
+{
+	return _Json_mapMany(f, [d1, d2]);
+});
+
+var _Json_map3 = F4(function(f, d1, d2, d3)
+{
+	return _Json_mapMany(f, [d1, d2, d3]);
+});
+
+var _Json_map4 = F5(function(f, d1, d2, d3, d4)
+{
+	return _Json_mapMany(f, [d1, d2, d3, d4]);
+});
+
+var _Json_map5 = F6(function(f, d1, d2, d3, d4, d5)
+{
+	return _Json_mapMany(f, [d1, d2, d3, d4, d5]);
+});
+
+var _Json_map6 = F7(function(f, d1, d2, d3, d4, d5, d6)
+{
+	return _Json_mapMany(f, [d1, d2, d3, d4, d5, d6]);
+});
+
+var _Json_map7 = F8(function(f, d1, d2, d3, d4, d5, d6, d7)
+{
+	return _Json_mapMany(f, [d1, d2, d3, d4, d5, d6, d7]);
+});
+
+var _Json_map8 = F9(function(f, d1, d2, d3, d4, d5, d6, d7, d8)
+{
+	return _Json_mapMany(f, [d1, d2, d3, d4, d5, d6, d7, d8]);
+});
+
+
+// DECODE
+
+var _Json_runOnString = F2(function(decoder, string)
+{
+	try
+	{
+		var value = JSON.parse(string);
+		return _Json_runHelp(decoder, value);
+	}
+	catch (e)
+	{
+		return elm$core$Result$Err(A2(elm$json$Json$Decode$Failure, 'This is not valid JSON! ' + e.message, _Json_wrap(string)));
+	}
+});
+
+var _Json_run = F2(function(decoder, value)
+{
+	return _Json_runHelp(decoder, _Json_unwrap(value));
+});
+
+function _Json_runHelp(decoder, value)
+{
+	switch (decoder.$)
+	{
+		case 2:
+			return decoder.b(value);
+
+		case 5:
+			return (value === null)
+				? elm$core$Result$Ok(decoder.c)
+				: _Json_expecting('null', value);
+
+		case 3:
+			if (!_Json_isArray(value))
+			{
+				return _Json_expecting('a LIST', value);
+			}
+			return _Json_runArrayDecoder(decoder.b, value, _List_fromArray);
+
+		case 4:
+			if (!_Json_isArray(value))
+			{
+				return _Json_expecting('an ARRAY', value);
+			}
+			return _Json_runArrayDecoder(decoder.b, value, _Json_toElmArray);
+
+		case 6:
+			var field = decoder.d;
+			if (typeof value !== 'object' || value === null || !(field in value))
+			{
+				return _Json_expecting('an OBJECT with a field named `' + field + '`', value);
+			}
+			var result = _Json_runHelp(decoder.b, value[field]);
+			return (elm$core$Result$isOk(result)) ? result : elm$core$Result$Err(A2(elm$json$Json$Decode$Field, field, result.a));
+
+		case 7:
+			var index = decoder.e;
+			if (!_Json_isArray(value))
+			{
+				return _Json_expecting('an ARRAY', value);
+			}
+			if (index >= value.length)
+			{
+				return _Json_expecting('a LONGER array. Need index ' + index + ' but only see ' + value.length + ' entries', value);
+			}
+			var result = _Json_runHelp(decoder.b, value[index]);
+			return (elm$core$Result$isOk(result)) ? result : elm$core$Result$Err(A2(elm$json$Json$Decode$Index, index, result.a));
+
+		case 8:
+			if (typeof value !== 'object' || value === null || _Json_isArray(value))
+			{
+				return _Json_expecting('an OBJECT', value);
+			}
+
+			var keyValuePairs = _List_Nil;
+			// TODO test perf of Object.keys and switch when support is good enough
+			for (var key in value)
+			{
+				if (value.hasOwnProperty(key))
+				{
+					var result = _Json_runHelp(decoder.b, value[key]);
+					if (!elm$core$Result$isOk(result))
+					{
+						return elm$core$Result$Err(A2(elm$json$Json$Decode$Field, key, result.a));
+					}
+					keyValuePairs = _List_Cons(_Utils_Tuple2(key, result.a), keyValuePairs);
+				}
+			}
+			return elm$core$Result$Ok(elm$core$List$reverse(keyValuePairs));
+
+		case 9:
+			var answer = decoder.f;
+			var decoders = decoder.g;
+			for (var i = 0; i < decoders.length; i++)
+			{
+				var result = _Json_runHelp(decoders[i], value);
+				if (!elm$core$Result$isOk(result))
+				{
+					return result;
+				}
+				answer = answer(result.a);
+			}
+			return elm$core$Result$Ok(answer);
+
+		case 10:
+			var result = _Json_runHelp(decoder.b, value);
+			return (!elm$core$Result$isOk(result))
+				? result
+				: _Json_runHelp(decoder.h(result.a), value);
+
+		case 11:
+			var errors = _List_Nil;
+			for (var temp = decoder.g; temp.b; temp = temp.b) // WHILE_CONS
+			{
+				var result = _Json_runHelp(temp.a, value);
+				if (elm$core$Result$isOk(result))
+				{
+					return result;
+				}
+				errors = _List_Cons(result.a, errors);
+			}
+			return elm$core$Result$Err(elm$json$Json$Decode$OneOf(elm$core$List$reverse(errors)));
+
+		case 1:
+			return elm$core$Result$Err(A2(elm$json$Json$Decode$Failure, decoder.a, _Json_wrap(value)));
+
+		case 0:
+			return elm$core$Result$Ok(decoder.a);
+	}
+}
+
+function _Json_runArrayDecoder(decoder, value, toElmValue)
+{
+	var len = value.length;
+	var array = new Array(len);
+	for (var i = 0; i < len; i++)
+	{
+		var result = _Json_runHelp(decoder, value[i]);
+		if (!elm$core$Result$isOk(result))
+		{
+			return elm$core$Result$Err(A2(elm$json$Json$Decode$Index, i, result.a));
+		}
+		array[i] = result.a;
+	}
+	return elm$core$Result$Ok(toElmValue(array));
+}
+
+function _Json_isArray(value)
+{
+	return Array.isArray(value) || (typeof FileList !== 'undefined' && value instanceof FileList);
+}
+
+function _Json_toElmArray(array)
+{
+	return A2(elm$core$Array$initialize, array.length, function(i) { return array[i]; });
+}
+
+function _Json_expecting(type, value)
+{
+	return elm$core$Result$Err(A2(elm$json$Json$Decode$Failure, 'Expecting ' + type, _Json_wrap(value)));
+}
+
+
+// EQUALITY
+
+function _Json_equality(x, y)
+{
+	if (x === y)
+	{
+		return true;
+	}
+
+	if (x.$ !== y.$)
+	{
+		return false;
+	}
+
+	switch (x.$)
+	{
+		case 0:
+		case 1:
+			return x.a === y.a;
+
+		case 2:
+			return x.b === y.b;
+
+		case 5:
+			return x.c === y.c;
+
+		case 3:
+		case 4:
+		case 8:
+			return _Json_equality(x.b, y.b);
+
+		case 6:
+			return x.d === y.d && _Json_equality(x.b, y.b);
+
+		case 7:
+			return x.e === y.e && _Json_equality(x.b, y.b);
+
+		case 9:
+			return x.f === y.f && _Json_listEquality(x.g, y.g);
+
+		case 10:
+			return x.h === y.h && _Json_equality(x.b, y.b);
+
+		case 11:
+			return _Json_listEquality(x.g, y.g);
+	}
+}
+
+function _Json_listEquality(aDecoders, bDecoders)
+{
+	var len = aDecoders.length;
+	if (len !== bDecoders.length)
+	{
+		return false;
+	}
+	for (var i = 0; i < len; i++)
+	{
+		if (!_Json_equality(aDecoders[i], bDecoders[i]))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+
+// ENCODE
+
+var _Json_encode = F2(function(indentLevel, value)
+{
+	return JSON.stringify(_Json_unwrap(value), null, indentLevel) + '';
+});
+
+function _Json_wrap(value) { return { $: 0, a: value }; }
+function _Json_unwrap(value) { return value.a; }
+
+function _Json_wrap_UNUSED(value) { return value; }
+function _Json_unwrap_UNUSED(value) { return value; }
+
+function _Json_emptyArray() { return []; }
+function _Json_emptyObject() { return {}; }
+
+var _Json_addField = F3(function(key, value, object)
+{
+	object[key] = _Json_unwrap(value);
+	return object;
+});
+
+function _Json_addEntry(func)
+{
+	return F2(function(entry, array)
+	{
+		array.push(_Json_unwrap(func(entry)));
+		return array;
+	});
+}
+
+var _Json_encodeNull = _Json_wrap(null);
+
+
+
+// TASKS
+
+function _Scheduler_succeed(value)
+{
+	return {
+		$: 0,
+		a: value
+	};
+}
+
+function _Scheduler_fail(error)
+{
+	return {
+		$: 1,
+		a: error
+	};
+}
+
+function _Scheduler_binding(callback)
+{
+	return {
+		$: 2,
+		b: callback,
+		c: null
+	};
+}
+
+var _Scheduler_andThen = F2(function(callback, task)
+{
+	return {
+		$: 3,
+		b: callback,
+		d: task
+	};
+});
+
+var _Scheduler_onError = F2(function(callback, task)
+{
+	return {
+		$: 4,
+		b: callback,
+		d: task
+	};
+});
+
+function _Scheduler_receive(callback)
+{
+	return {
+		$: 5,
+		b: callback
+	};
+}
+
+
+// PROCESSES
+
+var _Scheduler_guid = 0;
+
+function _Scheduler_rawSpawn(task)
+{
+	var proc = {
+		$: 0,
+		e: _Scheduler_guid++,
+		f: task,
+		g: null,
+		h: []
+	};
+
+	_Scheduler_enqueue(proc);
+
+	return proc;
+}
+
+function _Scheduler_spawn(task)
+{
+	return _Scheduler_binding(function(callback) {
+		callback(_Scheduler_succeed(_Scheduler_rawSpawn(task)));
+	});
+}
+
+function _Scheduler_rawSend(proc, msg)
+{
+	proc.h.push(msg);
+	_Scheduler_enqueue(proc);
+}
+
+var _Scheduler_send = F2(function(proc, msg)
+{
+	return _Scheduler_binding(function(callback) {
+		_Scheduler_rawSend(proc, msg);
+		callback(_Scheduler_succeed(_Utils_Tuple0));
+	});
+});
+
+function _Scheduler_kill(proc)
+{
+	return _Scheduler_binding(function(callback) {
+		var task = proc.f;
+		if (task.$ === 2 && task.c)
+		{
+			task.c();
+		}
+
+		proc.f = null;
+
+		callback(_Scheduler_succeed(_Utils_Tuple0));
+	});
+}
+
+
+/* STEP PROCESSES
+
+type alias Process =
+  { $ : tag
+  , id : unique_id
+  , root : Task
+  , stack : null | { $: SUCCEED | FAIL, a: callback, b: stack }
+  , mailbox : [msg]
+  }
+
+*/
+
+
+var _Scheduler_working = false;
+var _Scheduler_queue = [];
+
+
+function _Scheduler_enqueue(proc)
+{
+	_Scheduler_queue.push(proc);
+	if (_Scheduler_working)
+	{
+		return;
+	}
+	_Scheduler_working = true;
+	while (proc = _Scheduler_queue.shift())
+	{
+		_Scheduler_step(proc);
+	}
+	_Scheduler_working = false;
+}
+
+
+function _Scheduler_step(proc)
+{
+	while (proc.f)
+	{
+		var rootTag = proc.f.$;
+		if (rootTag === 0 || rootTag === 1)
+		{
+			while (proc.g && proc.g.$ !== rootTag)
+			{
+				proc.g = proc.g.i;
+			}
+			if (!proc.g)
+			{
+				return;
+			}
+			proc.f = proc.g.b(proc.f.a);
+			proc.g = proc.g.i;
+		}
+		else if (rootTag === 2)
+		{
+			proc.f.c = proc.f.b(function(newRoot) {
+				proc.f = newRoot;
+				_Scheduler_enqueue(proc);
+			});
+			return;
+		}
+		else if (rootTag === 5)
+		{
+			if (proc.h.length === 0)
+			{
+				return;
+			}
+			proc.f = proc.f.b(proc.h.shift());
+		}
+		else // if (rootTag === 3 || rootTag === 4)
+		{
+			proc.g = {
+				$: rootTag === 3 ? 0 : 1,
+				b: proc.f.b,
+				i: proc.g
+			};
+			proc.f = proc.f.d;
+		}
+	}
+}
+
+
+
+function _Process_sleep(time)
+{
+	return _Scheduler_binding(function(callback) {
+		var id = setTimeout(function() {
+			callback(_Scheduler_succeed(_Utils_Tuple0));
+		}, time);
+
+		return function() { clearTimeout(id); };
+	});
+}
+
+
+
+
+// PROGRAMS
+
+
+var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
+{
+	return _Platform_initialize(
+		flagDecoder,
+		args,
+		impl.init,
+		impl.update,
+		impl.subscriptions,
+		function() { return function() {} }
+	);
+});
+
+
+
+// INITIALIZE A PROGRAM
+
+
+function _Platform_initialize(flagDecoder, args, init, update, subscriptions, stepperBuilder)
+{
+	var result = A2(_Json_run, flagDecoder, _Json_wrap(args ? args['flags'] : undefined));
+	elm$core$Result$isOk(result) || _Debug_crash(2 /**/, _Json_errorToString(result.a) /**/);
+	var managers = {};
+	result = init(result.a);
+	var model = result.a;
+	var stepper = stepperBuilder(sendToApp, model);
+	var ports = _Platform_setupEffects(managers, sendToApp);
+
+	function sendToApp(msg, viewMetadata)
+	{
+		result = A2(update, msg, model);
+		stepper(model = result.a, viewMetadata);
+		_Platform_dispatchEffects(managers, result.b, subscriptions(model));
+	}
+
+	_Platform_dispatchEffects(managers, result.b, subscriptions(model));
+
+	return ports ? { ports: ports } : {};
+}
+
+
+
+// TRACK PRELOADS
+//
+// This is used by code in elm/browser and elm/http
+// to register any HTTP requests that are triggered by init.
+//
+
+
+var _Platform_preload;
+
+
+function _Platform_registerPreload(url)
+{
+	_Platform_preload.add(url);
+}
+
+
+
+// EFFECT MANAGERS
+
+
+var _Platform_effectManagers = {};
+
+
+function _Platform_setupEffects(managers, sendToApp)
+{
+	var ports;
+
+	// setup all necessary effect managers
+	for (var key in _Platform_effectManagers)
+	{
+		var manager = _Platform_effectManagers[key];
+
+		if (manager.a)
+		{
+			ports = ports || {};
+			ports[key] = manager.a(key, sendToApp);
+		}
+
+		managers[key] = _Platform_instantiateManager(manager, sendToApp);
+	}
+
+	return ports;
+}
+
+
+function _Platform_createManager(init, onEffects, onSelfMsg, cmdMap, subMap)
+{
+	return {
+		b: init,
+		c: onEffects,
+		d: onSelfMsg,
+		e: cmdMap,
+		f: subMap
+	};
+}
+
+
+function _Platform_instantiateManager(info, sendToApp)
+{
+	var router = {
+		g: sendToApp,
+		h: undefined
+	};
+
+	var onEffects = info.c;
+	var onSelfMsg = info.d;
+	var cmdMap = info.e;
+	var subMap = info.f;
+
+	function loop(state)
+	{
+		return A2(_Scheduler_andThen, loop, _Scheduler_receive(function(msg)
+		{
+			var value = msg.a;
+
+			if (msg.$ === 0)
+			{
+				return A3(onSelfMsg, router, value, state);
+			}
+
+			return cmdMap && subMap
+				? A4(onEffects, router, value.i, value.j, state)
+				: A3(onEffects, router, cmdMap ? value.i : value.j, state);
+		}));
+	}
+
+	return router.h = _Scheduler_rawSpawn(A2(_Scheduler_andThen, loop, info.b));
+}
+
+
+
+// ROUTING
+
+
+var _Platform_sendToApp = F2(function(router, msg)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		router.g(msg);
+		callback(_Scheduler_succeed(_Utils_Tuple0));
+	});
+});
+
+
+var _Platform_sendToSelf = F2(function(router, msg)
+{
+	return A2(_Scheduler_send, router.h, {
+		$: 0,
+		a: msg
+	});
+});
+
+
+
+// BAGS
+
+
+function _Platform_leaf(home)
+{
+	return function(value)
+	{
+		return {
+			$: 1,
+			k: home,
+			l: value
+		};
+	};
+}
+
+
+function _Platform_batch(list)
+{
+	return {
+		$: 2,
+		m: list
+	};
+}
+
+
+var _Platform_map = F2(function(tagger, bag)
+{
+	return {
+		$: 3,
+		n: tagger,
+		o: bag
+	}
+});
+
+
+
+// PIPE BAGS INTO EFFECT MANAGERS
+
+
+function _Platform_dispatchEffects(managers, cmdBag, subBag)
+{
+	var effectsDict = {};
+	_Platform_gatherEffects(true, cmdBag, effectsDict, null);
+	_Platform_gatherEffects(false, subBag, effectsDict, null);
+
+	for (var home in managers)
+	{
+		_Scheduler_rawSend(managers[home], {
+			$: 'fx',
+			a: effectsDict[home] || { i: _List_Nil, j: _List_Nil }
+		});
+	}
+}
+
+
+function _Platform_gatherEffects(isCmd, bag, effectsDict, taggers)
+{
+	switch (bag.$)
+	{
+		case 1:
+			var home = bag.k;
+			var effect = _Platform_toEffect(isCmd, home, taggers, bag.l);
+			effectsDict[home] = _Platform_insert(isCmd, effect, effectsDict[home]);
+			return;
+
+		case 2:
+			for (var list = bag.m; list.b; list = list.b) // WHILE_CONS
+			{
+				_Platform_gatherEffects(isCmd, list.a, effectsDict, taggers);
+			}
+			return;
+
+		case 3:
+			_Platform_gatherEffects(isCmd, bag.o, effectsDict, {
+				p: bag.n,
+				q: taggers
+			});
+			return;
+	}
+}
+
+
+function _Platform_toEffect(isCmd, home, taggers, value)
+{
+	function applyTaggers(x)
+	{
+		for (var temp = taggers; temp; temp = temp.q)
+		{
+			x = temp.p(x);
+		}
+		return x;
+	}
+
+	var map = isCmd
+		? _Platform_effectManagers[home].e
+		: _Platform_effectManagers[home].f;
+
+	return A2(map, applyTaggers, value)
+}
+
+
+function _Platform_insert(isCmd, newEffect, effects)
+{
+	effects = effects || { i: _List_Nil, j: _List_Nil };
+
+	isCmd
+		? (effects.i = _List_Cons(newEffect, effects.i))
+		: (effects.j = _List_Cons(newEffect, effects.j));
+
+	return effects;
+}
+
+
+
+// PORTS
+
+
+function _Platform_checkPortName(name)
+{
+	if (_Platform_effectManagers[name])
+	{
+		_Debug_crash(3, name)
+	}
+}
+
+
+
+// OUTGOING PORTS
+
+
+function _Platform_outgoingPort(name, converter)
+{
+	_Platform_checkPortName(name);
+	_Platform_effectManagers[name] = {
+		e: _Platform_outgoingPortMap,
+		r: converter,
+		a: _Platform_setupOutgoingPort
+	};
+	return _Platform_leaf(name);
+}
+
+
+var _Platform_outgoingPortMap = F2(function(tagger, value) { return value; });
+
+
+function _Platform_setupOutgoingPort(name)
+{
+	var subs = [];
+	var converter = _Platform_effectManagers[name].r;
+
+	// CREATE MANAGER
+
+	var init = _Process_sleep(0);
+
+	_Platform_effectManagers[name].b = init;
+	_Platform_effectManagers[name].c = F3(function(router, cmdList, state)
+	{
+		for ( ; cmdList.b; cmdList = cmdList.b) // WHILE_CONS
+		{
+			// grab a separate reference to subs in case unsubscribe is called
+			var currentSubs = subs;
+			var value = _Json_unwrap(converter(cmdList.a));
+			for (var i = 0; i < currentSubs.length; i++)
+			{
+				currentSubs[i](value);
+			}
+		}
+		return init;
+	});
+
+	// PUBLIC API
+
+	function subscribe(callback)
+	{
+		subs.push(callback);
+	}
+
+	function unsubscribe(callback)
+	{
+		// copy subs into a new array in case unsubscribe is called within a
+		// subscribed callback
+		subs = subs.slice();
+		var index = subs.indexOf(callback);
+		if (index >= 0)
+		{
+			subs.splice(index, 1);
+		}
+	}
+
+	return {
+		subscribe: subscribe,
+		unsubscribe: unsubscribe
+	};
+}
+
+
+
+// INCOMING PORTS
+
+
+function _Platform_incomingPort(name, converter)
+{
+	_Platform_checkPortName(name);
+	_Platform_effectManagers[name] = {
+		f: _Platform_incomingPortMap,
+		r: converter,
+		a: _Platform_setupIncomingPort
+	};
+	return _Platform_leaf(name);
+}
+
+
+var _Platform_incomingPortMap = F2(function(tagger, finalTagger)
+{
+	return function(value)
+	{
+		return tagger(finalTagger(value));
+	};
+});
+
+
+function _Platform_setupIncomingPort(name, sendToApp)
+{
+	var subs = _List_Nil;
+	var converter = _Platform_effectManagers[name].r;
+
+	// CREATE MANAGER
+
+	var init = _Scheduler_succeed(null);
+
+	_Platform_effectManagers[name].b = init;
+	_Platform_effectManagers[name].c = F3(function(router, subList, state)
+	{
+		subs = subList;
+		return init;
+	});
+
+	// PUBLIC API
+
+	function send(incomingValue)
+	{
+		var result = A2(_Json_run, converter, _Json_wrap(incomingValue));
+
+		elm$core$Result$isOk(result) || _Debug_crash(4, name, result.a);
+
+		var value = result.a;
+		for (var temp = subs; temp.b; temp = temp.b) // WHILE_CONS
+		{
+			sendToApp(temp.a(value));
+		}
+	}
+
+	return { send: send };
+}
+
+
+
+// EXPORT ELM MODULES
+//
+// Have DEBUG and PROD versions so that we can (1) give nicer errors in
+// debug mode and (2) not pay for the bits needed for that in prod mode.
+//
+
+
+function _Platform_export_UNUSED(exports)
+{
+	scope['Elm']
+		? _Platform_mergeExportsProd(scope['Elm'], exports)
+		: scope['Elm'] = exports;
+}
+
+
+function _Platform_mergeExportsProd(obj, exports)
+{
+	for (var name in exports)
+	{
+		(name in obj)
+			? (name == 'init')
+				? _Debug_crash(6)
+				: _Platform_mergeExportsProd(obj[name], exports[name])
+			: (obj[name] = exports[name]);
+	}
+}
+
+
+function _Platform_export(exports)
+{
+	scope['Elm']
+		? _Platform_mergeExportsDebug('Elm', scope['Elm'], exports)
+		: scope['Elm'] = exports;
+}
+
+
+function _Platform_mergeExportsDebug(moduleName, obj, exports)
+{
+	for (var name in exports)
+	{
+		(name in obj)
+			? (name == 'init')
+				? _Debug_crash(6, moduleName)
+				: _Platform_mergeExportsDebug(moduleName + '.' + name, obj[name], exports[name])
+			: (obj[name] = exports[name]);
+	}
+}
+
+
+function _Url_percentEncode(string)
+{
+	return encodeURIComponent(string);
+}
+
+function _Url_percentDecode(string)
+{
+	try
+	{
+		return elm$core$Maybe$Just(decodeURIComponent(string));
+	}
+	catch (e)
+	{
+		return elm$core$Maybe$Nothing;
+	}
+}
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
+
+
+
+function _Time_now(millisToPosix)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		callback(_Scheduler_succeed(millisToPosix(Date.now())));
+	});
+}
+
+var _Time_setInterval = F2(function(interval, task)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		var id = setInterval(function() { _Scheduler_rawSpawn(task); }, interval);
+		return function() { clearInterval(id); };
+	});
+});
+
+function _Time_here()
+{
+	return _Scheduler_binding(function(callback)
+	{
+		callback(_Scheduler_succeed(
+			A2(elm$time$Time$customZone, -(new Date().getTimezoneOffset()), _List_Nil)
+		));
+	});
+}
+
+
+function _Time_getZoneName()
+{
+	return _Scheduler_binding(function(callback)
+	{
+		try
+		{
+			var name = elm$time$Time$Name(Intl.DateTimeFormat().resolvedOptions().timeZone);
+		}
+		catch (e)
+		{
+			var name = elm$time$Time$Offset(new Date().getTimezoneOffset());
+		}
+		callback(_Scheduler_succeed(name));
+	});
+}
+
+
+
+
+// HELPERS
+
+
+var _VirtualDom_divertHrefToApp;
+
+var _VirtualDom_doc = typeof document !== 'undefined' ? document : {};
+
+
+function _VirtualDom_appendChild(parent, child)
+{
+	parent.appendChild(child);
+}
+
+var _VirtualDom_init = F4(function(virtualNode, flagDecoder, debugMetadata, args)
+{
+	// NOTE: this function needs _Platform_export available to work
+
+	/**_UNUSED/
+	var node = args['node'];
+	//*/
+	/**/
+	var node = args && args['node'] ? args['node'] : _Debug_crash(0);
+	//*/
+
+	node.parentNode.replaceChild(
+		_VirtualDom_render(virtualNode, function() {}),
+		node
+	);
+
+	return {};
+});
+
+
+
+// TEXT
+
+
+function _VirtualDom_text(string)
+{
+	return {
+		$: 0,
+		a: string
+	};
+}
+
+
+
+// NODE
+
+
+var _VirtualDom_nodeNS = F2(function(namespace, tag)
+{
+	return F2(function(factList, kidList)
+	{
+		for (var kids = [], descendantsCount = 0; kidList.b; kidList = kidList.b) // WHILE_CONS
+		{
+			var kid = kidList.a;
+			descendantsCount += (kid.b || 0);
+			kids.push(kid);
+		}
+		descendantsCount += kids.length;
+
+		return {
+			$: 1,
+			c: tag,
+			d: _VirtualDom_organizeFacts(factList),
+			e: kids,
+			f: namespace,
+			b: descendantsCount
+		};
+	});
+});
+
+
+var _VirtualDom_node = _VirtualDom_nodeNS(undefined);
+
+
+
+// KEYED NODE
+
+
+var _VirtualDom_keyedNodeNS = F2(function(namespace, tag)
+{
+	return F2(function(factList, kidList)
+	{
+		for (var kids = [], descendantsCount = 0; kidList.b; kidList = kidList.b) // WHILE_CONS
+		{
+			var kid = kidList.a;
+			descendantsCount += (kid.b.b || 0);
+			kids.push(kid);
+		}
+		descendantsCount += kids.length;
+
+		return {
+			$: 2,
+			c: tag,
+			d: _VirtualDom_organizeFacts(factList),
+			e: kids,
+			f: namespace,
+			b: descendantsCount
+		};
+	});
+});
+
+
+var _VirtualDom_keyedNode = _VirtualDom_keyedNodeNS(undefined);
+
+
+
+// CUSTOM
+
+
+function _VirtualDom_custom(factList, model, render, diff)
+{
+	return {
+		$: 3,
+		d: _VirtualDom_organizeFacts(factList),
+		g: model,
+		h: render,
+		i: diff
+	};
+}
+
+
+
+// MAP
+
+
+var _VirtualDom_map = F2(function(tagger, node)
+{
+	return {
+		$: 4,
+		j: tagger,
+		k: node,
+		b: 1 + (node.b || 0)
+	};
+});
+
+
+
+// LAZY
+
+
+function _VirtualDom_thunk(refs, thunk)
+{
+	return {
+		$: 5,
+		l: refs,
+		m: thunk,
+		k: undefined
+	};
+}
+
+var _VirtualDom_lazy = F2(function(func, a)
+{
+	return _VirtualDom_thunk([func, a], function() {
+		return func(a);
+	});
+});
+
+var _VirtualDom_lazy2 = F3(function(func, a, b)
+{
+	return _VirtualDom_thunk([func, a, b], function() {
+		return A2(func, a, b);
+	});
+});
+
+var _VirtualDom_lazy3 = F4(function(func, a, b, c)
+{
+	return _VirtualDom_thunk([func, a, b, c], function() {
+		return A3(func, a, b, c);
+	});
+});
+
+var _VirtualDom_lazy4 = F5(function(func, a, b, c, d)
+{
+	return _VirtualDom_thunk([func, a, b, c, d], function() {
+		return A4(func, a, b, c, d);
+	});
+});
+
+var _VirtualDom_lazy5 = F6(function(func, a, b, c, d, e)
+{
+	return _VirtualDom_thunk([func, a, b, c, d, e], function() {
+		return A5(func, a, b, c, d, e);
+	});
+});
+
+var _VirtualDom_lazy6 = F7(function(func, a, b, c, d, e, f)
+{
+	return _VirtualDom_thunk([func, a, b, c, d, e, f], function() {
+		return A6(func, a, b, c, d, e, f);
+	});
+});
+
+var _VirtualDom_lazy7 = F8(function(func, a, b, c, d, e, f, g)
+{
+	return _VirtualDom_thunk([func, a, b, c, d, e, f, g], function() {
+		return A7(func, a, b, c, d, e, f, g);
+	});
+});
+
+var _VirtualDom_lazy8 = F9(function(func, a, b, c, d, e, f, g, h)
+{
+	return _VirtualDom_thunk([func, a, b, c, d, e, f, g, h], function() {
+		return A8(func, a, b, c, d, e, f, g, h);
+	});
+});
+
+
+
+// FACTS
+
+
+var _VirtualDom_on = F2(function(key, handler)
+{
+	return {
+		$: 'a0',
+		n: key,
+		o: handler
+	};
+});
+var _VirtualDom_style = F2(function(key, value)
+{
+	return {
+		$: 'a1',
+		n: key,
+		o: value
+	};
+});
+var _VirtualDom_property = F2(function(key, value)
+{
+	return {
+		$: 'a2',
+		n: key,
+		o: value
+	};
+});
+var _VirtualDom_attribute = F2(function(key, value)
+{
+	return {
+		$: 'a3',
+		n: key,
+		o: value
+	};
+});
+var _VirtualDom_attributeNS = F3(function(namespace, key, value)
+{
+	return {
+		$: 'a4',
+		n: key,
+		o: { f: namespace, o: value }
+	};
+});
+
+
+
+// XSS ATTACK VECTOR CHECKS
+
+
+function _VirtualDom_noScript(tag)
+{
+	return tag == 'script' ? 'p' : tag;
+}
+
+function _VirtualDom_noOnOrFormAction(key)
+{
+	return /^(on|formAction$)/i.test(key) ? 'data-' + key : key;
+}
+
+function _VirtualDom_noInnerHtmlOrFormAction(key)
+{
+	return key == 'innerHTML' || key == 'formAction' ? 'data-' + key : key;
+}
+
+function _VirtualDom_noJavaScriptUri_UNUSED(value)
+{
+	return /^javascript:/i.test(value.replace(/\s/g,'')) ? '' : value;
+}
+
+function _VirtualDom_noJavaScriptUri(value)
+{
+	return /^javascript:/i.test(value.replace(/\s/g,''))
+		? 'javascript:alert("This is an XSS vector. Please use ports or web components instead.")'
+		: value;
+}
+
+function _VirtualDom_noJavaScriptOrHtmlUri_UNUSED(value)
+{
+	return /^\s*(javascript:|data:text\/html)/i.test(value) ? '' : value;
+}
+
+function _VirtualDom_noJavaScriptOrHtmlUri(value)
+{
+	return /^\s*(javascript:|data:text\/html)/i.test(value)
+		? 'javascript:alert("This is an XSS vector. Please use ports or web components instead.")'
+		: value;
+}
+
+
+
+// MAP FACTS
+
+
+var _VirtualDom_mapAttribute = F2(function(func, attr)
+{
+	return (attr.$ === 'a0')
+		? A2(_VirtualDom_on, attr.n, _VirtualDom_mapHandler(func, attr.o))
+		: attr;
+});
+
+function _VirtualDom_mapHandler(func, handler)
+{
+	var tag = elm$virtual_dom$VirtualDom$toHandlerInt(handler);
+
+	// 0 = Normal
+	// 1 = MayStopPropagation
+	// 2 = MayPreventDefault
+	// 3 = Custom
+
+	return {
+		$: handler.$,
+		a:
+			!tag
+				? A2(elm$json$Json$Decode$map, func, handler.a)
+				:
+			A3(elm$json$Json$Decode$map2,
+				tag < 3
+					? _VirtualDom_mapEventTuple
+					: _VirtualDom_mapEventRecord,
+				elm$json$Json$Decode$succeed(func),
+				handler.a
+			)
+	};
+}
+
+var _VirtualDom_mapEventTuple = F2(function(func, tuple)
+{
+	return _Utils_Tuple2(func(tuple.a), tuple.b);
+});
+
+var _VirtualDom_mapEventRecord = F2(function(func, record)
+{
+	return {
+		message: func(record.message),
+		stopPropagation: record.stopPropagation,
+		preventDefault: record.preventDefault
+	}
+});
+
+
+
+// ORGANIZE FACTS
+
+
+function _VirtualDom_organizeFacts(factList)
+{
+	for (var facts = {}; factList.b; factList = factList.b) // WHILE_CONS
+	{
+		var entry = factList.a;
+
+		var tag = entry.$;
+		var key = entry.n;
+		var value = entry.o;
+
+		if (tag === 'a2')
+		{
+			(key === 'className')
+				? _VirtualDom_addClass(facts, key, _Json_unwrap(value))
+				: facts[key] = _Json_unwrap(value);
+
+			continue;
+		}
+
+		var subFacts = facts[tag] || (facts[tag] = {});
+		(tag === 'a3' && key === 'class')
+			? _VirtualDom_addClass(subFacts, key, value)
+			: subFacts[key] = value;
+	}
+
+	return facts;
+}
+
+function _VirtualDom_addClass(object, key, newClass)
+{
+	var classes = object[key];
+	object[key] = classes ? classes + ' ' + newClass : newClass;
+}
+
+
+
+// RENDER
+
+
+function _VirtualDom_render(vNode, eventNode)
+{
+	var tag = vNode.$;
+
+	if (tag === 5)
+	{
+		return _VirtualDom_render(vNode.k || (vNode.k = vNode.m()), eventNode);
+	}
+
+	if (tag === 0)
+	{
+		return _VirtualDom_doc.createTextNode(vNode.a);
+	}
+
+	if (tag === 4)
+	{
+		var subNode = vNode.k;
+		var tagger = vNode.j;
+
+		while (subNode.$ === 4)
+		{
+			typeof tagger !== 'object'
+				? tagger = [tagger, subNode.j]
+				: tagger.push(subNode.j);
+
+			subNode = subNode.k;
+		}
+
+		var subEventRoot = { j: tagger, p: eventNode };
+		var domNode = _VirtualDom_render(subNode, subEventRoot);
+		domNode.elm_event_node_ref = subEventRoot;
+		return domNode;
+	}
+
+	if (tag === 3)
+	{
+		var domNode = vNode.h(vNode.g);
+		_VirtualDom_applyFacts(domNode, eventNode, vNode.d);
+		return domNode;
+	}
+
+	// at this point `tag` must be 1 or 2
+
+	var domNode = vNode.f
+		? _VirtualDom_doc.createElementNS(vNode.f, vNode.c)
+		: _VirtualDom_doc.createElement(vNode.c);
+
+	if (_VirtualDom_divertHrefToApp && vNode.c == 'a')
+	{
+		domNode.addEventListener('click', _VirtualDom_divertHrefToApp(domNode));
+	}
+
+	_VirtualDom_applyFacts(domNode, eventNode, vNode.d);
+
+	for (var kids = vNode.e, i = 0; i < kids.length; i++)
+	{
+		_VirtualDom_appendChild(domNode, _VirtualDom_render(tag === 1 ? kids[i] : kids[i].b, eventNode));
+	}
+
+	return domNode;
+}
+
+
+
+// APPLY FACTS
+
+
+function _VirtualDom_applyFacts(domNode, eventNode, facts)
+{
+	for (var key in facts)
+	{
+		var value = facts[key];
+
+		key === 'a1'
+			? _VirtualDom_applyStyles(domNode, value)
+			:
+		key === 'a0'
+			? _VirtualDom_applyEvents(domNode, eventNode, value)
+			:
+		key === 'a3'
+			? _VirtualDom_applyAttrs(domNode, value)
+			:
+		key === 'a4'
+			? _VirtualDom_applyAttrsNS(domNode, value)
+			:
+		((key !== 'value' && key !== 'checked') || domNode[key] !== value) && (domNode[key] = value);
+	}
+}
+
+
+
+// APPLY STYLES
+
+
+function _VirtualDom_applyStyles(domNode, styles)
+{
+	var domNodeStyle = domNode.style;
+
+	for (var key in styles)
+	{
+		domNodeStyle[key] = styles[key];
+	}
+}
+
+
+
+// APPLY ATTRS
+
+
+function _VirtualDom_applyAttrs(domNode, attrs)
+{
+	for (var key in attrs)
+	{
+		var value = attrs[key];
+		typeof value !== 'undefined'
+			? domNode.setAttribute(key, value)
+			: domNode.removeAttribute(key);
+	}
+}
+
+
+
+// APPLY NAMESPACED ATTRS
+
+
+function _VirtualDom_applyAttrsNS(domNode, nsAttrs)
+{
+	for (var key in nsAttrs)
+	{
+		var pair = nsAttrs[key];
+		var namespace = pair.f;
+		var value = pair.o;
+
+		typeof value !== 'undefined'
+			? domNode.setAttributeNS(namespace, key, value)
+			: domNode.removeAttributeNS(namespace, key);
+	}
+}
+
+
+
+// APPLY EVENTS
+
+
+function _VirtualDom_applyEvents(domNode, eventNode, events)
+{
+	var allCallbacks = domNode.elmFs || (domNode.elmFs = {});
+
+	for (var key in events)
+	{
+		var newHandler = events[key];
+		var oldCallback = allCallbacks[key];
+
+		if (!newHandler)
+		{
+			domNode.removeEventListener(key, oldCallback);
+			allCallbacks[key] = undefined;
+			continue;
+		}
+
+		if (oldCallback)
+		{
+			var oldHandler = oldCallback.q;
+			if (oldHandler.$ === newHandler.$)
+			{
+				oldCallback.q = newHandler;
+				continue;
+			}
+			domNode.removeEventListener(key, oldCallback);
+		}
+
+		oldCallback = _VirtualDom_makeCallback(eventNode, newHandler);
+		domNode.addEventListener(key, oldCallback,
+			_VirtualDom_passiveSupported
+			&& { passive: elm$virtual_dom$VirtualDom$toHandlerInt(newHandler) < 2 }
+		);
+		allCallbacks[key] = oldCallback;
+	}
+}
+
+
+
+// PASSIVE EVENTS
+
+
+var _VirtualDom_passiveSupported;
+
+try
+{
+	window.addEventListener('t', null, Object.defineProperty({}, 'passive', {
+		get: function() { _VirtualDom_passiveSupported = true; }
+	}));
+}
+catch(e) {}
+
+
+
+// EVENT HANDLERS
+
+
+function _VirtualDom_makeCallback(eventNode, initialHandler)
+{
+	function callback(event)
+	{
+		var handler = callback.q;
+		var result = _Json_runHelp(handler.a, event);
+
+		if (!elm$core$Result$isOk(result))
+		{
+			return;
+		}
+
+		var tag = elm$virtual_dom$VirtualDom$toHandlerInt(handler);
+
+		// 0 = Normal
+		// 1 = MayStopPropagation
+		// 2 = MayPreventDefault
+		// 3 = Custom
+
+		var value = result.a;
+		var message = !tag ? value : tag < 3 ? value.a : value.message;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.stopPropagation;
+		var currentEventNode = (
+			stopPropagation && event.stopPropagation(),
+			(tag == 2 ? value.b : tag == 3 && value.preventDefault) && event.preventDefault(),
+			eventNode
+		);
+		var tagger;
+		var i;
+		while (tagger = currentEventNode.j)
+		{
+			if (typeof tagger == 'function')
+			{
+				message = tagger(message);
+			}
+			else
+			{
+				for (var i = tagger.length; i--; )
+				{
+					message = tagger[i](message);
+				}
+			}
+			currentEventNode = currentEventNode.p;
+		}
+		currentEventNode(message, stopPropagation); // stopPropagation implies isSync
+	}
+
+	callback.q = initialHandler;
+
+	return callback;
+}
+
+function _VirtualDom_equalEvents(x, y)
+{
+	return x.$ == y.$ && _Json_equality(x.a, y.a);
+}
+
+
+
+// DIFF
+
+
+// TODO: Should we do patches like in iOS?
+//
+// type Patch
+//   = At Int Patch
+//   | Batch (List Patch)
+//   | Change ...
+//
+// How could it not be better?
+//
+function _VirtualDom_diff(x, y)
+{
+	var patches = [];
+	_VirtualDom_diffHelp(x, y, patches, 0);
+	return patches;
+}
+
+
+function _VirtualDom_pushPatch(patches, type, index, data)
+{
+	var patch = {
+		$: type,
+		r: index,
+		s: data,
+		t: undefined,
+		u: undefined
+	};
+	patches.push(patch);
+	return patch;
+}
+
+
+function _VirtualDom_diffHelp(x, y, patches, index)
+{
+	if (x === y)
+	{
+		return;
+	}
+
+	var xType = x.$;
+	var yType = y.$;
+
+	// Bail if you run into different types of nodes. Implies that the
+	// structure has changed significantly and it's not worth a diff.
+	if (xType !== yType)
+	{
+		if (xType === 1 && yType === 2)
+		{
+			y = _VirtualDom_dekey(y);
+			yType = 1;
+		}
+		else
+		{
+			_VirtualDom_pushPatch(patches, 0, index, y);
+			return;
+		}
+	}
+
+	// Now we know that both nodes are the same $.
+	switch (yType)
+	{
+		case 5:
+			var xRefs = x.l;
+			var yRefs = y.l;
+			var i = xRefs.length;
+			var same = i === yRefs.length;
+			while (same && i--)
+			{
+				same = xRefs[i] === yRefs[i];
+			}
+			if (same)
+			{
+				y.k = x.k;
+				return;
+			}
+			y.k = y.m();
+			var subPatches = [];
+			_VirtualDom_diffHelp(x.k, y.k, subPatches, 0);
+			subPatches.length > 0 && _VirtualDom_pushPatch(patches, 1, index, subPatches);
+			return;
+
+		case 4:
+			// gather nested taggers
+			var xTaggers = x.j;
+			var yTaggers = y.j;
+			var nesting = false;
+
+			var xSubNode = x.k;
+			while (xSubNode.$ === 4)
+			{
+				nesting = true;
+
+				typeof xTaggers !== 'object'
+					? xTaggers = [xTaggers, xSubNode.j]
+					: xTaggers.push(xSubNode.j);
+
+				xSubNode = xSubNode.k;
+			}
+
+			var ySubNode = y.k;
+			while (ySubNode.$ === 4)
+			{
+				nesting = true;
+
+				typeof yTaggers !== 'object'
+					? yTaggers = [yTaggers, ySubNode.j]
+					: yTaggers.push(ySubNode.j);
+
+				ySubNode = ySubNode.k;
+			}
+
+			// Just bail if different numbers of taggers. This implies the
+			// structure of the virtual DOM has changed.
+			if (nesting && xTaggers.length !== yTaggers.length)
+			{
+				_VirtualDom_pushPatch(patches, 0, index, y);
+				return;
+			}
+
+			// check if taggers are "the same"
+			if (nesting ? !_VirtualDom_pairwiseRefEqual(xTaggers, yTaggers) : xTaggers !== yTaggers)
+			{
+				_VirtualDom_pushPatch(patches, 2, index, yTaggers);
+			}
+
+			// diff everything below the taggers
+			_VirtualDom_diffHelp(xSubNode, ySubNode, patches, index + 1);
+			return;
+
+		case 0:
+			if (x.a !== y.a)
+			{
+				_VirtualDom_pushPatch(patches, 3, index, y.a);
+			}
+			return;
+
+		case 1:
+			_VirtualDom_diffNodes(x, y, patches, index, _VirtualDom_diffKids);
+			return;
+
+		case 2:
+			_VirtualDom_diffNodes(x, y, patches, index, _VirtualDom_diffKeyedKids);
+			return;
+
+		case 3:
+			if (x.h !== y.h)
+			{
+				_VirtualDom_pushPatch(patches, 0, index, y);
+				return;
+			}
+
+			var factsDiff = _VirtualDom_diffFacts(x.d, y.d);
+			factsDiff && _VirtualDom_pushPatch(patches, 4, index, factsDiff);
+
+			var patch = y.i(x.g, y.g);
+			patch && _VirtualDom_pushPatch(patches, 5, index, patch);
+
+			return;
+	}
+}
+
+// assumes the incoming arrays are the same length
+function _VirtualDom_pairwiseRefEqual(as, bs)
+{
+	for (var i = 0; i < as.length; i++)
+	{
+		if (as[i] !== bs[i])
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+function _VirtualDom_diffNodes(x, y, patches, index, diffKids)
+{
+	// Bail if obvious indicators have changed. Implies more serious
+	// structural changes such that it's not worth it to diff.
+	if (x.c !== y.c || x.f !== y.f)
+	{
+		_VirtualDom_pushPatch(patches, 0, index, y);
+		return;
+	}
+
+	var factsDiff = _VirtualDom_diffFacts(x.d, y.d);
+	factsDiff && _VirtualDom_pushPatch(patches, 4, index, factsDiff);
+
+	diffKids(x, y, patches, index);
+}
+
+
+
+// DIFF FACTS
+
+
+// TODO Instead of creating a new diff object, it's possible to just test if
+// there *is* a diff. During the actual patch, do the diff again and make the
+// modifications directly. This way, there's no new allocations. Worth it?
+function _VirtualDom_diffFacts(x, y, category)
+{
+	var diff;
+
+	// look for changes and removals
+	for (var xKey in x)
+	{
+		if (xKey === 'a1' || xKey === 'a0' || xKey === 'a3' || xKey === 'a4')
+		{
+			var subDiff = _VirtualDom_diffFacts(x[xKey], y[xKey] || {}, xKey);
+			if (subDiff)
+			{
+				diff = diff || {};
+				diff[xKey] = subDiff;
+			}
+			continue;
+		}
+
+		// remove if not in the new facts
+		if (!(xKey in y))
+		{
+			diff = diff || {};
+			diff[xKey] =
+				!category
+					? (typeof x[xKey] === 'string' ? '' : null)
+					:
+				(category === 'a1')
+					? ''
+					:
+				(category === 'a0' || category === 'a3')
+					? undefined
+					:
+				{ f: x[xKey].f, o: undefined };
+
+			continue;
+		}
+
+		var xValue = x[xKey];
+		var yValue = y[xKey];
+
+		// reference equal, so don't worry about it
+		if (xValue === yValue && xKey !== 'value' && xKey !== 'checked'
+			|| category === 'a0' && _VirtualDom_equalEvents(xValue, yValue))
+		{
+			continue;
+		}
+
+		diff = diff || {};
+		diff[xKey] = yValue;
+	}
+
+	// add new stuff
+	for (var yKey in y)
+	{
+		if (!(yKey in x))
+		{
+			diff = diff || {};
+			diff[yKey] = y[yKey];
+		}
+	}
+
+	return diff;
+}
+
+
+
+// DIFF KIDS
+
+
+function _VirtualDom_diffKids(xParent, yParent, patches, index)
+{
+	var xKids = xParent.e;
+	var yKids = yParent.e;
+
+	var xLen = xKids.length;
+	var yLen = yKids.length;
+
+	// FIGURE OUT IF THERE ARE INSERTS OR REMOVALS
+
+	if (xLen > yLen)
+	{
+		_VirtualDom_pushPatch(patches, 6, index, {
+			v: yLen,
+			i: xLen - yLen
+		});
+	}
+	else if (xLen < yLen)
+	{
+		_VirtualDom_pushPatch(patches, 7, index, {
+			v: xLen,
+			e: yKids
+		});
+	}
+
+	// PAIRWISE DIFF EVERYTHING ELSE
+
+	for (var minLen = xLen < yLen ? xLen : yLen, i = 0; i < minLen; i++)
+	{
+		var xKid = xKids[i];
+		_VirtualDom_diffHelp(xKid, yKids[i], patches, ++index);
+		index += xKid.b || 0;
+	}
+}
+
+
+
+// KEYED DIFF
+
+
+function _VirtualDom_diffKeyedKids(xParent, yParent, patches, rootIndex)
+{
+	var localPatches = [];
+
+	var changes = {}; // Dict String Entry
+	var inserts = []; // Array { index : Int, entry : Entry }
+	// type Entry = { tag : String, vnode : VNode, index : Int, data : _ }
+
+	var xKids = xParent.e;
+	var yKids = yParent.e;
+	var xLen = xKids.length;
+	var yLen = yKids.length;
+	var xIndex = 0;
+	var yIndex = 0;
+
+	var index = rootIndex;
+
+	while (xIndex < xLen && yIndex < yLen)
+	{
+		var x = xKids[xIndex];
+		var y = yKids[yIndex];
+
+		var xKey = x.a;
+		var yKey = y.a;
+		var xNode = x.b;
+		var yNode = y.b;
+
+		var newMatch = undefined;
+		var oldMatch = undefined;
+
+		// check if keys match
+
+		if (xKey === yKey)
+		{
+			index++;
+			_VirtualDom_diffHelp(xNode, yNode, localPatches, index);
+			index += xNode.b || 0;
+
+			xIndex++;
+			yIndex++;
+			continue;
+		}
+
+		// look ahead 1 to detect insertions and removals.
+
+		var xNext = xKids[xIndex + 1];
+		var yNext = yKids[yIndex + 1];
+
+		if (xNext)
+		{
+			var xNextKey = xNext.a;
+			var xNextNode = xNext.b;
+			oldMatch = yKey === xNextKey;
+		}
+
+		if (yNext)
+		{
+			var yNextKey = yNext.a;
+			var yNextNode = yNext.b;
+			newMatch = xKey === yNextKey;
+		}
+
+
+		// swap x and y
+		if (newMatch && oldMatch)
+		{
+			index++;
+			_VirtualDom_diffHelp(xNode, yNextNode, localPatches, index);
+			_VirtualDom_insertNode(changes, localPatches, xKey, yNode, yIndex, inserts);
+			index += xNode.b || 0;
+
+			index++;
+			_VirtualDom_removeNode(changes, localPatches, xKey, xNextNode, index);
+			index += xNextNode.b || 0;
+
+			xIndex += 2;
+			yIndex += 2;
+			continue;
+		}
+
+		// insert y
+		if (newMatch)
+		{
+			index++;
+			_VirtualDom_insertNode(changes, localPatches, yKey, yNode, yIndex, inserts);
+			_VirtualDom_diffHelp(xNode, yNextNode, localPatches, index);
+			index += xNode.b || 0;
+
+			xIndex += 1;
+			yIndex += 2;
+			continue;
+		}
+
+		// remove x
+		if (oldMatch)
+		{
+			index++;
+			_VirtualDom_removeNode(changes, localPatches, xKey, xNode, index);
+			index += xNode.b || 0;
+
+			index++;
+			_VirtualDom_diffHelp(xNextNode, yNode, localPatches, index);
+			index += xNextNode.b || 0;
+
+			xIndex += 2;
+			yIndex += 1;
+			continue;
+		}
+
+		// remove x, insert y
+		if (xNext && xNextKey === yNextKey)
+		{
+			index++;
+			_VirtualDom_removeNode(changes, localPatches, xKey, xNode, index);
+			_VirtualDom_insertNode(changes, localPatches, yKey, yNode, yIndex, inserts);
+			index += xNode.b || 0;
+
+			index++;
+			_VirtualDom_diffHelp(xNextNode, yNextNode, localPatches, index);
+			index += xNextNode.b || 0;
+
+			xIndex += 2;
+			yIndex += 2;
+			continue;
+		}
+
+		break;
+	}
+
+	// eat up any remaining nodes with removeNode and insertNode
+
+	while (xIndex < xLen)
+	{
+		index++;
+		var x = xKids[xIndex];
+		var xNode = x.b;
+		_VirtualDom_removeNode(changes, localPatches, x.a, xNode, index);
+		index += xNode.b || 0;
+		xIndex++;
+	}
+
+	while (yIndex < yLen)
+	{
+		var endInserts = endInserts || [];
+		var y = yKids[yIndex];
+		_VirtualDom_insertNode(changes, localPatches, y.a, y.b, undefined, endInserts);
+		yIndex++;
+	}
+
+	if (localPatches.length > 0 || inserts.length > 0 || endInserts)
+	{
+		_VirtualDom_pushPatch(patches, 8, rootIndex, {
+			w: localPatches,
+			x: inserts,
+			y: endInserts
+		});
+	}
+}
+
+
+
+// CHANGES FROM KEYED DIFF
+
+
+var _VirtualDom_POSTFIX = '_elmW6BL';
+
+
+function _VirtualDom_insertNode(changes, localPatches, key, vnode, yIndex, inserts)
+{
+	var entry = changes[key];
+
+	// never seen this key before
+	if (!entry)
+	{
+		entry = {
+			c: 0,
+			z: vnode,
+			r: yIndex,
+			s: undefined
+		};
+
+		inserts.push({ r: yIndex, A: entry });
+		changes[key] = entry;
+
+		return;
+	}
+
+	// this key was removed earlier, a match!
+	if (entry.c === 1)
+	{
+		inserts.push({ r: yIndex, A: entry });
+
+		entry.c = 2;
+		var subPatches = [];
+		_VirtualDom_diffHelp(entry.z, vnode, subPatches, entry.r);
+		entry.r = yIndex;
+		entry.s.s = {
+			w: subPatches,
+			A: entry
+		};
+
+		return;
+	}
+
+	// this key has already been inserted or moved, a duplicate!
+	_VirtualDom_insertNode(changes, localPatches, key + _VirtualDom_POSTFIX, vnode, yIndex, inserts);
+}
+
+
+function _VirtualDom_removeNode(changes, localPatches, key, vnode, index)
+{
+	var entry = changes[key];
+
+	// never seen this key before
+	if (!entry)
+	{
+		var patch = _VirtualDom_pushPatch(localPatches, 9, index, undefined);
+
+		changes[key] = {
+			c: 1,
+			z: vnode,
+			r: index,
+			s: patch
+		};
+
+		return;
+	}
+
+	// this key was inserted earlier, a match!
+	if (entry.c === 0)
+	{
+		entry.c = 2;
+		var subPatches = [];
+		_VirtualDom_diffHelp(vnode, entry.z, subPatches, index);
+
+		_VirtualDom_pushPatch(localPatches, 9, index, {
+			w: subPatches,
+			A: entry
+		});
+
+		return;
+	}
+
+	// this key has already been removed or moved, a duplicate!
+	_VirtualDom_removeNode(changes, localPatches, key + _VirtualDom_POSTFIX, vnode, index);
+}
+
+
+
+// ADD DOM NODES
+//
+// Each DOM node has an "index" assigned in order of traversal. It is important
+// to minimize our crawl over the actual DOM, so these indexes (along with the
+// descendantsCount of virtual nodes) let us skip touching entire subtrees of
+// the DOM if we know there are no patches there.
+
+
+function _VirtualDom_addDomNodes(domNode, vNode, patches, eventNode)
+{
+	_VirtualDom_addDomNodesHelp(domNode, vNode, patches, 0, 0, vNode.b, eventNode);
+}
+
+
+// assumes `patches` is non-empty and indexes increase monotonically.
+function _VirtualDom_addDomNodesHelp(domNode, vNode, patches, i, low, high, eventNode)
+{
+	var patch = patches[i];
+	var index = patch.r;
+
+	while (index === low)
+	{
+		var patchType = patch.$;
+
+		if (patchType === 1)
+		{
+			_VirtualDom_addDomNodes(domNode, vNode.k, patch.s, eventNode);
+		}
+		else if (patchType === 8)
+		{
+			patch.t = domNode;
+			patch.u = eventNode;
+
+			var subPatches = patch.s.w;
+			if (subPatches.length > 0)
+			{
+				_VirtualDom_addDomNodesHelp(domNode, vNode, subPatches, 0, low, high, eventNode);
+			}
+		}
+		else if (patchType === 9)
+		{
+			patch.t = domNode;
+			patch.u = eventNode;
+
+			var data = patch.s;
+			if (data)
+			{
+				data.A.s = domNode;
+				var subPatches = data.w;
+				if (subPatches.length > 0)
+				{
+					_VirtualDom_addDomNodesHelp(domNode, vNode, subPatches, 0, low, high, eventNode);
+				}
+			}
+		}
+		else
+		{
+			patch.t = domNode;
+			patch.u = eventNode;
+		}
+
+		i++;
+
+		if (!(patch = patches[i]) || (index = patch.r) > high)
+		{
+			return i;
+		}
+	}
+
+	var tag = vNode.$;
+
+	if (tag === 4)
+	{
+		var subNode = vNode.k;
+
+		while (subNode.$ === 4)
+		{
+			subNode = subNode.k;
+		}
+
+		return _VirtualDom_addDomNodesHelp(domNode, subNode, patches, i, low + 1, high, domNode.elm_event_node_ref);
+	}
+
+	// tag must be 1 or 2 at this point
+
+	var vKids = vNode.e;
+	var childNodes = domNode.childNodes;
+	for (var j = 0; j < vKids.length; j++)
+	{
+		low++;
+		var vKid = tag === 1 ? vKids[j] : vKids[j].b;
+		var nextLow = low + (vKid.b || 0);
+		if (low <= index && index <= nextLow)
+		{
+			i = _VirtualDom_addDomNodesHelp(childNodes[j], vKid, patches, i, low, nextLow, eventNode);
+			if (!(patch = patches[i]) || (index = patch.r) > high)
+			{
+				return i;
+			}
+		}
+		low = nextLow;
+	}
+	return i;
+}
+
+
+
+// APPLY PATCHES
+
+
+function _VirtualDom_applyPatches(rootDomNode, oldVirtualNode, patches, eventNode)
+{
+	if (patches.length === 0)
+	{
+		return rootDomNode;
+	}
+
+	_VirtualDom_addDomNodes(rootDomNode, oldVirtualNode, patches, eventNode);
+	return _VirtualDom_applyPatchesHelp(rootDomNode, patches);
+}
+
+function _VirtualDom_applyPatchesHelp(rootDomNode, patches)
+{
+	for (var i = 0; i < patches.length; i++)
+	{
+		var patch = patches[i];
+		var localDomNode = patch.t
+		var newNode = _VirtualDom_applyPatch(localDomNode, patch);
+		if (localDomNode === rootDomNode)
+		{
+			rootDomNode = newNode;
+		}
+	}
+	return rootDomNode;
+}
+
+function _VirtualDom_applyPatch(domNode, patch)
+{
+	switch (patch.$)
+	{
+		case 0:
+			return _VirtualDom_applyPatchRedraw(domNode, patch.s, patch.u);
+
+		case 4:
+			_VirtualDom_applyFacts(domNode, patch.u, patch.s);
+			return domNode;
+
+		case 3:
+			domNode.replaceData(0, domNode.length, patch.s);
+			return domNode;
+
+		case 1:
+			return _VirtualDom_applyPatchesHelp(domNode, patch.s);
+
+		case 2:
+			if (domNode.elm_event_node_ref)
+			{
+				domNode.elm_event_node_ref.j = patch.s;
+			}
+			else
+			{
+				domNode.elm_event_node_ref = { j: patch.s, p: patch.u };
+			}
+			return domNode;
+
+		case 6:
+			var data = patch.s;
+			for (var i = 0; i < data.i; i++)
+			{
+				domNode.removeChild(domNode.childNodes[data.v]);
+			}
+			return domNode;
+
+		case 7:
+			var data = patch.s;
+			var kids = data.e;
+			var i = data.v;
+			var theEnd = domNode.childNodes[i];
+			for (; i < kids.length; i++)
+			{
+				domNode.insertBefore(_VirtualDom_render(kids[i], patch.u), theEnd);
+			}
+			return domNode;
+
+		case 9:
+			var data = patch.s;
+			if (!data)
+			{
+				domNode.parentNode.removeChild(domNode);
+				return domNode;
+			}
+			var entry = data.A;
+			if (typeof entry.r !== 'undefined')
+			{
+				domNode.parentNode.removeChild(domNode);
+			}
+			entry.s = _VirtualDom_applyPatchesHelp(domNode, data.w);
+			return domNode;
+
+		case 8:
+			return _VirtualDom_applyPatchReorder(domNode, patch);
+
+		case 5:
+			return patch.s(domNode);
+
+		default:
+			_Debug_crash(10); // 'Ran into an unknown patch!'
+	}
+}
+
+
+function _VirtualDom_applyPatchRedraw(domNode, vNode, eventNode)
+{
+	var parentNode = domNode.parentNode;
+	var newNode = _VirtualDom_render(vNode, eventNode);
+
+	if (!newNode.elm_event_node_ref)
+	{
+		newNode.elm_event_node_ref = domNode.elm_event_node_ref;
+	}
+
+	if (parentNode && newNode !== domNode)
+	{
+		parentNode.replaceChild(newNode, domNode);
+	}
+	return newNode;
+}
+
+
+function _VirtualDom_applyPatchReorder(domNode, patch)
+{
+	var data = patch.s;
+
+	// remove end inserts
+	var frag = _VirtualDom_applyPatchReorderEndInsertsHelp(data.y, patch);
+
+	// removals
+	domNode = _VirtualDom_applyPatchesHelp(domNode, data.w);
+
+	// inserts
+	var inserts = data.x;
+	for (var i = 0; i < inserts.length; i++)
+	{
+		var insert = inserts[i];
+		var entry = insert.A;
+		var node = entry.c === 2
+			? entry.s
+			: _VirtualDom_render(entry.z, patch.u);
+		domNode.insertBefore(node, domNode.childNodes[insert.r]);
+	}
+
+	// add end inserts
+	if (frag)
+	{
+		_VirtualDom_appendChild(domNode, frag);
+	}
+
+	return domNode;
+}
+
+
+function _VirtualDom_applyPatchReorderEndInsertsHelp(endInserts, patch)
+{
+	if (!endInserts)
+	{
+		return;
+	}
+
+	var frag = _VirtualDom_doc.createDocumentFragment();
+	for (var i = 0; i < endInserts.length; i++)
+	{
+		var insert = endInserts[i];
+		var entry = insert.A;
+		_VirtualDom_appendChild(frag, entry.c === 2
+			? entry.s
+			: _VirtualDom_render(entry.z, patch.u)
+		);
+	}
+	return frag;
+}
+
+
+function _VirtualDom_virtualize(node)
+{
+	// TEXT NODES
+
+	if (node.nodeType === 3)
+	{
+		return _VirtualDom_text(node.textContent);
+	}
+
+
+	// WEIRD NODES
+
+	if (node.nodeType !== 1)
+	{
+		return _VirtualDom_text('');
+	}
+
+
+	// ELEMENT NODES
+
+	var attrList = _List_Nil;
+	var attrs = node.attributes;
+	for (var i = attrs.length; i--; )
+	{
+		var attr = attrs[i];
+		var name = attr.name;
+		var value = attr.value;
+		attrList = _List_Cons( A2(_VirtualDom_attribute, name, value), attrList );
+	}
+
+	var tag = node.tagName.toLowerCase();
+	var kidList = _List_Nil;
+	var kids = node.childNodes;
+
+	for (var i = kids.length; i--; )
+	{
+		kidList = _List_Cons(_VirtualDom_virtualize(kids[i]), kidList);
+	}
+	return A3(_VirtualDom_node, tag, attrList, kidList);
+}
+
+function _VirtualDom_dekey(keyedNode)
+{
+	var keyedKids = keyedNode.e;
+	var len = keyedKids.length;
+	var kids = new Array(len);
+	for (var i = 0; i < len; i++)
+	{
+		kids[i] = keyedKids[i].b;
+	}
+
+	return {
+		$: 1,
+		c: keyedNode.c,
+		d: keyedNode.d,
+		e: kids,
+		f: keyedNode.f,
+		b: keyedNode.b
+	};
+}
+
+
+
+
+// ELEMENT
+
+
+var _Debugger_element;
+
+var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debugMetadata, args)
+{
+	return _Platform_initialize(
+		flagDecoder,
+		args,
+		impl.init,
+		impl.update,
+		impl.subscriptions,
+		function(sendToApp, initialModel) {
+			var view = impl.view;
+			/**_UNUSED/
+			var domNode = args['node'];
+			//*/
+			/**/
+			var domNode = args && args['node'] ? args['node'] : _Debug_crash(0);
+			//*/
+			var currNode = _VirtualDom_virtualize(domNode);
+
+			return _Browser_makeAnimator(initialModel, function(model)
+			{
+				var nextNode = view(model);
+				var patches = _VirtualDom_diff(currNode, nextNode);
+				domNode = _VirtualDom_applyPatches(domNode, currNode, patches, sendToApp);
+				currNode = nextNode;
+			});
+		}
+	);
+});
+
+
+
+// DOCUMENT
+
+
+var _Debugger_document;
+
+var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, debugMetadata, args)
+{
+	return _Platform_initialize(
+		flagDecoder,
+		args,
+		impl.init,
+		impl.update,
+		impl.subscriptions,
+		function(sendToApp, initialModel) {
+			var divertHrefToApp = impl.setup && impl.setup(sendToApp)
+			var view = impl.view;
+			var title = _VirtualDom_doc.title;
+			var bodyNode = _VirtualDom_doc.body;
+			var currNode = _VirtualDom_virtualize(bodyNode);
+			return _Browser_makeAnimator(initialModel, function(model)
+			{
+				_VirtualDom_divertHrefToApp = divertHrefToApp;
+				var doc = view(model);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.body);
+				var patches = _VirtualDom_diff(currNode, nextNode);
+				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
+				currNode = nextNode;
+				_VirtualDom_divertHrefToApp = 0;
+				(title !== doc.title) && (_VirtualDom_doc.title = title = doc.title);
+			});
+		}
+	);
+});
+
+
+
+// ANIMATION
+
+
+var _Browser_cancelAnimationFrame =
+	typeof cancelAnimationFrame !== 'undefined'
+		? cancelAnimationFrame
+		: function(id) { clearTimeout(id); };
+
+var _Browser_requestAnimationFrame =
+	typeof requestAnimationFrame !== 'undefined'
+		? requestAnimationFrame
+		: function(callback) { return setTimeout(callback, 1000 / 60); };
+
+
+function _Browser_makeAnimator(model, draw)
+{
+	draw(model);
+
+	var state = 0;
+
+	function updateIfNeeded()
+	{
+		state = state === 1
+			? 0
+			: ( _Browser_requestAnimationFrame(updateIfNeeded), draw(model), 1 );
+	}
+
+	return function(nextModel, isSync)
+	{
+		model = nextModel;
+
+		isSync
+			? ( draw(model),
+				state === 2 && (state = 1)
+				)
+			: ( state === 0 && _Browser_requestAnimationFrame(updateIfNeeded),
+				state = 2
+				);
+	};
+}
+
+
+
+// APPLICATION
+
+
+function _Browser_application(impl)
+{
+	var onUrlChange = impl.onUrlChange;
+	var onUrlRequest = impl.onUrlRequest;
+	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
+
+	return _Browser_document({
+		setup: function(sendToApp)
+		{
+			key.a = sendToApp;
+			_Browser_window.addEventListener('popstate', key);
+			_Browser_window.navigator.userAgent.indexOf('Trident') < 0 || _Browser_window.addEventListener('hashchange', key);
+
+			return F2(function(domNode, event)
+			{
+				if (!event.ctrlKey && !event.metaKey && !event.shiftKey && event.button < 1 && !domNode.target && !domNode.hasAttribute('download'))
+				{
+					event.preventDefault();
+					var href = domNode.href;
+					var curr = _Browser_getUrl();
+					var next = elm$url$Url$fromString(href).a;
+					sendToApp(onUrlRequest(
+						(next
+							&& curr.protocol === next.protocol
+							&& curr.host === next.host
+							&& curr.port_.a === next.port_.a
+						)
+							? elm$browser$Browser$Internal(next)
+							: elm$browser$Browser$External(href)
+					));
+				}
+			});
+		},
+		init: function(flags)
+		{
+			return A3(impl.init, flags, _Browser_getUrl(), key);
+		},
+		view: impl.view,
+		update: impl.update,
+		subscriptions: impl.subscriptions
+	});
+}
+
+function _Browser_getUrl()
+{
+	return elm$url$Url$fromString(_VirtualDom_doc.location.href).a || _Debug_crash(1);
+}
+
+var _Browser_go = F2(function(key, n)
+{
+	return A2(elm$core$Task$perform, elm$core$Basics$never, _Scheduler_binding(function() {
+		n && history.go(n);
+		key();
+	}));
+});
+
+var _Browser_pushUrl = F2(function(key, url)
+{
+	return A2(elm$core$Task$perform, elm$core$Basics$never, _Scheduler_binding(function() {
+		history.pushState({}, '', url);
+		key();
+	}));
+});
+
+var _Browser_replaceUrl = F2(function(key, url)
+{
+	return A2(elm$core$Task$perform, elm$core$Basics$never, _Scheduler_binding(function() {
+		history.replaceState({}, '', url);
+		key();
+	}));
+});
+
+
+
+// GLOBAL EVENTS
+
+
+var _Browser_fakeNode = { addEventListener: function() {}, removeEventListener: function() {} };
+var _Browser_doc = typeof document !== 'undefined' ? document : _Browser_fakeNode;
+var _Browser_window = typeof window !== 'undefined' ? window : _Browser_fakeNode;
+
+var _Browser_on = F3(function(node, eventName, sendToSelf)
+{
+	return _Scheduler_spawn(_Scheduler_binding(function(callback)
+	{
+		function handler(event)	{ _Scheduler_rawSpawn(sendToSelf(event)); }
+		node.addEventListener(eventName, handler, _VirtualDom_passiveSupported && { passive: true });
+		return function() { node.removeEventListener(eventName, handler); };
+	}));
+});
+
+var _Browser_decodeEvent = F2(function(decoder, event)
+{
+	var result = _Json_runHelp(decoder, event);
+	return elm$core$Result$isOk(result) ? elm$core$Maybe$Just(result.a) : elm$core$Maybe$Nothing;
+});
+
+
+
+// PAGE VISIBILITY
+
+
+function _Browser_visibilityInfo()
+{
+	return (typeof _VirtualDom_doc.hidden !== 'undefined')
+		? { hidden: 'hidden', change: 'visibilitychange' }
+		:
+	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
+		? { hidden: 'mozHidden', change: 'mozvisibilitychange' }
+		:
+	(typeof _VirtualDom_doc.msHidden !== 'undefined')
+		? { hidden: 'msHidden', change: 'msvisibilitychange' }
+		:
+	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
+		? { hidden: 'webkitHidden', change: 'webkitvisibilitychange' }
+		: { hidden: 'hidden', change: 'visibilitychange' };
+}
+
+
+
+// ANIMATION FRAMES
+
+
+function _Browser_rAF()
+{
+	return _Scheduler_binding(function(callback)
+	{
+		var id = _Browser_requestAnimationFrame(function() {
+			callback(_Scheduler_succeed(Date.now()));
+		});
+
+		return function() {
+			_Browser_cancelAnimationFrame(id);
+		};
+	});
+}
+
+
+function _Browser_now()
+{
+	return _Scheduler_binding(function(callback)
+	{
+		callback(_Scheduler_succeed(Date.now()));
+	});
+}
+
+
+
+// DOM STUFF
+
+
+function _Browser_withNode(id, doStuff)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		_Browser_requestAnimationFrame(function() {
+			var node = document.getElementById(id);
+			callback(node
+				? _Scheduler_succeed(doStuff(node))
+				: _Scheduler_fail(elm$browser$Browser$Dom$NotFound(id))
+			);
+		});
+	});
+}
+
+
+function _Browser_withWindow(doStuff)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		_Browser_requestAnimationFrame(function() {
+			callback(_Scheduler_succeed(doStuff()));
+		});
+	});
+}
+
+
+// FOCUS and BLUR
+
+
+var _Browser_call = F2(function(functionName, id)
+{
+	return _Browser_withNode(id, function(node) {
+		node[functionName]();
+		return _Utils_Tuple0;
+	});
+});
+
+
+
+// WINDOW VIEWPORT
+
+
+function _Browser_getViewport()
+{
+	return {
+		scene: _Browser_getScene(),
+		viewport: {
+			x: _Browser_window.pageXOffset,
+			y: _Browser_window.pageYOffset,
+			width: _Browser_doc.documentElement.clientWidth,
+			height: _Browser_doc.documentElement.clientHeight
+		}
+	};
+}
+
+function _Browser_getScene()
+{
+	var body = _Browser_doc.body;
+	var elem = _Browser_doc.documentElement;
+	return {
+		width: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		height: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+	};
+}
+
+var _Browser_setViewport = F2(function(x, y)
+{
+	return _Browser_withWindow(function()
+	{
+		_Browser_window.scroll(x, y);
+		return _Utils_Tuple0;
+	});
+});
+
+
+
+// ELEMENT VIEWPORT
+
+
+function _Browser_getViewportOf(id)
+{
+	return _Browser_withNode(id, function(node)
+	{
+		return {
+			scene: {
+				width: node.scrollWidth,
+				height: node.scrollHeight
+			},
+			viewport: {
+				x: node.scrollLeft,
+				y: node.scrollTop,
+				width: node.clientWidth,
+				height: node.clientHeight
+			}
+		};
+	});
+}
+
+
+var _Browser_setViewportOf = F3(function(id, x, y)
+{
+	return _Browser_withNode(id, function(node)
+	{
+		node.scrollLeft = x;
+		node.scrollTop = y;
+		return _Utils_Tuple0;
+	});
+});
+
+
+
+// ELEMENT
+
+
+function _Browser_getElement(id)
+{
+	return _Browser_withNode(id, function(node)
+	{
+		var rect = node.getBoundingClientRect();
+		var x = _Browser_window.pageXOffset;
+		var y = _Browser_window.pageYOffset;
+		return {
+			scene: _Browser_getScene(),
+			viewport: {
+				x: x,
+				y: y,
+				width: _Browser_doc.documentElement.clientWidth,
+				height: _Browser_doc.documentElement.clientHeight
+			},
+			element: {
+				x: x + rect.left,
+				y: y + rect.top,
+				width: rect.width,
+				height: rect.height
+			}
+		};
+	});
+}
+
+
+
+// LOAD and RELOAD
+
+
+function _Browser_reload(skipCache)
+{
+	return A2(elm$core$Task$perform, elm$core$Basics$never, _Scheduler_binding(function(callback)
+	{
+		_VirtualDom_doc.location.reload(skipCache);
+	}));
+}
+
+function _Browser_load(url)
+{
+	return A2(elm$core$Task$perform, elm$core$Basics$never, _Scheduler_binding(function(callback)
+	{
+		try
+		{
+			_Browser_window.location = url;
+		}
+		catch(err)
+		{
+			// Only Firefox can throw a NS_ERROR_MALFORMED_URI exception here.
+			// Other browsers reload the page, so let's be consistent about that.
+			_VirtualDom_doc.location.reload(false);
+		}
+	}));
+}
+var author$project$Main$UrlChanged = function (a) {
+	return {$: 'UrlChanged', a: a};
+};
+var author$project$Main$UrlRequested = function (a) {
+	return {$: 'UrlRequested', a: a};
+};
+var author$project$Main$Redirect = function (a) {
+	return {$: 'Redirect', a: a};
+};
+var elm$core$List$foldl = F3(
+	function (func, acc, list) {
+		foldl:
+		while (true) {
+			if (!list.b) {
+				return acc;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				var $temp$func = func,
+					$temp$acc = A2(func, x, acc),
+					$temp$list = xs;
+				func = $temp$func;
+				acc = $temp$acc;
+				list = $temp$list;
+				continue foldl;
+			}
+		}
+	});
+var elm$core$Array$branchFactor = 32;
+var elm$core$Array$Array_elm_builtin = F4(
+	function (a, b, c, d) {
+		return {$: 'Array_elm_builtin', a: a, b: b, c: c, d: d};
+	});
+var elm$core$Basics$EQ = {$: 'EQ'};
+var elm$core$Basics$GT = {$: 'GT'};
+var elm$core$Basics$LT = {$: 'LT'};
+var elm$core$Dict$foldr = F3(
+	function (func, acc, t) {
+		foldr:
+		while (true) {
+			if (t.$ === 'RBEmpty_elm_builtin') {
+				return acc;
+			} else {
+				var key = t.b;
+				var value = t.c;
+				var left = t.d;
+				var right = t.e;
+				var $temp$func = func,
+					$temp$acc = A3(
+					func,
+					key,
+					value,
+					A3(elm$core$Dict$foldr, func, acc, right)),
+					$temp$t = left;
+				func = $temp$func;
+				acc = $temp$acc;
+				t = $temp$t;
+				continue foldr;
+			}
+		}
+	});
+var elm$core$List$cons = _List_cons;
+var elm$core$Dict$toList = function (dict) {
+	return A3(
+		elm$core$Dict$foldr,
+		F3(
+			function (key, value, list) {
+				return A2(
+					elm$core$List$cons,
+					_Utils_Tuple2(key, value),
+					list);
+			}),
+		_List_Nil,
+		dict);
+};
+var elm$core$Dict$keys = function (dict) {
+	return A3(
+		elm$core$Dict$foldr,
+		F3(
+			function (key, value, keyList) {
+				return A2(elm$core$List$cons, key, keyList);
+			}),
+		_List_Nil,
+		dict);
+};
+var elm$core$Set$toList = function (_n0) {
+	var dict = _n0.a;
+	return elm$core$Dict$keys(dict);
+};
+var elm$core$Elm$JsArray$foldr = _JsArray_foldr;
+var elm$core$Array$foldr = F3(
+	function (func, baseCase, _n0) {
+		var tree = _n0.c;
+		var tail = _n0.d;
+		var helper = F2(
+			function (node, acc) {
+				if (node.$ === 'SubTree') {
+					var subTree = node.a;
+					return A3(elm$core$Elm$JsArray$foldr, helper, acc, subTree);
+				} else {
+					var values = node.a;
+					return A3(elm$core$Elm$JsArray$foldr, func, acc, values);
+				}
+			});
+		return A3(
+			elm$core$Elm$JsArray$foldr,
+			helper,
+			A3(elm$core$Elm$JsArray$foldr, func, baseCase, tail),
+			tree);
+	});
+var elm$core$Array$toList = function (array) {
+	return A3(elm$core$Array$foldr, elm$core$List$cons, _List_Nil, array);
+};
+var elm$core$Basics$ceiling = _Basics_ceiling;
+var elm$core$Basics$fdiv = _Basics_fdiv;
+var elm$core$Basics$logBase = F2(
+	function (base, number) {
+		return _Basics_log(number) / _Basics_log(base);
+	});
+var elm$core$Basics$toFloat = _Basics_toFloat;
+var elm$core$Array$shiftStep = elm$core$Basics$ceiling(
+	A2(elm$core$Basics$logBase, 2, elm$core$Array$branchFactor));
+var elm$core$Elm$JsArray$empty = _JsArray_empty;
+var elm$core$Array$empty = A4(elm$core$Array$Array_elm_builtin, 0, elm$core$Array$shiftStep, elm$core$Elm$JsArray$empty, elm$core$Elm$JsArray$empty);
+var elm$core$Array$Leaf = function (a) {
+	return {$: 'Leaf', a: a};
+};
+var elm$core$Array$SubTree = function (a) {
+	return {$: 'SubTree', a: a};
+};
+var elm$core$Elm$JsArray$initializeFromList = _JsArray_initializeFromList;
+var elm$core$List$reverse = function (list) {
+	return A3(elm$core$List$foldl, elm$core$List$cons, _List_Nil, list);
+};
+var elm$core$Array$compressNodes = F2(
+	function (nodes, acc) {
+		compressNodes:
+		while (true) {
+			var _n0 = A2(elm$core$Elm$JsArray$initializeFromList, elm$core$Array$branchFactor, nodes);
+			var node = _n0.a;
+			var remainingNodes = _n0.b;
+			var newAcc = A2(
+				elm$core$List$cons,
+				elm$core$Array$SubTree(node),
+				acc);
+			if (!remainingNodes.b) {
+				return elm$core$List$reverse(newAcc);
+			} else {
+				var $temp$nodes = remainingNodes,
+					$temp$acc = newAcc;
+				nodes = $temp$nodes;
+				acc = $temp$acc;
+				continue compressNodes;
+			}
+		}
+	});
+var elm$core$Basics$apR = F2(
+	function (x, f) {
+		return f(x);
+	});
+var elm$core$Basics$eq = _Utils_equal;
+var elm$core$Tuple$first = function (_n0) {
+	var x = _n0.a;
+	return x;
+};
+var elm$core$Array$treeFromBuilder = F2(
+	function (nodeList, nodeListSize) {
+		treeFromBuilder:
+		while (true) {
+			var newNodeSize = elm$core$Basics$ceiling(nodeListSize / elm$core$Array$branchFactor);
+			if (newNodeSize === 1) {
+				return A2(elm$core$Elm$JsArray$initializeFromList, elm$core$Array$branchFactor, nodeList).a;
+			} else {
+				var $temp$nodeList = A2(elm$core$Array$compressNodes, nodeList, _List_Nil),
+					$temp$nodeListSize = newNodeSize;
+				nodeList = $temp$nodeList;
+				nodeListSize = $temp$nodeListSize;
+				continue treeFromBuilder;
+			}
+		}
+	});
+var elm$core$Basics$add = _Basics_add;
+var elm$core$Basics$apL = F2(
+	function (f, x) {
+		return f(x);
+	});
+var elm$core$Basics$floor = _Basics_floor;
+var elm$core$Basics$gt = _Utils_gt;
+var elm$core$Basics$max = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) > 0) ? x : y;
+	});
+var elm$core$Basics$mul = _Basics_mul;
+var elm$core$Basics$sub = _Basics_sub;
+var elm$core$Elm$JsArray$length = _JsArray_length;
+var elm$core$Array$builderToArray = F2(
+	function (reverseNodeList, builder) {
+		if (!builder.nodeListSize) {
+			return A4(
+				elm$core$Array$Array_elm_builtin,
+				elm$core$Elm$JsArray$length(builder.tail),
+				elm$core$Array$shiftStep,
+				elm$core$Elm$JsArray$empty,
+				builder.tail);
+		} else {
+			var treeLen = builder.nodeListSize * elm$core$Array$branchFactor;
+			var depth = elm$core$Basics$floor(
+				A2(elm$core$Basics$logBase, elm$core$Array$branchFactor, treeLen - 1));
+			var correctNodeList = reverseNodeList ? elm$core$List$reverse(builder.nodeList) : builder.nodeList;
+			var tree = A2(elm$core$Array$treeFromBuilder, correctNodeList, builder.nodeListSize);
+			return A4(
+				elm$core$Array$Array_elm_builtin,
+				elm$core$Elm$JsArray$length(builder.tail) + treeLen,
+				A2(elm$core$Basics$max, 5, depth * elm$core$Array$shiftStep),
+				tree,
+				builder.tail);
+		}
+	});
+var elm$core$Basics$False = {$: 'False'};
+var elm$core$Basics$idiv = _Basics_idiv;
+var elm$core$Basics$lt = _Utils_lt;
+var elm$core$Elm$JsArray$initialize = _JsArray_initialize;
+var elm$core$Array$initializeHelp = F5(
+	function (fn, fromIndex, len, nodeList, tail) {
+		initializeHelp:
+		while (true) {
+			if (fromIndex < 0) {
+				return A2(
+					elm$core$Array$builderToArray,
+					false,
+					{nodeList: nodeList, nodeListSize: (len / elm$core$Array$branchFactor) | 0, tail: tail});
+			} else {
+				var leaf = elm$core$Array$Leaf(
+					A3(elm$core$Elm$JsArray$initialize, elm$core$Array$branchFactor, fromIndex, fn));
+				var $temp$fn = fn,
+					$temp$fromIndex = fromIndex - elm$core$Array$branchFactor,
+					$temp$len = len,
+					$temp$nodeList = A2(elm$core$List$cons, leaf, nodeList),
+					$temp$tail = tail;
+				fn = $temp$fn;
+				fromIndex = $temp$fromIndex;
+				len = $temp$len;
+				nodeList = $temp$nodeList;
+				tail = $temp$tail;
+				continue initializeHelp;
+			}
+		}
+	});
+var elm$core$Basics$le = _Utils_le;
+var elm$core$Basics$remainderBy = _Basics_remainderBy;
+var elm$core$Array$initialize = F2(
+	function (len, fn) {
+		if (len <= 0) {
+			return elm$core$Array$empty;
+		} else {
+			var tailLen = len % elm$core$Array$branchFactor;
+			var tail = A3(elm$core$Elm$JsArray$initialize, tailLen, len - tailLen, fn);
+			var initialFromIndex = (len - tailLen) - elm$core$Array$branchFactor;
+			return A5(elm$core$Array$initializeHelp, fn, initialFromIndex, len, _List_Nil, tail);
+		}
+	});
+var elm$core$Maybe$Just = function (a) {
+	return {$: 'Just', a: a};
+};
+var elm$core$Maybe$Nothing = {$: 'Nothing'};
+var elm$core$Result$Err = function (a) {
+	return {$: 'Err', a: a};
+};
+var elm$core$Result$Ok = function (a) {
+	return {$: 'Ok', a: a};
+};
+var elm$core$Basics$True = {$: 'True'};
+var elm$core$Result$isOk = function (result) {
+	if (result.$ === 'Ok') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var elm$json$Json$Decode$Failure = F2(
+	function (a, b) {
+		return {$: 'Failure', a: a, b: b};
+	});
+var elm$json$Json$Decode$Field = F2(
+	function (a, b) {
+		return {$: 'Field', a: a, b: b};
+	});
+var elm$json$Json$Decode$Index = F2(
+	function (a, b) {
+		return {$: 'Index', a: a, b: b};
+	});
+var elm$json$Json$Decode$OneOf = function (a) {
+	return {$: 'OneOf', a: a};
+};
+var elm$core$Basics$and = _Basics_and;
+var elm$core$Basics$append = _Utils_append;
+var elm$core$Basics$or = _Basics_or;
+var elm$core$Char$toCode = _Char_toCode;
+var elm$core$Char$isLower = function (_char) {
+	var code = elm$core$Char$toCode(_char);
+	return (97 <= code) && (code <= 122);
+};
+var elm$core$Char$isUpper = function (_char) {
+	var code = elm$core$Char$toCode(_char);
+	return (code <= 90) && (65 <= code);
+};
+var elm$core$Char$isAlpha = function (_char) {
+	return elm$core$Char$isLower(_char) || elm$core$Char$isUpper(_char);
+};
+var elm$core$Char$isDigit = function (_char) {
+	var code = elm$core$Char$toCode(_char);
+	return (code <= 57) && (48 <= code);
+};
+var elm$core$Char$isAlphaNum = function (_char) {
+	return elm$core$Char$isLower(_char) || (elm$core$Char$isUpper(_char) || elm$core$Char$isDigit(_char));
+};
+var elm$core$List$length = function (xs) {
+	return A3(
+		elm$core$List$foldl,
+		F2(
+			function (_n0, i) {
+				return i + 1;
+			}),
+		0,
+		xs);
+};
+var elm$core$List$map2 = _List_map2;
+var elm$core$List$rangeHelp = F3(
+	function (lo, hi, list) {
+		rangeHelp:
+		while (true) {
+			if (_Utils_cmp(lo, hi) < 1) {
+				var $temp$lo = lo,
+					$temp$hi = hi - 1,
+					$temp$list = A2(elm$core$List$cons, hi, list);
+				lo = $temp$lo;
+				hi = $temp$hi;
+				list = $temp$list;
+				continue rangeHelp;
+			} else {
+				return list;
+			}
+		}
+	});
+var elm$core$List$range = F2(
+	function (lo, hi) {
+		return A3(elm$core$List$rangeHelp, lo, hi, _List_Nil);
+	});
+var elm$core$List$indexedMap = F2(
+	function (f, xs) {
+		return A3(
+			elm$core$List$map2,
+			f,
+			A2(
+				elm$core$List$range,
+				0,
+				elm$core$List$length(xs) - 1),
+			xs);
+	});
+var elm$core$String$all = _String_all;
+var elm$core$String$fromInt = _String_fromNumber;
+var elm$core$String$join = F2(
+	function (sep, chunks) {
+		return A2(
+			_String_join,
+			sep,
+			_List_toArray(chunks));
+	});
+var elm$core$String$uncons = _String_uncons;
+var elm$core$String$split = F2(
+	function (sep, string) {
+		return _List_fromArray(
+			A2(_String_split, sep, string));
+	});
+var elm$json$Json$Decode$indent = function (str) {
+	return A2(
+		elm$core$String$join,
+		'\n    ',
+		A2(elm$core$String$split, '\n', str));
+};
+var elm$json$Json$Encode$encode = _Json_encode;
+var elm$json$Json$Decode$errorOneOf = F2(
+	function (i, error) {
+		return '\n\n(' + (elm$core$String$fromInt(i + 1) + (') ' + elm$json$Json$Decode$indent(
+			elm$json$Json$Decode$errorToString(error))));
+	});
+var elm$json$Json$Decode$errorToString = function (error) {
+	return A2(elm$json$Json$Decode$errorToStringHelp, error, _List_Nil);
+};
+var elm$json$Json$Decode$errorToStringHelp = F2(
+	function (error, context) {
+		errorToStringHelp:
+		while (true) {
+			switch (error.$) {
+				case 'Field':
+					var f = error.a;
+					var err = error.b;
+					var isSimple = function () {
+						var _n1 = elm$core$String$uncons(f);
+						if (_n1.$ === 'Nothing') {
+							return false;
+						} else {
+							var _n2 = _n1.a;
+							var _char = _n2.a;
+							var rest = _n2.b;
+							return elm$core$Char$isAlpha(_char) && A2(elm$core$String$all, elm$core$Char$isAlphaNum, rest);
+						}
+					}();
+					var fieldName = isSimple ? ('.' + f) : ('[\'' + (f + '\']'));
+					var $temp$error = err,
+						$temp$context = A2(elm$core$List$cons, fieldName, context);
+					error = $temp$error;
+					context = $temp$context;
+					continue errorToStringHelp;
+				case 'Index':
+					var i = error.a;
+					var err = error.b;
+					var indexName = '[' + (elm$core$String$fromInt(i) + ']');
+					var $temp$error = err,
+						$temp$context = A2(elm$core$List$cons, indexName, context);
+					error = $temp$error;
+					context = $temp$context;
+					continue errorToStringHelp;
+				case 'OneOf':
+					var errors = error.a;
+					if (!errors.b) {
+						return 'Ran into a Json.Decode.oneOf with no possibilities' + function () {
+							if (!context.b) {
+								return '!';
+							} else {
+								return ' at json' + A2(
+									elm$core$String$join,
+									'',
+									elm$core$List$reverse(context));
+							}
+						}();
+					} else {
+						if (!errors.b.b) {
+							var err = errors.a;
+							var $temp$error = err,
+								$temp$context = context;
+							error = $temp$error;
+							context = $temp$context;
+							continue errorToStringHelp;
+						} else {
+							var starter = function () {
+								if (!context.b) {
+									return 'Json.Decode.oneOf';
+								} else {
+									return 'The Json.Decode.oneOf at json' + A2(
+										elm$core$String$join,
+										'',
+										elm$core$List$reverse(context));
+								}
+							}();
+							var introduction = starter + (' failed in the following ' + (elm$core$String$fromInt(
+								elm$core$List$length(errors)) + ' ways:'));
+							return A2(
+								elm$core$String$join,
+								'\n\n',
+								A2(
+									elm$core$List$cons,
+									introduction,
+									A2(elm$core$List$indexedMap, elm$json$Json$Decode$errorOneOf, errors)));
+						}
+					}
+				default:
+					var msg = error.a;
+					var json = error.b;
+					var introduction = function () {
+						if (!context.b) {
+							return 'Problem with the given value:\n\n';
+						} else {
+							return 'Problem with the value at json' + (A2(
+								elm$core$String$join,
+								'',
+								elm$core$List$reverse(context)) + ':\n\n    ');
+						}
+					}();
+					return introduction + (elm$json$Json$Decode$indent(
+						A2(elm$json$Json$Encode$encode, 4, json)) + ('\n\n' + msg));
+			}
+		}
+	});
+var elm$json$Json$Encode$object = function (pairs) {
+	return _Json_wrap(
+		A3(
+			elm$core$List$foldl,
+			F2(
+				function (_n0, obj) {
+					var k = _n0.a;
+					var v = _n0.b;
+					return A3(_Json_addField, k, v, obj);
+				}),
+			_Json_emptyObject(_Utils_Tuple0),
+			pairs));
+};
+var elm$json$Json$Encode$string = _Json_wrap;
+var author$project$Chat$chatPageLoaded = _Platform_outgoingPort(
+	'chatPageLoaded',
+	function ($) {
+		return elm$json$Json$Encode$object(
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					'chatName',
+					elm$json$Json$Encode$string($.chatName)),
+					_Utils_Tuple2(
+					'roomName',
+					elm$json$Json$Encode$string($.roomName))
+				]));
+	});
+var author$project$Chat$Room = F3(
+	function (id, name, userIds) {
+		return {id: id, name: name, userIds: userIds};
+	});
+var author$project$Session$chatName = function (session) {
+	if (session.$ === 'Guest') {
+		return '';
+	} else {
+		var name = session.b;
+		return name;
+	}
+};
+var author$project$Chat$initialModel = function (session) {
+	return {
+		chatName: author$project$Session$chatName(session),
+		messages: _List_Nil,
+		pendingMessage: '',
+		room: A3(author$project$Chat$Room, 'IIVY2snGny1UkBvgGqQB', '', _List_Nil),
+		session: session,
+		userId: ''
+	};
+};
+var author$project$Session$roomName = function (session) {
+	if (session.$ === 'Guest') {
+		return elm$core$Maybe$Nothing;
+	} else {
+		var id = session.a;
+		if (id.$ === 'Nothing') {
+			return elm$core$Maybe$Just('default');
+		} else {
+			var realId = id.a;
+			return elm$core$Maybe$Just(realId);
+		}
+	}
+};
+var elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
+var author$project$Chat$roomName = function (session) {
+	return A2(
+		elm$core$Maybe$withDefault,
+		'default',
+		author$project$Session$roomName(session));
+};
+var author$project$Chat$init = function (session) {
+	return _Utils_Tuple2(
+		author$project$Chat$initialModel(session),
+		author$project$Chat$chatPageLoaded(
+			{
+				chatName: author$project$Session$chatName(session),
+				roomName: author$project$Chat$roomName(session)
+			}));
+};
+var author$project$Home$initialModel = F2(
+	function (session, errors) {
+		return {errors: errors, name: '', session: session};
+	});
+var elm$core$Platform$Cmd$batch = _Platform_batch;
+var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
+var author$project$Home$init = F2(
+	function (session, errors) {
+		return _Utils_Tuple2(
+			A2(
+				author$project$Home$initialModel,
+				session,
+				A2(elm$core$Maybe$withDefault, _List_Nil, errors)),
+			elm$core$Platform$Cmd$none);
+	});
+var author$project$Main$Chat = function (a) {
+	return {$: 'Chat', a: a};
+};
+var author$project$Main$GoToChat = function (a) {
+	return {$: 'GoToChat', a: a};
+};
+var author$project$Main$GoToHome = function (a) {
+	return {$: 'GoToHome', a: a};
+};
+var author$project$Main$Home = function (a) {
+	return {$: 'Home', a: a};
+};
+var elm$core$Platform$Cmd$map = _Platform_map;
+var author$project$Main$resolveWith = F4(
+	function (toModel, toMsg, model, _n0) {
+		var subModel = _n0.a;
+		var subCmd = _n0.b;
+		return _Utils_Tuple2(
+			toModel(subModel),
+			A2(elm$core$Platform$Cmd$map, toMsg, subCmd));
+	});
+var elm$core$Basics$not = _Basics_not;
+var elm$core$String$isEmpty = function (string) {
+	return string === '';
+};
+var author$project$Main$validChatName = function (name) {
+	return !elm$core$String$isEmpty(name);
+};
+var author$project$Session$LoggedIn = F3(
+	function (a, b, c) {
+		return {$: 'LoggedIn', a: a, b: b, c: c};
+	});
+var author$project$Session$Guest = function (a) {
+	return {$: 'Guest', a: a};
+};
+var author$project$Session$init = function (key) {
+	return author$project$Session$Guest(key);
+};
+var author$project$Main$resolveRoute = F3(
+	function (route, key, model) {
+		switch (route.$) {
+			case 'Home':
+				return A4(
+					author$project$Main$resolveWith,
+					author$project$Main$Home,
+					author$project$Main$GoToHome,
+					model,
+					A2(
+						author$project$Home$init,
+						author$project$Session$init(key),
+						elm$core$Maybe$Just(_List_Nil)));
+			case 'Chat':
+				var name = route.a;
+				if (name.$ === 'Nothing') {
+					return A4(
+						author$project$Main$resolveWith,
+						author$project$Main$Home,
+						author$project$Main$GoToHome,
+						model,
+						A2(
+							author$project$Home$init,
+							author$project$Session$init(key),
+							elm$core$Maybe$Just(
+								_List_fromArray(
+									['You must have a name to chat!']))));
+				} else {
+					var chatName = name.a;
+					return author$project$Main$validChatName(chatName) ? A4(
+						author$project$Main$resolveWith,
+						author$project$Main$Chat,
+						author$project$Main$GoToChat,
+						model,
+						author$project$Chat$init(
+							A3(author$project$Session$LoggedIn, elm$core$Maybe$Nothing, chatName, key))) : A4(
+						author$project$Main$resolveWith,
+						author$project$Main$Home,
+						author$project$Main$GoToHome,
+						model,
+						A2(
+							author$project$Home$init,
+							author$project$Session$init(key),
+							elm$core$Maybe$Just(
+								_List_fromArray(
+									['Invalid chat name']))));
+				}
+			default:
+				return A4(
+					author$project$Main$resolveWith,
+					author$project$Main$Home,
+					author$project$Main$GoToHome,
+					model,
+					A2(
+						author$project$Home$init,
+						author$project$Session$init(key),
+						elm$core$Maybe$Just(_List_Nil)));
+		}
+	});
+var author$project$Route$NotFound = {$: 'NotFound'};
+var author$project$Route$Chat = function (a) {
+	return {$: 'Chat', a: a};
+};
+var author$project$Route$Home = {$: 'Home'};
+var elm$core$Basics$identity = function (x) {
+	return x;
+};
+var elm$core$List$foldrHelper = F4(
+	function (fn, acc, ctr, ls) {
+		if (!ls.b) {
+			return acc;
+		} else {
+			var a = ls.a;
+			var r1 = ls.b;
+			if (!r1.b) {
+				return A2(fn, a, acc);
+			} else {
+				var b = r1.a;
+				var r2 = r1.b;
+				if (!r2.b) {
+					return A2(
+						fn,
+						a,
+						A2(fn, b, acc));
+				} else {
+					var c = r2.a;
+					var r3 = r2.b;
+					if (!r3.b) {
+						return A2(
+							fn,
+							a,
+							A2(
+								fn,
+								b,
+								A2(fn, c, acc)));
+					} else {
+						var d = r3.a;
+						var r4 = r3.b;
+						var res = (ctr > 500) ? A3(
+							elm$core$List$foldl,
+							fn,
+							acc,
+							elm$core$List$reverse(r4)) : A4(elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
+						return A2(
+							fn,
+							a,
+							A2(
+								fn,
+								b,
+								A2(
+									fn,
+									c,
+									A2(fn, d, res))));
+					}
+				}
+			}
+		}
+	});
+var elm$core$List$foldr = F3(
+	function (fn, acc, ls) {
+		return A4(elm$core$List$foldrHelper, fn, acc, 0, ls);
+	});
+var elm$core$List$map = F2(
+	function (f, xs) {
+		return A3(
+			elm$core$List$foldr,
+			F2(
+				function (x, acc) {
+					return A2(
+						elm$core$List$cons,
+						f(x),
+						acc);
+				}),
+			_List_Nil,
+			xs);
+	});
+var elm$url$Url$Parser$Parser = function (a) {
+	return {$: 'Parser', a: a};
+};
+var elm$url$Url$Parser$State = F5(
+	function (visited, unvisited, params, frag, value) {
+		return {frag: frag, params: params, unvisited: unvisited, value: value, visited: visited};
+	});
+var elm$url$Url$Parser$mapState = F2(
+	function (func, _n0) {
+		var visited = _n0.visited;
+		var unvisited = _n0.unvisited;
+		var params = _n0.params;
+		var frag = _n0.frag;
+		var value = _n0.value;
+		return A5(
+			elm$url$Url$Parser$State,
+			visited,
+			unvisited,
+			params,
+			frag,
+			func(value));
+	});
+var elm$url$Url$Parser$map = F2(
+	function (subValue, _n0) {
+		var parseArg = _n0.a;
+		return elm$url$Url$Parser$Parser(
+			function (_n1) {
+				var visited = _n1.visited;
+				var unvisited = _n1.unvisited;
+				var params = _n1.params;
+				var frag = _n1.frag;
+				var value = _n1.value;
+				return A2(
+					elm$core$List$map,
+					elm$url$Url$Parser$mapState(value),
+					parseArg(
+						A5(elm$url$Url$Parser$State, visited, unvisited, params, frag, subValue)));
+			});
+	});
+var elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
+		}
+	});
+var elm$core$List$concat = function (lists) {
+	return A3(elm$core$List$foldr, elm$core$List$append, _List_Nil, lists);
+};
+var elm$core$List$concatMap = F2(
+	function (f, list) {
+		return elm$core$List$concat(
+			A2(elm$core$List$map, f, list));
+	});
+var elm$url$Url$Parser$oneOf = function (parsers) {
+	return elm$url$Url$Parser$Parser(
+		function (state) {
+			return A2(
+				elm$core$List$concatMap,
+				function (_n0) {
+					var parser = _n0.a;
+					return parser(state);
+				},
+				parsers);
+		});
+};
+var elm$url$Url$Parser$query = function (_n0) {
+	var queryParser = _n0.a;
+	return elm$url$Url$Parser$Parser(
+		function (_n1) {
+			var visited = _n1.visited;
+			var unvisited = _n1.unvisited;
+			var params = _n1.params;
+			var frag = _n1.frag;
+			var value = _n1.value;
+			return _List_fromArray(
+				[
+					A5(
+					elm$url$Url$Parser$State,
+					visited,
+					unvisited,
+					params,
+					frag,
+					value(
+						queryParser(params)))
+				]);
+		});
+};
+var elm$url$Url$Parser$slash = F2(
+	function (_n0, _n1) {
+		var parseBefore = _n0.a;
+		var parseAfter = _n1.a;
+		return elm$url$Url$Parser$Parser(
+			function (state) {
+				return A2(
+					elm$core$List$concatMap,
+					parseAfter,
+					parseBefore(state));
+			});
+	});
+var elm$url$Url$Parser$questionMark = F2(
+	function (parser, queryParser) {
+		return A2(
+			elm$url$Url$Parser$slash,
+			parser,
+			elm$url$Url$Parser$query(queryParser));
+	});
+var elm$url$Url$Parser$s = function (str) {
+	return elm$url$Url$Parser$Parser(
+		function (_n0) {
+			var visited = _n0.visited;
+			var unvisited = _n0.unvisited;
+			var params = _n0.params;
+			var frag = _n0.frag;
+			var value = _n0.value;
+			if (!unvisited.b) {
+				return _List_Nil;
+			} else {
+				var next = unvisited.a;
+				var rest = unvisited.b;
+				return _Utils_eq(next, str) ? _List_fromArray(
+					[
+						A5(
+						elm$url$Url$Parser$State,
+						A2(elm$core$List$cons, next, visited),
+						rest,
+						params,
+						frag,
+						value)
+					]) : _List_Nil;
+			}
+		});
+};
+var elm$url$Url$Parser$top = elm$url$Url$Parser$Parser(
+	function (state) {
+		return _List_fromArray(
+			[state]);
+	});
+var elm$core$Basics$compare = _Utils_compare;
+var elm$core$Dict$get = F2(
+	function (targetKey, dict) {
+		get:
+		while (true) {
+			if (dict.$ === 'RBEmpty_elm_builtin') {
+				return elm$core$Maybe$Nothing;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var _n1 = A2(elm$core$Basics$compare, targetKey, key);
+				switch (_n1.$) {
+					case 'LT':
+						var $temp$targetKey = targetKey,
+							$temp$dict = left;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+					case 'EQ':
+						return elm$core$Maybe$Just(value);
+					default:
+						var $temp$targetKey = targetKey,
+							$temp$dict = right;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+				}
+			}
+		}
+	});
+var elm$url$Url$Parser$Internal$Parser = function (a) {
+	return {$: 'Parser', a: a};
+};
+var elm$url$Url$Parser$Query$custom = F2(
+	function (key, func) {
+		return elm$url$Url$Parser$Internal$Parser(
+			function (dict) {
+				return func(
+					A2(
+						elm$core$Maybe$withDefault,
+						_List_Nil,
+						A2(elm$core$Dict$get, key, dict)));
+			});
+	});
+var elm$url$Url$Parser$Query$string = function (key) {
+	return A2(
+		elm$url$Url$Parser$Query$custom,
+		key,
+		function (stringList) {
+			if (stringList.b && (!stringList.b.b)) {
+				var str = stringList.a;
+				return elm$core$Maybe$Just(str);
+			} else {
+				return elm$core$Maybe$Nothing;
+			}
+		});
+};
+var author$project$Route$parser = elm$url$Url$Parser$oneOf(
+	_List_fromArray(
+		[
+			A2(elm$url$Url$Parser$map, author$project$Route$Home, elm$url$Url$Parser$top),
+			A2(
+			elm$url$Url$Parser$map,
+			author$project$Route$Chat,
+			A2(
+				elm$url$Url$Parser$questionMark,
+				elm$url$Url$Parser$s('chat'),
+				elm$url$Url$Parser$Query$string('name'))),
+			A2(
+			elm$url$Url$Parser$map,
+			author$project$Route$NotFound,
+			elm$url$Url$Parser$s('not-found'))
+		]));
+var elm$url$Url$Parser$getFirstMatch = function (states) {
+	getFirstMatch:
+	while (true) {
+		if (!states.b) {
+			return elm$core$Maybe$Nothing;
+		} else {
+			var state = states.a;
+			var rest = states.b;
+			var _n1 = state.unvisited;
+			if (!_n1.b) {
+				return elm$core$Maybe$Just(state.value);
+			} else {
+				if ((_n1.a === '') && (!_n1.b.b)) {
+					return elm$core$Maybe$Just(state.value);
+				} else {
+					var $temp$states = rest;
+					states = $temp$states;
+					continue getFirstMatch;
+				}
+			}
+		}
+	}
+};
+var elm$url$Url$Parser$removeFinalEmpty = function (segments) {
+	if (!segments.b) {
+		return _List_Nil;
+	} else {
+		if ((segments.a === '') && (!segments.b.b)) {
+			return _List_Nil;
+		} else {
+			var segment = segments.a;
+			var rest = segments.b;
+			return A2(
+				elm$core$List$cons,
+				segment,
+				elm$url$Url$Parser$removeFinalEmpty(rest));
+		}
+	}
+};
+var elm$url$Url$Parser$preparePath = function (path) {
+	var _n0 = A2(elm$core$String$split, '/', path);
+	if (_n0.b && (_n0.a === '')) {
+		var segments = _n0.b;
+		return elm$url$Url$Parser$removeFinalEmpty(segments);
+	} else {
+		var segments = _n0;
+		return elm$url$Url$Parser$removeFinalEmpty(segments);
+	}
+};
+var elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
+var elm$core$Dict$empty = elm$core$Dict$RBEmpty_elm_builtin;
+var elm$core$Dict$Black = {$: 'Black'};
+var elm$core$Dict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {$: 'RBNode_elm_builtin', a: a, b: b, c: c, d: d, e: e};
+	});
+var elm$core$Dict$Red = {$: 'Red'};
+var elm$core$Dict$balance = F5(
+	function (color, key, value, left, right) {
+		if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Red')) {
+			var _n1 = right.a;
+			var rK = right.b;
+			var rV = right.c;
+			var rLeft = right.d;
+			var rRight = right.e;
+			if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
+				var _n3 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var lLeft = left.d;
+				var lRight = left.e;
+				return A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					elm$core$Dict$Red,
+					key,
+					value,
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Black, lK, lV, lLeft, lRight),
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Black, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					color,
+					rK,
+					rV,
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, key, value, left, rLeft),
+					rRight);
+			}
+		} else {
+			if ((((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) && (left.d.$ === 'RBNode_elm_builtin')) && (left.d.a.$ === 'Red')) {
+				var _n5 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var _n6 = left.d;
+				var _n7 = _n6.a;
+				var llK = _n6.b;
+				var llV = _n6.c;
+				var llLeft = _n6.d;
+				var llRight = _n6.e;
+				var lRight = left.e;
+				return A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					elm$core$Dict$Red,
+					lK,
+					lV,
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Black, llK, llV, llLeft, llRight),
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Black, key, value, lRight, right));
+			} else {
+				return A5(elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
+			}
+		}
+	});
+var elm$core$Dict$insertHelp = F3(
+	function (key, value, dict) {
+		if (dict.$ === 'RBEmpty_elm_builtin') {
+			return A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, key, value, elm$core$Dict$RBEmpty_elm_builtin, elm$core$Dict$RBEmpty_elm_builtin);
+		} else {
+			var nColor = dict.a;
+			var nKey = dict.b;
+			var nValue = dict.c;
+			var nLeft = dict.d;
+			var nRight = dict.e;
+			var _n1 = A2(elm$core$Basics$compare, key, nKey);
+			switch (_n1.$) {
+				case 'LT':
+					return A5(
+						elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						A3(elm$core$Dict$insertHelp, key, value, nLeft),
+						nRight);
+				case 'EQ':
+					return A5(elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
+				default:
+					return A5(
+						elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						nLeft,
+						A3(elm$core$Dict$insertHelp, key, value, nRight));
+			}
+		}
+	});
+var elm$core$Dict$insert = F3(
+	function (key, value, dict) {
+		var _n0 = A3(elm$core$Dict$insertHelp, key, value, dict);
+		if ((_n0.$ === 'RBNode_elm_builtin') && (_n0.a.$ === 'Red')) {
+			var _n1 = _n0.a;
+			var k = _n0.b;
+			var v = _n0.c;
+			var l = _n0.d;
+			var r = _n0.e;
+			return A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Black, k, v, l, r);
+		} else {
+			var x = _n0;
+			return x;
+		}
+	});
+var elm$core$Dict$getMin = function (dict) {
+	getMin:
+	while (true) {
+		if ((dict.$ === 'RBNode_elm_builtin') && (dict.d.$ === 'RBNode_elm_builtin')) {
+			var left = dict.d;
+			var $temp$dict = left;
+			dict = $temp$dict;
+			continue getMin;
+		} else {
+			return dict;
+		}
+	}
+};
+var elm$core$Dict$moveRedLeft = function (dict) {
+	if (((dict.$ === 'RBNode_elm_builtin') && (dict.d.$ === 'RBNode_elm_builtin')) && (dict.e.$ === 'RBNode_elm_builtin')) {
+		if ((dict.e.d.$ === 'RBNode_elm_builtin') && (dict.e.d.a.$ === 'Red')) {
+			var clr = dict.a;
+			var k = dict.b;
+			var v = dict.c;
+			var _n1 = dict.d;
+			var lClr = _n1.a;
+			var lK = _n1.b;
+			var lV = _n1.c;
+			var lLeft = _n1.d;
+			var lRight = _n1.e;
+			var _n2 = dict.e;
+			var rClr = _n2.a;
+			var rK = _n2.b;
+			var rV = _n2.c;
+			var rLeft = _n2.d;
+			var _n3 = rLeft.a;
+			var rlK = rLeft.b;
+			var rlV = rLeft.c;
+			var rlL = rLeft.d;
+			var rlR = rLeft.e;
+			var rRight = _n2.e;
+			return A5(
+				elm$core$Dict$RBNode_elm_builtin,
+				elm$core$Dict$Red,
+				rlK,
+				rlV,
+				A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					elm$core$Dict$Black,
+					k,
+					v,
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, lK, lV, lLeft, lRight),
+					rlL),
+				A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Black, rK, rV, rlR, rRight));
+		} else {
+			var clr = dict.a;
+			var k = dict.b;
+			var v = dict.c;
+			var _n4 = dict.d;
+			var lClr = _n4.a;
+			var lK = _n4.b;
+			var lV = _n4.c;
+			var lLeft = _n4.d;
+			var lRight = _n4.e;
+			var _n5 = dict.e;
+			var rClr = _n5.a;
+			var rK = _n5.b;
+			var rV = _n5.c;
+			var rLeft = _n5.d;
+			var rRight = _n5.e;
+			if (clr.$ === 'Black') {
+				return A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					elm$core$Dict$Black,
+					k,
+					v,
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, lK, lV, lLeft, lRight),
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					elm$core$Dict$Black,
+					k,
+					v,
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, lK, lV, lLeft, lRight),
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, rK, rV, rLeft, rRight));
+			}
+		}
+	} else {
+		return dict;
+	}
+};
+var elm$core$Dict$moveRedRight = function (dict) {
+	if (((dict.$ === 'RBNode_elm_builtin') && (dict.d.$ === 'RBNode_elm_builtin')) && (dict.e.$ === 'RBNode_elm_builtin')) {
+		if ((dict.d.d.$ === 'RBNode_elm_builtin') && (dict.d.d.a.$ === 'Red')) {
+			var clr = dict.a;
+			var k = dict.b;
+			var v = dict.c;
+			var _n1 = dict.d;
+			var lClr = _n1.a;
+			var lK = _n1.b;
+			var lV = _n1.c;
+			var _n2 = _n1.d;
+			var _n3 = _n2.a;
+			var llK = _n2.b;
+			var llV = _n2.c;
+			var llLeft = _n2.d;
+			var llRight = _n2.e;
+			var lRight = _n1.e;
+			var _n4 = dict.e;
+			var rClr = _n4.a;
+			var rK = _n4.b;
+			var rV = _n4.c;
+			var rLeft = _n4.d;
+			var rRight = _n4.e;
+			return A5(
+				elm$core$Dict$RBNode_elm_builtin,
+				elm$core$Dict$Red,
+				lK,
+				lV,
+				A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Black, llK, llV, llLeft, llRight),
+				A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					elm$core$Dict$Black,
+					k,
+					v,
+					lRight,
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, rK, rV, rLeft, rRight)));
+		} else {
+			var clr = dict.a;
+			var k = dict.b;
+			var v = dict.c;
+			var _n5 = dict.d;
+			var lClr = _n5.a;
+			var lK = _n5.b;
+			var lV = _n5.c;
+			var lLeft = _n5.d;
+			var lRight = _n5.e;
+			var _n6 = dict.e;
+			var rClr = _n6.a;
+			var rK = _n6.b;
+			var rV = _n6.c;
+			var rLeft = _n6.d;
+			var rRight = _n6.e;
+			if (clr.$ === 'Black') {
+				return A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					elm$core$Dict$Black,
+					k,
+					v,
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, lK, lV, lLeft, lRight),
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					elm$core$Dict$Black,
+					k,
+					v,
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, lK, lV, lLeft, lRight),
+					A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, rK, rV, rLeft, rRight));
+			}
+		}
+	} else {
+		return dict;
+	}
+};
+var elm$core$Dict$removeHelpPrepEQGT = F7(
+	function (targetKey, dict, color, key, value, left, right) {
+		if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
+			var _n1 = left.a;
+			var lK = left.b;
+			var lV = left.c;
+			var lLeft = left.d;
+			var lRight = left.e;
+			return A5(
+				elm$core$Dict$RBNode_elm_builtin,
+				color,
+				lK,
+				lV,
+				lLeft,
+				A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Red, key, value, lRight, right));
+		} else {
+			_n2$2:
+			while (true) {
+				if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Black')) {
+					if (right.d.$ === 'RBNode_elm_builtin') {
+						if (right.d.a.$ === 'Black') {
+							var _n3 = right.a;
+							var _n4 = right.d;
+							var _n5 = _n4.a;
+							return elm$core$Dict$moveRedRight(dict);
+						} else {
+							break _n2$2;
+						}
+					} else {
+						var _n6 = right.a;
+						var _n7 = right.d;
+						return elm$core$Dict$moveRedRight(dict);
+					}
+				} else {
+					break _n2$2;
+				}
+			}
+			return dict;
+		}
+	});
+var elm$core$Dict$removeMin = function (dict) {
+	if ((dict.$ === 'RBNode_elm_builtin') && (dict.d.$ === 'RBNode_elm_builtin')) {
+		var color = dict.a;
+		var key = dict.b;
+		var value = dict.c;
+		var left = dict.d;
+		var lColor = left.a;
+		var lLeft = left.d;
+		var right = dict.e;
+		if (lColor.$ === 'Black') {
+			if ((lLeft.$ === 'RBNode_elm_builtin') && (lLeft.a.$ === 'Red')) {
+				var _n3 = lLeft.a;
+				return A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					color,
+					key,
+					value,
+					elm$core$Dict$removeMin(left),
+					right);
+			} else {
+				var _n4 = elm$core$Dict$moveRedLeft(dict);
+				if (_n4.$ === 'RBNode_elm_builtin') {
+					var nColor = _n4.a;
+					var nKey = _n4.b;
+					var nValue = _n4.c;
+					var nLeft = _n4.d;
+					var nRight = _n4.e;
+					return A5(
+						elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						elm$core$Dict$removeMin(nLeft),
+						nRight);
+				} else {
+					return elm$core$Dict$RBEmpty_elm_builtin;
+				}
+			}
+		} else {
+			return A5(
+				elm$core$Dict$RBNode_elm_builtin,
+				color,
+				key,
+				value,
+				elm$core$Dict$removeMin(left),
+				right);
+		}
+	} else {
+		return elm$core$Dict$RBEmpty_elm_builtin;
+	}
+};
+var elm$core$Dict$removeHelp = F2(
+	function (targetKey, dict) {
+		if (dict.$ === 'RBEmpty_elm_builtin') {
+			return elm$core$Dict$RBEmpty_elm_builtin;
+		} else {
+			var color = dict.a;
+			var key = dict.b;
+			var value = dict.c;
+			var left = dict.d;
+			var right = dict.e;
+			if (_Utils_cmp(targetKey, key) < 0) {
+				if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Black')) {
+					var _n4 = left.a;
+					var lLeft = left.d;
+					if ((lLeft.$ === 'RBNode_elm_builtin') && (lLeft.a.$ === 'Red')) {
+						var _n6 = lLeft.a;
+						return A5(
+							elm$core$Dict$RBNode_elm_builtin,
+							color,
+							key,
+							value,
+							A2(elm$core$Dict$removeHelp, targetKey, left),
+							right);
+					} else {
+						var _n7 = elm$core$Dict$moveRedLeft(dict);
+						if (_n7.$ === 'RBNode_elm_builtin') {
+							var nColor = _n7.a;
+							var nKey = _n7.b;
+							var nValue = _n7.c;
+							var nLeft = _n7.d;
+							var nRight = _n7.e;
+							return A5(
+								elm$core$Dict$balance,
+								nColor,
+								nKey,
+								nValue,
+								A2(elm$core$Dict$removeHelp, targetKey, nLeft),
+								nRight);
+						} else {
+							return elm$core$Dict$RBEmpty_elm_builtin;
+						}
+					}
+				} else {
+					return A5(
+						elm$core$Dict$RBNode_elm_builtin,
+						color,
+						key,
+						value,
+						A2(elm$core$Dict$removeHelp, targetKey, left),
+						right);
+				}
+			} else {
+				return A2(
+					elm$core$Dict$removeHelpEQGT,
+					targetKey,
+					A7(elm$core$Dict$removeHelpPrepEQGT, targetKey, dict, color, key, value, left, right));
+			}
+		}
+	});
+var elm$core$Dict$removeHelpEQGT = F2(
+	function (targetKey, dict) {
+		if (dict.$ === 'RBNode_elm_builtin') {
+			var color = dict.a;
+			var key = dict.b;
+			var value = dict.c;
+			var left = dict.d;
+			var right = dict.e;
+			if (_Utils_eq(targetKey, key)) {
+				var _n1 = elm$core$Dict$getMin(right);
+				if (_n1.$ === 'RBNode_elm_builtin') {
+					var minKey = _n1.b;
+					var minValue = _n1.c;
+					return A5(
+						elm$core$Dict$balance,
+						color,
+						minKey,
+						minValue,
+						left,
+						elm$core$Dict$removeMin(right));
+				} else {
+					return elm$core$Dict$RBEmpty_elm_builtin;
+				}
+			} else {
+				return A5(
+					elm$core$Dict$balance,
+					color,
+					key,
+					value,
+					left,
+					A2(elm$core$Dict$removeHelp, targetKey, right));
+			}
+		} else {
+			return elm$core$Dict$RBEmpty_elm_builtin;
+		}
+	});
+var elm$core$Dict$remove = F2(
+	function (key, dict) {
+		var _n0 = A2(elm$core$Dict$removeHelp, key, dict);
+		if ((_n0.$ === 'RBNode_elm_builtin') && (_n0.a.$ === 'Red')) {
+			var _n1 = _n0.a;
+			var k = _n0.b;
+			var v = _n0.c;
+			var l = _n0.d;
+			var r = _n0.e;
+			return A5(elm$core$Dict$RBNode_elm_builtin, elm$core$Dict$Black, k, v, l, r);
+		} else {
+			var x = _n0;
+			return x;
+		}
+	});
+var elm$core$Dict$update = F3(
+	function (targetKey, alter, dictionary) {
+		var _n0 = alter(
+			A2(elm$core$Dict$get, targetKey, dictionary));
+		if (_n0.$ === 'Just') {
+			var value = _n0.a;
+			return A3(elm$core$Dict$insert, targetKey, value, dictionary);
+		} else {
+			return A2(elm$core$Dict$remove, targetKey, dictionary);
+		}
+	});
+var elm$url$Url$percentDecode = _Url_percentDecode;
+var elm$url$Url$Parser$addToParametersHelp = F2(
+	function (value, maybeList) {
+		if (maybeList.$ === 'Nothing') {
+			return elm$core$Maybe$Just(
+				_List_fromArray(
+					[value]));
+		} else {
+			var list = maybeList.a;
+			return elm$core$Maybe$Just(
+				A2(elm$core$List$cons, value, list));
+		}
+	});
+var elm$url$Url$Parser$addParam = F2(
+	function (segment, dict) {
+		var _n0 = A2(elm$core$String$split, '=', segment);
+		if ((_n0.b && _n0.b.b) && (!_n0.b.b.b)) {
+			var rawKey = _n0.a;
+			var _n1 = _n0.b;
+			var rawValue = _n1.a;
+			var _n2 = elm$url$Url$percentDecode(rawKey);
+			if (_n2.$ === 'Nothing') {
+				return dict;
+			} else {
+				var key = _n2.a;
+				var _n3 = elm$url$Url$percentDecode(rawValue);
+				if (_n3.$ === 'Nothing') {
+					return dict;
+				} else {
+					var value = _n3.a;
+					return A3(
+						elm$core$Dict$update,
+						key,
+						elm$url$Url$Parser$addToParametersHelp(value),
+						dict);
+				}
+			}
+		} else {
+			return dict;
+		}
+	});
+var elm$url$Url$Parser$prepareQuery = function (maybeQuery) {
+	if (maybeQuery.$ === 'Nothing') {
+		return elm$core$Dict$empty;
+	} else {
+		var qry = maybeQuery.a;
+		return A3(
+			elm$core$List$foldr,
+			elm$url$Url$Parser$addParam,
+			elm$core$Dict$empty,
+			A2(elm$core$String$split, '&', qry));
+	}
+};
+var elm$url$Url$Parser$parse = F2(
+	function (_n0, url) {
+		var parser = _n0.a;
+		return elm$url$Url$Parser$getFirstMatch(
+			parser(
+				A5(
+					elm$url$Url$Parser$State,
+					_List_Nil,
+					elm$url$Url$Parser$preparePath(url.path),
+					elm$url$Url$Parser$prepareQuery(url.query),
+					url.fragment,
+					elm$core$Basics$identity)));
+	});
+var author$project$Route$fromUrl = function (url) {
+	return A2(
+		elm$core$Maybe$withDefault,
+		author$project$Route$NotFound,
+		A2(elm$url$Url$Parser$parse, author$project$Route$parser, url));
+};
+var author$project$Main$init = F3(
+	function (_n0, url, key) {
+		return A3(
+			author$project$Main$resolveRoute,
+			author$project$Route$fromUrl(url),
+			key,
+			author$project$Main$Redirect(
+				author$project$Session$Guest(key)));
+	});
+var author$project$Chat$GotAllMessages = function (a) {
+	return {$: 'GotAllMessages', a: a};
+};
+var author$project$Chat$GotMessage = function (a) {
+	return {$: 'GotMessage', a: a};
+};
+var author$project$Chat$GotUserId = function (a) {
+	return {$: 'GotUserId', a: a};
+};
+var elm$json$Json$Decode$andThen = _Json_andThen;
+var elm$json$Json$Decode$field = _Json_decodeField;
+var elm$json$Json$Decode$list = _Json_decodeList;
+var elm$json$Json$Decode$string = _Json_decodeString;
+var elm$json$Json$Decode$succeed = _Json_succeed;
+var author$project$Chat$getAllMessages = _Platform_incomingPort(
+	'getAllMessages',
+	elm$json$Json$Decode$list(
+		A2(
+			elm$json$Json$Decode$andThen,
+			function (userId) {
+				return A2(
+					elm$json$Json$Decode$andThen,
+					function (roomId) {
+						return A2(
+							elm$json$Json$Decode$andThen,
+							function (id) {
+								return A2(
+									elm$json$Json$Decode$andThen,
+									function (chatName) {
+										return A2(
+											elm$json$Json$Decode$andThen,
+											function (body) {
+												return elm$json$Json$Decode$succeed(
+													{body: body, chatName: chatName, id: id, roomId: roomId, userId: userId});
+											},
+											A2(elm$json$Json$Decode$field, 'body', elm$json$Json$Decode$string));
+									},
+									A2(elm$json$Json$Decode$field, 'chatName', elm$json$Json$Decode$string));
+							},
+							A2(elm$json$Json$Decode$field, 'id', elm$json$Json$Decode$string));
+					},
+					A2(elm$json$Json$Decode$field, 'roomId', elm$json$Json$Decode$string));
+			},
+			A2(elm$json$Json$Decode$field, 'userId', elm$json$Json$Decode$string))));
+var author$project$Chat$getMessage = _Platform_incomingPort(
+	'getMessage',
+	A2(
+		elm$json$Json$Decode$andThen,
+		function (userId) {
+			return A2(
+				elm$json$Json$Decode$andThen,
+				function (roomId) {
+					return A2(
+						elm$json$Json$Decode$andThen,
+						function (id) {
+							return A2(
+								elm$json$Json$Decode$andThen,
+								function (chatName) {
+									return A2(
+										elm$json$Json$Decode$andThen,
+										function (body) {
+											return elm$json$Json$Decode$succeed(
+												{body: body, chatName: chatName, id: id, roomId: roomId, userId: userId});
+										},
+										A2(elm$json$Json$Decode$field, 'body', elm$json$Json$Decode$string));
+								},
+								A2(elm$json$Json$Decode$field, 'chatName', elm$json$Json$Decode$string));
+						},
+						A2(elm$json$Json$Decode$field, 'id', elm$json$Json$Decode$string));
+				},
+				A2(elm$json$Json$Decode$field, 'roomId', elm$json$Json$Decode$string));
+		},
+		A2(elm$json$Json$Decode$field, 'userId', elm$json$Json$Decode$string)));
+var author$project$Chat$getUserId = _Platform_incomingPort('getUserId', elm$json$Json$Decode$string);
+var elm$core$Platform$Sub$batch = _Platform_batch;
+var author$project$Chat$subscriptions = function (model) {
+	return elm$core$Platform$Sub$batch(
+		_List_fromArray(
+			[
+				author$project$Chat$getMessage(
+				function (message) {
+					return author$project$Chat$GotMessage(message);
+				}),
+				author$project$Chat$getUserId(
+				function (userId) {
+					return author$project$Chat$GotUserId(userId);
+				}),
+				author$project$Chat$getAllMessages(
+				function (messages) {
+					return author$project$Chat$GotAllMessages(messages);
+				})
+			]));
+};
+var elm$core$Platform$Sub$map = _Platform_map;
+var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
+var author$project$Main$subscriptions = function (model) {
+	if (model.$ === 'Chat') {
+		var chat = model.a;
+		return A2(
+			elm$core$Platform$Sub$map,
+			author$project$Main$GoToChat,
+			author$project$Chat$subscriptions(chat));
+	} else {
+		return elm$core$Platform$Sub$none;
+	}
+};
+var author$project$Chat$Message = F5(
+	function (id, userId, body, roomId, chatName) {
+		return {body: body, chatName: chatName, id: id, roomId: roomId, userId: userId};
+	});
+var author$project$Chat$GenerateRandomId = function (a) {
+	return {$: 'GenerateRandomId', a: a};
+};
+var elm$random$Random$Generate = function (a) {
+	return {$: 'Generate', a: a};
+};
+var elm$core$Task$andThen = _Scheduler_andThen;
+var elm$core$Task$succeed = _Scheduler_succeed;
+var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var elm$random$Random$Seed = F2(
+	function (a, b) {
+		return {$: 'Seed', a: a, b: b};
+	});
+var elm$random$Random$next = function (_n0) {
+	var state0 = _n0.a;
+	var incr = _n0.b;
+	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
+};
+var elm$random$Random$initialSeed = function (x) {
+	var _n0 = elm$random$Random$next(
+		A2(elm$random$Random$Seed, 0, 1013904223));
+	var state1 = _n0.a;
+	var incr = _n0.b;
+	var state2 = (state1 + x) >>> 0;
+	return elm$random$Random$next(
+		A2(elm$random$Random$Seed, state2, incr));
+};
+var elm$time$Time$Name = function (a) {
+	return {$: 'Name', a: a};
+};
+var elm$time$Time$Offset = function (a) {
+	return {$: 'Offset', a: a};
+};
+var elm$time$Time$Zone = F2(
+	function (a, b) {
+		return {$: 'Zone', a: a, b: b};
+	});
+var elm$time$Time$customZone = elm$time$Time$Zone;
+var elm$time$Time$Posix = function (a) {
+	return {$: 'Posix', a: a};
+};
+var elm$time$Time$millisToPosix = elm$time$Time$Posix;
+var elm$time$Time$now = _Time_now(elm$time$Time$millisToPosix);
+var elm$time$Time$posixToMillis = function (_n0) {
+	var millis = _n0.a;
+	return millis;
+};
+var elm$random$Random$init = A2(
+	elm$core$Task$andThen,
+	function (time) {
+		return elm$core$Task$succeed(
+			elm$random$Random$initialSeed(
+				elm$time$Time$posixToMillis(time)));
+	},
+	elm$time$Time$now);
+var elm$core$Platform$sendToApp = _Platform_sendToApp;
+var elm$random$Random$step = F2(
+	function (_n0, seed) {
+		var generator = _n0.a;
+		return generator(seed);
+	});
+var elm$random$Random$onEffects = F3(
+	function (router, commands, seed) {
+		if (!commands.b) {
+			return elm$core$Task$succeed(seed);
+		} else {
+			var generator = commands.a.a;
+			var rest = commands.b;
+			var _n1 = A2(elm$random$Random$step, generator, seed);
+			var value = _n1.a;
+			var newSeed = _n1.b;
+			return A2(
+				elm$core$Task$andThen,
+				function (_n2) {
+					return A3(elm$random$Random$onEffects, router, rest, newSeed);
+				},
+				A2(elm$core$Platform$sendToApp, router, value));
+		}
+	});
+var elm$random$Random$onSelfMsg = F3(
+	function (_n0, _n1, seed) {
+		return elm$core$Task$succeed(seed);
+	});
+var elm$random$Random$Generator = function (a) {
+	return {$: 'Generator', a: a};
+};
+var elm$random$Random$map = F2(
+	function (func, _n0) {
+		var genA = _n0.a;
+		return elm$random$Random$Generator(
+			function (seed0) {
+				var _n1 = genA(seed0);
+				var a = _n1.a;
+				var seed1 = _n1.b;
+				return _Utils_Tuple2(
+					func(a),
+					seed1);
+			});
+	});
+var elm$random$Random$cmdMap = F2(
+	function (func, _n0) {
+		var generator = _n0.a;
+		return elm$random$Random$Generate(
+			A2(elm$random$Random$map, func, generator));
+	});
+_Platform_effectManagers['Random'] = _Platform_createManager(elm$random$Random$init, elm$random$Random$onEffects, elm$random$Random$onSelfMsg, elm$random$Random$cmdMap);
+var elm$random$Random$command = _Platform_leaf('Random');
+var elm$random$Random$generate = F2(
+	function (tagger, generator) {
+		return elm$random$Random$command(
+			elm$random$Random$Generate(
+				A2(elm$random$Random$map, tagger, generator)));
+	});
+var elm$core$Char$fromCode = _Char_fromCode;
+var elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var elm$core$Bitwise$and = _Bitwise_and;
+var elm$core$Bitwise$xor = _Bitwise_xor;
+var elm$random$Random$peel = function (_n0) {
+	var state = _n0.a;
+	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
+	return ((word >>> 22) ^ word) >>> 0;
+};
+var elm$random$Random$int = F2(
+	function (a, b) {
+		return elm$random$Random$Generator(
+			function (seed0) {
+				var _n0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
+				var lo = _n0.a;
+				var hi = _n0.b;
+				var range = (hi - lo) + 1;
+				if (!((range - 1) & range)) {
+					return _Utils_Tuple2(
+						(((range - 1) & elm$random$Random$peel(seed0)) >>> 0) + lo,
+						elm$random$Random$next(seed0));
+				} else {
+					var threshhold = (((-range) >>> 0) % range) >>> 0;
+					var accountForBias = function (seed) {
+						accountForBias:
+						while (true) {
+							var x = elm$random$Random$peel(seed);
+							var seedN = elm$random$Random$next(seed);
+							if (_Utils_cmp(x, threshhold) < 0) {
+								var $temp$seed = seedN;
+								seed = $temp$seed;
+								continue accountForBias;
+							} else {
+								return _Utils_Tuple2((x % range) + lo, seedN);
+							}
+						}
+					};
+					return accountForBias(seed0);
+				}
+			});
+	});
+var elm_community$random_extra$Random$Char$char = F2(
+	function (start, end) {
+		return A2(
+			elm$random$Random$map,
+			elm$core$Char$fromCode,
+			A2(elm$random$Random$int, start, end));
+	});
+var elm_community$random_extra$Random$Char$lowerCaseLatin = A2(elm_community$random_extra$Random$Char$char, 97, 122);
+var elm_community$random_extra$Random$Char$upperCaseLatin = A2(elm_community$random_extra$Random$Char$char, 65, 90);
+var elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var elm$core$List$sum = function (numbers) {
+	return A3(elm$core$List$foldl, elm$core$Basics$add, 0, numbers);
+};
+var elm$core$Tuple$second = function (_n0) {
+	var y = _n0.b;
+	return y;
+};
+var elm$random$Random$andThen = F2(
+	function (callback, _n0) {
+		var genA = _n0.a;
+		return elm$random$Random$Generator(
+			function (seed) {
+				var _n1 = genA(seed);
+				var result = _n1.a;
+				var newSeed = _n1.b;
+				var _n2 = callback(result);
+				var genB = _n2.a;
+				return genB(newSeed);
+			});
+	});
+var elm$random$Random$float = F2(
+	function (a, b) {
+		return elm$random$Random$Generator(
+			function (seed0) {
+				var seed1 = elm$random$Random$next(seed0);
+				var range = elm$core$Basics$abs(b - a);
+				var n1 = elm$random$Random$peel(seed1);
+				var n0 = elm$random$Random$peel(seed0);
+				var lo = (134217727 & n1) * 1.0;
+				var hi = (67108863 & n0) * 1.0;
+				var val = ((hi * 1.34217728e8) + lo) / 9.007199254740992e15;
+				var scaled = (val * range) + a;
+				return _Utils_Tuple2(
+					scaled,
+					elm$random$Random$next(seed1));
+			});
+	});
+var elm_community$random_extra$Random$Extra$frequency = F2(
+	function (head, pairs) {
+		var total = elm$core$List$sum(
+			A2(
+				elm$core$List$map,
+				A2(elm$core$Basics$composeL, elm$core$Basics$abs, elm$core$Tuple$first),
+				A2(elm$core$List$cons, head, pairs)));
+		var pick = F2(
+			function (someChoices, n) {
+				pick:
+				while (true) {
+					if (someChoices.b) {
+						var _n1 = someChoices.a;
+						var k = _n1.a;
+						var g = _n1.b;
+						var rest = someChoices.b;
+						if (_Utils_cmp(n, k) < 1) {
+							return g;
+						} else {
+							var $temp$someChoices = rest,
+								$temp$n = n - k;
+							someChoices = $temp$someChoices;
+							n = $temp$n;
+							continue pick;
+						}
+					} else {
+						return head.b;
+					}
+				}
+			});
+		return A2(
+			elm$random$Random$andThen,
+			pick(
+				A2(elm$core$List$cons, head, pairs)),
+			A2(elm$random$Random$float, 0, total));
+	});
+var elm_community$random_extra$Random$Extra$choices = F2(
+	function (hd, gens) {
+		return A2(
+			elm_community$random_extra$Random$Extra$frequency,
+			_Utils_Tuple2(1, hd),
+			A2(
+				elm$core$List$map,
+				function (g) {
+					return _Utils_Tuple2(1, g);
+				},
+				gens));
+	});
+var elm_community$random_extra$Random$Char$latin = A2(
+	elm_community$random_extra$Random$Extra$choices,
+	elm_community$random_extra$Random$Char$lowerCaseLatin,
+	_List_fromArray(
+		[elm_community$random_extra$Random$Char$upperCaseLatin]));
+var elm$core$String$fromList = _String_fromList;
+var elm$random$Random$listHelp = F4(
+	function (revList, n, gen, seed) {
+		listHelp:
+		while (true) {
+			if (n < 1) {
+				return _Utils_Tuple2(revList, seed);
+			} else {
+				var _n0 = gen(seed);
+				var value = _n0.a;
+				var newSeed = _n0.b;
+				var $temp$revList = A2(elm$core$List$cons, value, revList),
+					$temp$n = n - 1,
+					$temp$gen = gen,
+					$temp$seed = newSeed;
+				revList = $temp$revList;
+				n = $temp$n;
+				gen = $temp$gen;
+				seed = $temp$seed;
+				continue listHelp;
+			}
+		}
+	});
+var elm$random$Random$list = F2(
+	function (n, _n0) {
+		var gen = _n0.a;
+		return elm$random$Random$Generator(
+			function (seed) {
+				return A4(elm$random$Random$listHelp, _List_Nil, n, gen, seed);
+			});
+	});
+var elm_community$random_extra$Random$String$string = F2(
+	function (stringLength, charGenerator) {
+		return A2(
+			elm$random$Random$map,
+			elm$core$String$fromList,
+			A2(elm$random$Random$list, stringLength, charGenerator));
+	});
+var author$project$Chat$generateRandomId = A2(
+	elm$random$Random$generate,
+	author$project$Chat$GenerateRandomId,
+	A2(elm_community$random_extra$Random$String$string, 20, elm_community$random_extra$Random$Char$latin));
+var author$project$Chat$messageEncoder = function (message) {
+	return elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'id',
+				elm$json$Json$Encode$string(message.id)),
+				_Utils_Tuple2(
+				'userId',
+				elm$json$Json$Encode$string(message.userId)),
+				_Utils_Tuple2(
+				'roomId',
+				elm$json$Json$Encode$string(message.roomId)),
+				_Utils_Tuple2(
+				'chatName',
+				elm$json$Json$Encode$string(message.chatName)),
+				_Utils_Tuple2(
+				'body',
+				elm$json$Json$Encode$string(message.body))
+			]));
+};
+var author$project$Chat$storeMessage = _Platform_outgoingPort('storeMessage', elm$core$Basics$identity);
+var elm$core$String$trim = _String_trim;
+var author$project$Chat$update = F2(
+	function (msg, model) {
+		switch (msg.$) {
+			case 'EnterMessage':
+				var message = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{pendingMessage: message}),
+					elm$core$Platform$Cmd$none);
+			case 'SubmitMessage':
+				return _Utils_Tuple2(model, author$project$Chat$generateRandomId);
+			case 'GenerateRandomId':
+				var id = msg.a;
+				var message = A5(
+					author$project$Chat$Message,
+					id,
+					model.userId,
+					elm$core$String$trim(model.pendingMessage),
+					model.room.id,
+					author$project$Session$chatName(model.session));
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{pendingMessage: ''}),
+					author$project$Chat$storeMessage(
+						author$project$Chat$messageEncoder(message)));
+			case 'GotUserId':
+				var id = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{userId: id}),
+					elm$core$Platform$Cmd$none);
+			case 'GotMessage':
+				var message = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							messages: A2(elm$core$List$cons, message, model.messages)
+						}),
+					elm$core$Platform$Cmd$none);
+			default:
+				var messages = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{messages: messages}),
+					elm$core$Platform$Cmd$none);
+		}
+	});
+var author$project$Home$encodeUserData = function (_n0) {
+	var id = _n0.a;
+	var name = _n0.b;
+	return elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'id',
+				elm$json$Json$Encode$string(id)),
+				_Utils_Tuple2(
+				'name',
+				elm$json$Json$Encode$string(name))
+			]));
+};
+var author$project$Home$GenerateRandomId = function (a) {
+	return {$: 'GenerateRandomId', a: a};
+};
+var author$project$Home$generateRandomId = A2(
+	elm$random$Random$generate,
+	author$project$Home$GenerateRandomId,
+	A2(elm_community$random_extra$Random$String$string, 20, elm_community$random_extra$Random$Char$latin));
+var author$project$Home$storeUser = _Platform_outgoingPort('storeUser', elm$core$Basics$identity);
+var elm$url$Url$Builder$toQueryPair = function (_n0) {
+	var key = _n0.a;
+	var value = _n0.b;
+	return key + ('=' + value);
+};
+var elm$url$Url$Builder$toQuery = function (parameters) {
+	if (!parameters.b) {
+		return '';
+	} else {
+		return '?' + A2(
+			elm$core$String$join,
+			'&',
+			A2(elm$core$List$map, elm$url$Url$Builder$toQueryPair, parameters));
+	}
+};
+var elm$url$Url$Builder$relative = F2(
+	function (pathSegments, parameters) {
+		return _Utils_ap(
+			A2(elm$core$String$join, '/', pathSegments),
+			elm$url$Url$Builder$toQuery(parameters));
+	});
+var elm$url$Url$percentEncode = _Url_percentEncode;
+var elm$url$Url$Builder$QueryParameter = F2(
+	function (a, b) {
+		return {$: 'QueryParameter', a: a, b: b};
+	});
+var elm$url$Url$Builder$string = F2(
+	function (key, value) {
+		return A2(
+			elm$url$Url$Builder$QueryParameter,
+			elm$url$Url$percentEncode(key),
+			elm$url$Url$percentEncode(value));
+	});
+var author$project$Route$toString = function (route) {
+	switch (route.$) {
+		case 'Home':
+			return 'home';
+		case 'Chat':
+			var name = route.a;
+			if (name.$ === 'Nothing') {
+				return A2(
+					elm$url$Url$Builder$relative,
+					_List_fromArray(
+						['/']),
+					_List_Nil);
+			} else {
+				var chatName = name.a;
+				return A2(
+					elm$url$Url$Builder$relative,
+					_List_fromArray(
+						['chat']),
+					_List_fromArray(
+						[
+							A2(elm$url$Url$Builder$string, 'name', chatName)
+						]));
+			}
+		default:
+			return 'not-found';
+	}
+};
+var elm$browser$Browser$External = function (a) {
+	return {$: 'External', a: a};
+};
+var elm$browser$Browser$Internal = function (a) {
+	return {$: 'Internal', a: a};
+};
+var elm$browser$Browser$Dom$NotFound = function (a) {
+	return {$: 'NotFound', a: a};
+};
+var elm$core$Basics$never = function (_n0) {
+	never:
+	while (true) {
+		var nvr = _n0.a;
+		var $temp$_n0 = nvr;
+		_n0 = $temp$_n0;
+		continue never;
+	}
+};
+var elm$core$Task$Perform = function (a) {
+	return {$: 'Perform', a: a};
+};
+var elm$core$Task$init = elm$core$Task$succeed(_Utils_Tuple0);
+var elm$core$Task$map = F2(
+	function (func, taskA) {
+		return A2(
+			elm$core$Task$andThen,
+			function (a) {
+				return elm$core$Task$succeed(
+					func(a));
+			},
+			taskA);
+	});
+var elm$core$Task$map2 = F3(
+	function (func, taskA, taskB) {
+		return A2(
+			elm$core$Task$andThen,
+			function (a) {
+				return A2(
+					elm$core$Task$andThen,
+					function (b) {
+						return elm$core$Task$succeed(
+							A2(func, a, b));
+					},
+					taskB);
+			},
+			taskA);
+	});
+var elm$core$Task$sequence = function (tasks) {
+	return A3(
+		elm$core$List$foldr,
+		elm$core$Task$map2(elm$core$List$cons),
+		elm$core$Task$succeed(_List_Nil),
+		tasks);
+};
+var elm$core$Task$spawnCmd = F2(
+	function (router, _n0) {
+		var task = _n0.a;
+		return _Scheduler_spawn(
+			A2(
+				elm$core$Task$andThen,
+				elm$core$Platform$sendToApp(router),
+				task));
+	});
+var elm$core$Task$onEffects = F3(
+	function (router, commands, state) {
+		return A2(
+			elm$core$Task$map,
+			function (_n0) {
+				return _Utils_Tuple0;
+			},
+			elm$core$Task$sequence(
+				A2(
+					elm$core$List$map,
+					elm$core$Task$spawnCmd(router),
+					commands)));
+	});
+var elm$core$Task$onSelfMsg = F3(
+	function (_n0, _n1, _n2) {
+		return elm$core$Task$succeed(_Utils_Tuple0);
+	});
+var elm$core$Task$cmdMap = F2(
+	function (tagger, _n0) {
+		var task = _n0.a;
+		return elm$core$Task$Perform(
+			A2(elm$core$Task$map, tagger, task));
+	});
+_Platform_effectManagers['Task'] = _Platform_createManager(elm$core$Task$init, elm$core$Task$onEffects, elm$core$Task$onSelfMsg, elm$core$Task$cmdMap);
+var elm$core$Task$command = _Platform_leaf('Task');
+var elm$core$Task$perform = F2(
+	function (toMessage, task) {
+		return elm$core$Task$command(
+			elm$core$Task$Perform(
+				A2(elm$core$Task$map, toMessage, task)));
+	});
+var elm$json$Json$Decode$map = _Json_map1;
+var elm$json$Json$Decode$map2 = _Json_map2;
+var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
+	switch (handler.$) {
+		case 'Normal':
+			return 0;
+		case 'MayStopPropagation':
+			return 1;
+		case 'MayPreventDefault':
+			return 2;
+		default:
+			return 3;
+	}
+};
+var elm$core$String$length = _String_length;
+var elm$core$String$slice = _String_slice;
+var elm$core$String$dropLeft = F2(
+	function (n, string) {
+		return (n < 1) ? string : A3(
+			elm$core$String$slice,
+			n,
+			elm$core$String$length(string),
+			string);
+	});
+var elm$core$String$startsWith = _String_startsWith;
+var elm$url$Url$Http = {$: 'Http'};
+var elm$url$Url$Https = {$: 'Https'};
+var elm$core$String$indexes = _String_indexes;
+var elm$core$String$left = F2(
+	function (n, string) {
+		return (n < 1) ? '' : A3(elm$core$String$slice, 0, n, string);
+	});
+var elm$core$String$contains = _String_contains;
+var elm$core$String$toInt = _String_toInt;
+var elm$url$Url$Url = F6(
+	function (protocol, host, port_, path, query, fragment) {
+		return {fragment: fragment, host: host, path: path, port_: port_, protocol: protocol, query: query};
+	});
+var elm$url$Url$chompBeforePath = F5(
+	function (protocol, path, params, frag, str) {
+		if (elm$core$String$isEmpty(str) || A2(elm$core$String$contains, '@', str)) {
+			return elm$core$Maybe$Nothing;
+		} else {
+			var _n0 = A2(elm$core$String$indexes, ':', str);
+			if (!_n0.b) {
+				return elm$core$Maybe$Just(
+					A6(elm$url$Url$Url, protocol, str, elm$core$Maybe$Nothing, path, params, frag));
+			} else {
+				if (!_n0.b.b) {
+					var i = _n0.a;
+					var _n1 = elm$core$String$toInt(
+						A2(elm$core$String$dropLeft, i + 1, str));
+					if (_n1.$ === 'Nothing') {
+						return elm$core$Maybe$Nothing;
+					} else {
+						var port_ = _n1;
+						return elm$core$Maybe$Just(
+							A6(
+								elm$url$Url$Url,
+								protocol,
+								A2(elm$core$String$left, i, str),
+								port_,
+								path,
+								params,
+								frag));
+					}
+				} else {
+					return elm$core$Maybe$Nothing;
+				}
+			}
+		}
+	});
+var elm$url$Url$chompBeforeQuery = F4(
+	function (protocol, params, frag, str) {
+		if (elm$core$String$isEmpty(str)) {
+			return elm$core$Maybe$Nothing;
+		} else {
+			var _n0 = A2(elm$core$String$indexes, '/', str);
+			if (!_n0.b) {
+				return A5(elm$url$Url$chompBeforePath, protocol, '/', params, frag, str);
+			} else {
+				var i = _n0.a;
+				return A5(
+					elm$url$Url$chompBeforePath,
+					protocol,
+					A2(elm$core$String$dropLeft, i, str),
+					params,
+					frag,
+					A2(elm$core$String$left, i, str));
+			}
+		}
+	});
+var elm$url$Url$chompBeforeFragment = F3(
+	function (protocol, frag, str) {
+		if (elm$core$String$isEmpty(str)) {
+			return elm$core$Maybe$Nothing;
+		} else {
+			var _n0 = A2(elm$core$String$indexes, '?', str);
+			if (!_n0.b) {
+				return A4(elm$url$Url$chompBeforeQuery, protocol, elm$core$Maybe$Nothing, frag, str);
+			} else {
+				var i = _n0.a;
+				return A4(
+					elm$url$Url$chompBeforeQuery,
+					protocol,
+					elm$core$Maybe$Just(
+						A2(elm$core$String$dropLeft, i + 1, str)),
+					frag,
+					A2(elm$core$String$left, i, str));
+			}
+		}
+	});
+var elm$url$Url$chompAfterProtocol = F2(
+	function (protocol, str) {
+		if (elm$core$String$isEmpty(str)) {
+			return elm$core$Maybe$Nothing;
+		} else {
+			var _n0 = A2(elm$core$String$indexes, '#', str);
+			if (!_n0.b) {
+				return A3(elm$url$Url$chompBeforeFragment, protocol, elm$core$Maybe$Nothing, str);
+			} else {
+				var i = _n0.a;
+				return A3(
+					elm$url$Url$chompBeforeFragment,
+					protocol,
+					elm$core$Maybe$Just(
+						A2(elm$core$String$dropLeft, i + 1, str)),
+					A2(elm$core$String$left, i, str));
+			}
+		}
+	});
+var elm$url$Url$fromString = function (str) {
+	return A2(elm$core$String$startsWith, 'http://', str) ? A2(
+		elm$url$Url$chompAfterProtocol,
+		elm$url$Url$Http,
+		A2(elm$core$String$dropLeft, 7, str)) : (A2(elm$core$String$startsWith, 'https://', str) ? A2(
+		elm$url$Url$chompAfterProtocol,
+		elm$url$Url$Https,
+		A2(elm$core$String$dropLeft, 8, str)) : elm$core$Maybe$Nothing);
+};
+var elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
+var author$project$Route$pushUrl = F2(
+	function (key, route) {
+		return A2(
+			elm$browser$Browser$Navigation$pushUrl,
+			key,
+			author$project$Route$toString(route));
+	});
+var author$project$Session$navKey = function (session) {
+	if (session.$ === 'Guest') {
+		var key = session.a;
+		return key;
+	} else {
+		var key = session.c;
+		return key;
+	}
+};
+var author$project$Home$update = F2(
+	function (msg, model) {
+		switch (msg.$) {
+			case 'EnterName':
+				var name = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{name: name}),
+					elm$core$Platform$Cmd$none);
+			case 'SubmitName':
+				return _Utils_Tuple2(model, author$project$Home$generateRandomId);
+			default:
+				var id = msg.a;
+				return _Utils_Tuple2(
+					model,
+					elm$core$Platform$Cmd$batch(
+						_List_fromArray(
+							[
+								author$project$Home$storeUser(
+								author$project$Home$encodeUserData(
+									_Utils_Tuple2(id, model.name))),
+								A2(
+								author$project$Route$pushUrl,
+								author$project$Session$navKey(model.session),
+								author$project$Route$Chat(
+									elm$core$Maybe$Just(model.name)))
+							])));
+		}
+	});
+var author$project$Chat$toSession = function (model) {
+	return model.session;
+};
+var author$project$Home$toSession = function (model) {
+	return model.session;
+};
+var author$project$Main$toSession = function (model) {
+	switch (model.$) {
+		case 'Redirect':
+			var session = model.a;
+			return session;
+		case 'Home':
+			var home = model.a;
+			return author$project$Home$toSession(home);
+		case 'Chat':
+			var chat = model.a;
+			return author$project$Chat$toSession(chat);
+		default:
+			var session = model.a;
+			return session;
+	}
+};
+var elm$browser$Browser$Navigation$replaceUrl = _Browser_replaceUrl;
+var author$project$Route$changeUrl = F2(
+	function (key, route) {
+		return A2(
+			elm$browser$Browser$Navigation$replaceUrl,
+			key,
+			author$project$Route$toString(route));
+	});
+var elm$browser$Browser$Navigation$load = _Browser_load;
+var author$project$Main$update = F2(
+	function (msg, model) {
+		var _n0 = _Utils_Tuple2(msg, model);
+		_n0$5:
+		while (true) {
+			switch (_n0.a.$) {
+				case 'UrlRequested':
+					var request = _n0.a.a;
+					if (request.$ === 'Internal') {
+						var url = request.a;
+						return A3(
+							author$project$Main$resolveRoute,
+							author$project$Route$fromUrl(url),
+							author$project$Session$navKey(
+								author$project$Main$toSession(model)),
+							model);
+					} else {
+						var url = request.a;
+						return _Utils_Tuple2(
+							model,
+							elm$browser$Browser$Navigation$load(url));
+					}
+				case 'UrlChanged':
+					var url = _n0.a.a;
+					return A3(
+						author$project$Main$resolveRoute,
+						author$project$Route$fromUrl(url),
+						author$project$Session$navKey(
+							author$project$Main$toSession(model)),
+						model);
+				case 'GoToHome':
+					if (_n0.b.$ === 'Home') {
+						var homeMsg = _n0.a.a;
+						var home = _n0.b.a;
+						return A4(
+							author$project$Main$resolveWith,
+							author$project$Main$Home,
+							author$project$Main$GoToHome,
+							model,
+							A2(author$project$Home$update, homeMsg, home));
+					} else {
+						break _n0$5;
+					}
+				case 'GoToChat':
+					if (_n0.b.$ === 'Chat') {
+						var chatMsg = _n0.a.a;
+						var chat = _n0.b.a;
+						return A4(
+							author$project$Main$resolveWith,
+							author$project$Main$Chat,
+							author$project$Main$GoToChat,
+							model,
+							A2(author$project$Chat$update, chatMsg, chat));
+					} else {
+						break _n0$5;
+					}
+				default:
+					if (_n0.b.$ === 'Redirect') {
+						var session = _n0.a.a;
+						return _Utils_Tuple2(
+							author$project$Main$Redirect(session),
+							A2(
+								author$project$Route$changeUrl,
+								author$project$Session$navKey(session),
+								author$project$Route$Home));
+					} else {
+						break _n0$5;
+					}
+			}
+		}
+		return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+	});
+var elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
+var author$project$Chat$isHacker = function (name) {
+	return A2(
+		elm$core$List$any,
+		function (x) {
+			return A2(elm$core$String$contains, x, name);
+		},
+		_List_fromArray(
+			['<', '>'])) ? 'HAXXOR' : name;
+};
+var elm$html$Html$div = _VirtualDom_node('div');
+var elm$html$Html$p = _VirtualDom_node('p');
+var elm$html$Html$span = _VirtualDom_node('span');
+var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
+var elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			elm$json$Json$Encode$string(string));
+	});
+var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
+var elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2(elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var elm$html$Html$Attributes$classList = function (classes) {
+	return elm$html$Html$Attributes$class(
+		A2(
+			elm$core$String$join,
+			' ',
+			A2(
+				elm$core$List$map,
+				elm$core$Tuple$first,
+				A2(elm$core$List$filter, elm$core$Tuple$second, classes))));
+};
+var author$project$Chat$displayedMessage = F2(
+	function (model, message) {
+		return A2(
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					elm$html$Html$Attributes$classList(
+					_List_fromArray(
+						[
+							_Utils_Tuple2('mt-4', true),
+							_Utils_Tuple2(
+							'text-right',
+							!_Utils_eq(message.userId, model.userId))
+						]))
+				]),
+			_List_fromArray(
+				[
+					A2(
+					elm$html$Html$span,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class('font-bold')
+						]),
+					_List_fromArray(
+						[
+							elm$html$Html$text(
+							author$project$Chat$isHacker(message.chatName))
+						])),
+					A2(
+					elm$html$Html$p,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class('mt-0')
+						]),
+					_List_fromArray(
+						[
+							elm$html$Html$text(message.body)
+						]))
+				]));
+	});
+var author$project$Chat$messageBox = function (model) {
+	return A2(
+		elm$html$Html$div,
+		_List_fromArray(
+			[
+				elm$html$Html$Attributes$class('bg-white px-2 -mb-12 overflow-y-scroll flex-1 mt-12 mx-4 message-box')
+			]),
+		elm$core$List$reverse(
+			A2(
+				elm$core$List$map,
+				function (message) {
+					return A2(author$project$Chat$displayedMessage, model, message);
+				},
+				model.messages)));
+};
+var author$project$Chat$EnterMessage = function (a) {
+	return {$: 'EnterMessage', a: a};
+};
+var author$project$Chat$SubmitMessage = {$: 'SubmitMessage'};
+var author$project$Chat$buttonSvg = 'data:image/svg+xml;utf8,<svg aria-hidden=\"true\" focusable=\"false\" data-prefix=\"fas\" data-icon=\"paper-plane\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path fill=\"rgb(96,111,123)\" d=\"M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z\"></path></svg>';
+var elm$html$Html$button = _VirtualDom_node('button');
+var elm$html$Html$form = _VirtualDom_node('form');
+var elm$html$Html$img = _VirtualDom_node('img');
+var elm$html$Html$input = _VirtualDom_node('input');
+var elm$json$Json$Encode$bool = _Json_wrap;
+var elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			elm$json$Json$Encode$bool(bool));
+	});
+var elm$html$Html$Attributes$autofocus = elm$html$Html$Attributes$boolProperty('autofocus');
+var elm$html$Html$Attributes$src = function (url) {
+	return A2(
+		elm$html$Html$Attributes$stringProperty,
+		'src',
+		_VirtualDom_noJavaScriptOrHtmlUri(url));
+};
+var elm$html$Html$Attributes$type_ = elm$html$Html$Attributes$stringProperty('type');
+var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
+var elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			elm$virtual_dom$VirtualDom$on,
+			event,
+			elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		elm$html$Html$Events$on,
+		'click',
+		elm$json$Json$Decode$succeed(msg));
+};
+var elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 'MayStopPropagation', a: a};
+};
+var elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			elm$virtual_dom$VirtualDom$on,
+			event,
+			elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3(elm$core$List$foldr, elm$json$Json$Decode$field, decoder, fields);
+	});
+var elm$html$Html$Events$targetValue = A2(
+	elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	elm$json$Json$Decode$string);
+var elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			elm$json$Json$Decode$map,
+			elm$html$Html$Events$alwaysStop,
+			A2(elm$json$Json$Decode$map, tagger, elm$html$Html$Events$targetValue)));
+};
+var elm$html$Html$Events$alwaysPreventDefault = function (msg) {
+	return _Utils_Tuple2(msg, true);
+};
+var elm$virtual_dom$VirtualDom$MayPreventDefault = function (a) {
+	return {$: 'MayPreventDefault', a: a};
+};
+var elm$html$Html$Events$preventDefaultOn = F2(
+	function (event, decoder) {
+		return A2(
+			elm$virtual_dom$VirtualDom$on,
+			event,
+			elm$virtual_dom$VirtualDom$MayPreventDefault(decoder));
+	});
+var elm$html$Html$Events$onSubmit = function (msg) {
+	return A2(
+		elm$html$Html$Events$preventDefaultOn,
+		'submit',
+		A2(
+			elm$json$Json$Decode$map,
+			elm$html$Html$Events$alwaysPreventDefault,
+			elm$json$Json$Decode$succeed(msg)));
+};
+var author$project$Chat$messageInput = function (model) {
+	return A2(
+		elm$html$Html$form,
+		_List_fromArray(
+			[
+				elm$html$Html$Events$onSubmit(author$project$Chat$SubmitMessage),
+				elm$html$Html$Attributes$class('flex my-20')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				elm$html$Html$input,
+				_List_fromArray(
+					[
+						elm$html$Html$Events$onInput(author$project$Chat$EnterMessage),
+						elm$html$Html$Attributes$value(model.pendingMessage),
+						elm$html$Html$Attributes$autofocus(true),
+						elm$html$Html$Attributes$class('mx-4 flex-1 p-4 text-lg')
+					]),
+				_List_Nil),
+				A2(
+				elm$html$Html$button,
+				_List_fromArray(
+					[
+						elm$html$Html$Events$onClick(author$project$Chat$SubmitMessage),
+						elm$html$Html$Attributes$type_('button'),
+						elm$html$Html$Attributes$class('bg-green-lighter mr-4 p-4')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$img,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$src(author$project$Chat$buttonSvg),
+								elm$html$Html$Attributes$class('w-4')
+							]),
+						_List_Nil)
+					]))
+			]));
+};
+var elm$html$Html$h1 = _VirtualDom_node('h1');
+var author$project$Chat$view = function (model) {
+	return {
+		content: A2(
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					elm$html$Html$Attributes$class('flex flex-col h-screen')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					elm$html$Html$h1,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class('text-center mt-8')
+						]),
+					_List_fromArray(
+						[
+							elm$html$Html$text('Chat Room')
+						])),
+					author$project$Chat$messageBox(model),
+					author$project$Chat$messageInput(model)
+				])),
+		title: 'Chat Room'
+	};
+};
+var elm$html$Html$li = _VirtualDom_node('li');
+var author$project$Home$listItem = function (message) {
+	return A2(
+		elm$html$Html$li,
+		_List_Nil,
+		_List_fromArray(
+			[
+				elm$html$Html$text(message)
+			]));
+};
+var author$project$Home$shouldRender = F2(
+	function (cond, html) {
+		return cond ? html : elm$html$Html$text('');
+	});
+var elm$html$Html$ul = _VirtualDom_node('ul');
+var author$project$Home$errorList = function (errors) {
+	return A2(
+		author$project$Home$shouldRender,
+		elm$core$List$length(errors) > 0,
+		A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					elm$html$Html$ul,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class(' text-center text-grey-lightest errors p-8 bg-red-light')
+						]),
+					A2(elm$core$List$map, author$project$Home$listItem, errors))
+				])));
+};
+var author$project$Home$SubmitName = {$: 'SubmitName'};
+var author$project$Home$formButton = A2(
+	elm$html$Html$div,
+	_List_fromArray(
+		[
+			elm$html$Html$Attributes$class('text-center')
+		]),
+	_List_fromArray(
+		[
+			A2(
+			elm$html$Html$button,
+			_List_fromArray(
+				[
+					elm$html$Html$Attributes$class('border-solid bg-teal-dark hover:bg-teal-darker text-grey-lighter rounded-lg py-4 px-8 mt-8'),
+					elm$html$Html$Attributes$type_('button'),
+					elm$html$Html$Events$onClick(author$project$Home$SubmitName)
+				]),
+			_List_fromArray(
+				[
+					elm$html$Html$text('Enter')
+				]))
+		]));
+var author$project$Home$EnterName = function (a) {
+	return {$: 'EnterName', a: a};
+};
+var elm$html$Html$Attributes$placeholder = elm$html$Html$Attributes$stringProperty('placeholder');
+var elm$html$Html$Attributes$required = elm$html$Html$Attributes$boolProperty('required');
+var author$project$Home$inputForm = function (model) {
+	return A2(
+		elm$html$Html$form,
+		_List_fromArray(
+			[
+				elm$html$Html$Events$onSubmit(author$project$Home$SubmitName),
+				elm$html$Html$Attributes$class('flex flex-row px-4')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				elm$html$Html$span,
+				_List_fromArray(
+					[
+						elm$html$Html$Attributes$class('bg-indigo p-4 text-grey-lighter rounded-bl-lg rounded-tl-lg')
+					]),
+				_List_fromArray(
+					[
+						elm$html$Html$text('@')
+					])),
+				A2(
+				elm$html$Html$input,
+				_List_fromArray(
+					[
+						elm$html$Html$Attributes$placeholder('Enter your name'),
+						elm$html$Html$Attributes$class('border-solid text-lg flex-1 p-4 border-indigo border-1 rounded-br-lg rounded-tr-lg name-input'),
+						elm$html$Html$Attributes$value(model.name),
+						elm$html$Html$Attributes$required(true),
+						elm$html$Html$Attributes$autofocus(true),
+						elm$html$Html$Events$onInput(author$project$Home$EnterName)
+					]),
+				_List_Nil)
+			]));
+};
+var author$project$Home$view = function (model) {
+	return {
+		content: A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					author$project$Home$errorList(model.errors),
+					A2(
+					elm$html$Html$h1,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class('text-center mb-8 mt-20')
+						]),
+					_List_fromArray(
+						[
+							elm$html$Html$text('Chatterbox')
+						])),
+					author$project$Home$inputForm(model),
+					author$project$Home$formButton
+				])),
+		title: 'Home'
+	};
+};
+var author$project$Page$blank = {body: _List_Nil, title: ''};
+var author$project$Page$notFound = {
+	body: _List_fromArray(
+		[
+			A2(
+			elm$html$Html$h1,
+			_List_Nil,
+			_List_fromArray(
+				[
+					elm$html$Html$text('The page you\'re looking for doesn\'t exist.')
+				]))
+		]),
+	title: 'Not Found'
+};
+var elm$html$Html$footer = _VirtualDom_node('footer');
+var elm$html$Html$main_ = _VirtualDom_node('main');
+var author$project$Page$viewer = function (_n0) {
+	var title = _n0.title;
+	var content = _n0.content;
+	return {
+		body: _List_fromArray(
+			[
+				A2(
+				elm$html$Html$main_,
+				_List_Nil,
+				_List_fromArray(
+					[content])),
+				A2(
+				elm$html$Html$footer,
+				_List_fromArray(
+					[
+						elm$html$Html$Attributes$class('absolute pin-b-8 pin-x')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$p,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$class('text-center text-grey-darker')
+							]),
+						_List_fromArray(
+							[
+								elm$html$Html$text('Made with ♥️ using Elm © 2019')
+							]))
+					]))
+			]),
+		title: title + ' - Elm Chat'
+	};
+};
+var elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
+var elm$html$Html$map = elm$virtual_dom$VirtualDom$map;
+var author$project$Main$view = function (model) {
+	var viewPage = F2(
+		function (toMsg, config) {
+			var _n1 = author$project$Page$viewer(config);
+			var title = _n1.title;
+			var body = _n1.body;
+			return {
+				body: A2(
+					elm$core$List$map,
+					elm$html$Html$map(toMsg),
+					body),
+				title: title
+			};
+		});
+	switch (model.$) {
+		case 'Redirect':
+			return author$project$Page$blank;
+		case 'NotFound':
+			return author$project$Page$notFound;
+		case 'Home':
+			var home = model.a;
+			return A2(
+				viewPage,
+				author$project$Main$GoToHome,
+				author$project$Home$view(home));
+		default:
+			var chat = model.a;
+			return A2(
+				viewPage,
+				author$project$Main$GoToChat,
+				author$project$Chat$view(chat));
+	}
+};
+var elm$browser$Browser$application = _Browser_application;
+var author$project$Main$main = elm$browser$Browser$application(
+	{init: author$project$Main$init, onUrlChange: author$project$Main$UrlChanged, onUrlRequest: author$project$Main$UrlRequested, subscriptions: author$project$Main$subscriptions, update: author$project$Main$update, view: author$project$Main$view});
+_Platform_export({'Main':{'init':author$project$Main$main(
+	elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));
