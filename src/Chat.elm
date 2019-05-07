@@ -129,6 +129,7 @@ subscriptions model =
     Sub.batch
         [ getMessage (\message -> GotMessage message)
         , getUserId (\userId -> GotUserId userId)
+        , getAllMessages (\messages -> GotAllMessages messages)
         ]
 
 
@@ -150,6 +151,9 @@ port storeMessage : E.Value -> Cmd msg
 port getMessage : (Message -> msg) -> Sub msg
 
 
+port getAllMessages : (List Message -> msg) -> Sub msg
+
+
 port getUserId : (String -> msg) -> Sub msg
 
 
@@ -163,6 +167,7 @@ type Msg
     | GotMessage Message
     | GotUserId String
     | GenerateRandomId String
+    | GotAllMessages (List Message)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -202,6 +207,11 @@ update msg model =
             , Cmd.none
             )
 
+        GotAllMessages messages ->
+            ( { model | messages = messages }
+            , Cmd.none
+            )
+
 
 
 -- HELPERS
@@ -213,6 +223,7 @@ messageEncoder message =
         [ ( "id", E.string message.id )
         , ( "userId", E.string message.userId )
         , ( "roomId", E.string message.roomId )
+        , ( "chatName", E.string message.chatName )
         , ( "body", E.string message.body )
         ]
 

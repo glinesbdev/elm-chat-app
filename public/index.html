@@ -54,14 +54,21 @@
                 let msgData = {
                     body: message.body,
                     userId: message.userId,
-                    roomId: message.roomId
+                    roomId: message.roomId,
+                    chatName: message.chatName
                 };
 
                 db.collection('messages').doc(message.id).set(msgData);
 
 
-                db.collection('messages').doc(message.id).onSnapshot(doc => {
-                    getChatName({ id: doc.id, chatName: "Unknown", ...doc.data() });
+                db.collection('messages').onSnapshot(snapshot => {
+                    const messages = [];
+
+                    snapshot.forEach(doc => {
+                        messages.push({ id: doc.id, ...doc.data() });
+                    });
+
+                    app.ports.getAllMessages.send(messages);
                 })
             });
 
@@ -84,36 +91,57 @@
             function fetchMessages(roomId) {
                 db.collection('messages').where('roomId', '==', roomId).get()
                     .then(snapshot => {
+                        const messages = [];
+
                         snapshot.forEach(doc => {
                             const msgData = {
                                 id : doc.id,
                                 userId : doc.data().userId,
                                 body: doc.data().body,
                                 roomId: roomId,
-                                chatName: "Unknown" // Elm is expecting a value here so give it a default just in case something goes terribly wrong
+                                chatName: doc.data().chatName
                             };
 
-                            getChatName(msgData);
+                            messages.push(msgData);
                         });
+
+                        app.ports.getAllMessages.send(messages);
                     })
                     .catch(() => {
                         // Elm is expecting a list of objects so it's a-okay to send an empty list here
-                        app.ports.getMessage.send([]);
+                        app.ports.getAllMessages.send([]);
                     });
             }
 
-            function getChatName(msgData) {
-                // We need to get the correct user name for each message
-                db.collection('users').doc(msgData.userId).get()
-                    .then(snapshot => {
-                        msgData.chatName = snapshot.data().name;
-                        app.ports.getMessage.send(msgData);
-                    })
-                    .catch(error => {
-                        app.ports.getMessage.send(msgData);
-                        console.error(error);
-                    });
-            }
+            // function getChatName(msgData) {
+            //     // We need to get the correct user name for each message
+            //     db.collection('users').doc(msgData.userId).get()
+            //         .then(snapshot => {
+            //             msgData.chatName = snapshot.data().name;
+            //             app.ports.getMessage.send(msgData);
+            //         })
+            //         .catch(error => {
+            //             app.ports.getMessage.send(msgData);
+            //             console.error(error);
+            //         });
+            // }
+
+            // function getChatNames(msgs) {
+            //     msgs.forEach(msg => {
+            //     // We need to get the correct user name for each message
+            //         db.collection('users').doc(msgData.userId).get()
+            //             .then(snapshot => {
+            //                 const messages = [];
+
+            //                 msgData.chatName = snapshot.data().name;
+            //                 app.ports.getMessage.send(msgData);
+            //             })
+            //             .catch(error => {
+            //                 app.ports.getMessage.send(msgData);
+            //                 console.error(error);
+            //             });
+            //     });
+            // }
         </script>
     </body>
 </html>

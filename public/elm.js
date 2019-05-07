@@ -5997,6 +5997,9 @@ var author$project$Main$init = F3(
 			author$project$Main$Redirect(
 				author$project$Session$Guest(key)));
 	});
+var author$project$Chat$GotAllMessages = function (a) {
+	return {$: 'GotAllMessages', a: a};
+};
 var author$project$Chat$GotMessage = function (a) {
 	return {$: 'GotMessage', a: a};
 };
@@ -6005,8 +6008,39 @@ var author$project$Chat$GotUserId = function (a) {
 };
 var elm$json$Json$Decode$andThen = _Json_andThen;
 var elm$json$Json$Decode$field = _Json_decodeField;
+var elm$json$Json$Decode$list = _Json_decodeList;
 var elm$json$Json$Decode$string = _Json_decodeString;
 var elm$json$Json$Decode$succeed = _Json_succeed;
+var author$project$Chat$getAllMessages = _Platform_incomingPort(
+	'getAllMessages',
+	elm$json$Json$Decode$list(
+		A2(
+			elm$json$Json$Decode$andThen,
+			function (userId) {
+				return A2(
+					elm$json$Json$Decode$andThen,
+					function (roomId) {
+						return A2(
+							elm$json$Json$Decode$andThen,
+							function (id) {
+								return A2(
+									elm$json$Json$Decode$andThen,
+									function (chatName) {
+										return A2(
+											elm$json$Json$Decode$andThen,
+											function (body) {
+												return elm$json$Json$Decode$succeed(
+													{body: body, chatName: chatName, id: id, roomId: roomId, userId: userId});
+											},
+											A2(elm$json$Json$Decode$field, 'body', elm$json$Json$Decode$string));
+									},
+									A2(elm$json$Json$Decode$field, 'chatName', elm$json$Json$Decode$string));
+							},
+							A2(elm$json$Json$Decode$field, 'id', elm$json$Json$Decode$string));
+					},
+					A2(elm$json$Json$Decode$field, 'roomId', elm$json$Json$Decode$string));
+			},
+			A2(elm$json$Json$Decode$field, 'userId', elm$json$Json$Decode$string))));
 var author$project$Chat$getMessage = _Platform_incomingPort(
 	'getMessage',
 	A2(
@@ -6049,6 +6083,10 @@ var author$project$Chat$subscriptions = function (model) {
 				author$project$Chat$getUserId(
 				function (userId) {
 					return author$project$Chat$GotUserId(userId);
+				}),
+				author$project$Chat$getAllMessages(
+				function (messages) {
+					return author$project$Chat$GotAllMessages(messages);
 				})
 			]));
 };
@@ -6388,6 +6426,9 @@ var author$project$Chat$messageEncoder = function (message) {
 				'roomId',
 				elm$json$Json$Encode$string(message.roomId)),
 				_Utils_Tuple2(
+				'chatName',
+				elm$json$Json$Encode$string(message.chatName)),
+				_Utils_Tuple2(
 				'body',
 				elm$json$Json$Encode$string(message.body))
 			]));
@@ -6428,7 +6469,7 @@ var author$project$Chat$update = F2(
 						model,
 						{userId: id}),
 					elm$core$Platform$Cmd$none);
-			default:
+			case 'GotMessage':
 				var message = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -6436,6 +6477,13 @@ var author$project$Chat$update = F2(
 						{
 							messages: A2(elm$core$List$cons, message, model.messages)
 						}),
+					elm$core$Platform$Cmd$none);
+			default:
+				var messages = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{messages: messages}),
 					elm$core$Platform$Cmd$none);
 		}
 	});
