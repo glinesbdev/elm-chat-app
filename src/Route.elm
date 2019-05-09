@@ -9,7 +9,7 @@ import Url.Parser.Query as Query
 
 type Route
     = Home
-    | Chat (Maybe String)
+    | Chat
     | NotFound
 
 
@@ -17,7 +17,7 @@ parser : Parser.Parser (Route -> a) a
 parser =
     Parser.oneOf
         [ Parser.map Home Parser.top
-        , Parser.map Chat (Parser.s "chat" <?> Query.string "name")
+        , Parser.map Chat (Parser.s "chat")
         , Parser.map NotFound (Parser.s "not-found")
         ]
 
@@ -41,15 +41,10 @@ toString : Route -> String
 toString route =
     case route of
         Home ->
-            "home"
+            Builder.relative [ "/" ] []
 
-        Chat name ->
-            case name of
-                Nothing ->
-                    Builder.relative [ "/" ] []
-
-                Just chatName ->
-                    Builder.relative [ "chat" ] [ Builder.string "name" chatName ]
+        Chat ->
+            Builder.relative [ "chat" ] []
 
         NotFound ->
             "not-found"

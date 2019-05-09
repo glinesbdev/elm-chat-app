@@ -1,8 +1,10 @@
-port module Home exposing (Model, Msg, init, toSession, update, view)
+port module Home exposing (Model, Msg, init, subscriptions, toSession, update, view)
 
+import Aliases exposing (..)
 import Html exposing (..)
 import Html.Attributes as Attr
 import Html.Events as Event
+import Json.Decode as D
 import Json.Encode as E
 import Random
 import Random.Char as RandomChar
@@ -22,14 +24,17 @@ type alias Model =
     }
 
 
-type alias Errors =
-    List String
+type alias SavedUser =
+    { id : UserId
+    , name : UserName
+    , room : Room
+    }
 
 
 init : Session.Session -> Maybe Errors -> ( Model, Cmd Msg )
 init session errors =
     ( initialModel session <| Maybe.withDefault [] errors
-    , Cmd.none
+    , checkForUser ()
     )
 
 
@@ -67,7 +72,7 @@ inputForm model =
         [ span [ Attr.class "bg-indigo p-4 text-grey-lighter rounded-bl-lg rounded-tl-lg" ] [ text "@" ]
         , input
             [ Attr.placeholder "Enter your name"
-            , Attr.class "border-solid text-lg flex-1 p-4 border-indigo border-1 rounded-br-lg rounded-tr-lg name-input"
+            , Attr.class "border-solid text-lg flex-1 p-4 border-indigo border-1 rounded-br-lg rounded-tr-lg"
             , Attr.value model.name
             , Attr.required True
             , Attr.autofocus True
@@ -105,10 +110,30 @@ listItem message =
 
 
 
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    setUser (\user -> GotUser user)
+
+
+
 -- PORTS
+-- OUTGOING
 
 
 port storeUser : E.Value -> Cmd msg
+
+
+port checkForUser : () -> Cmd msg
+
+
+
+-- INCOMING
+
+
+port setUser : (E.Value -> msg) -> Sub msg
 
 
 
@@ -119,6 +144,7 @@ type Msg
     = EnterName String
     | SubmitName
     | GenerateRandomId String
+    | GotUser E.Value
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -133,16 +159,53 @@ update msg model =
             )
 
         GenerateRandomId id ->
-            ( model
+            ( { model | session = Session.LoggedIn Nothing id model.name (Session.navKey model.session) }
             , Cmd.batch
                 [ storeUser <| encodeUserData ( id, model.name )
-                , Route.pushUrl (Session.navKey model.session) (Route.Chat <| Just model.name)
+                , Route.pushUrl (Session.navKey model.session) Route.Chat
                 ]
             )
+
+        GotUser user ->
+            let
+                userVal =
+                    D.decodeValue userDecoder user
+            in
+            case userVal of
+                Ok val ->
+                    ( { model | session = Session.LoggedIn (Just val.room.name) val.id val.name (Session.navKey model.session) }
+                    , Route.pushUrl (Session.navKey model.session) Route.Chat
+                    )
+
+                Err err ->
+                    case err of
+                        D.Failure error _ ->
+                            ( { model | errors = error :: model.errors }
+                            , Cmd.none
+                            )
+
+                        _ ->
+                            ( model
+                            , Cmd.none
+                            )
 
 
 
 -- HELPERS
+
+
+userDecoder : D.Decoder SavedUser
+userDecoder =
+    D.map3 SavedUser
+        (D.field "id" D.string)
+        (D.field "name" D.string)
+        (D.field "room" roomDecoder)
+
+
+roomDecoder : D.Decoder Room
+roomDecoder =
+    D.map Room
+        (D.field "name" D.string)
 
 
 shouldRender : Bool -> Html Msg -> Html Msg

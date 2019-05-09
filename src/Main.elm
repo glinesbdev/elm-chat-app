@@ -45,25 +45,27 @@ init _ url key =
 
 resolveRoute : Route.Route -> Nav.Key -> Model -> ( Model, Cmd Msg )
 resolveRoute route key model =
+    let
+        session =
+            toSession model
+    in
     case route of
         Route.Home ->
             Home.init (Session.init key) (Just [])
                 |> resolveWith Home GoToHome model
 
-        Route.Chat name ->
-            case name of
-                Nothing ->
-                    Home.init (Session.init key) (Just [ "You must have a name to chat!" ])
-                        |> resolveWith Home GoToHome model
+        Route.Chat ->
+            let
+                userName =
+                    Session.userName session
+            in
+            if validUserName userName then
+                Chat.init (Session.LoggedIn Nothing (Session.userId session) userName key)
+                    |> resolveWith Chat GoToChat model
 
-                Just chatName ->
-                    if validChatName chatName then
-                        Chat.init (Session.LoggedIn Nothing chatName key)
-                            |> resolveWith Chat GoToChat model
-
-                    else
-                        Home.init (Session.init key) (Just [ "Invalid chat name" ])
-                            |> resolveWith Home GoToHome model
+            else
+                Home.init (Session.init key) (Just [ "You must have a name to chat!" ])
+                    |> resolveWith Home GoToHome model
 
         _ ->
             Home.init (Session.init key) (Just [])
@@ -123,6 +125,9 @@ view model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     case model of
+        Home home ->
+            Sub.map GoToHome (Home.subscriptions home)
+
         Chat chat ->
             Sub.map GoToChat (Chat.subscriptions chat)
 
@@ -190,6 +195,6 @@ resolveWith toModel toMsg model ( subModel, subCmd ) =
 -- HELPERS
 
 
-validChatName : String -> Bool
-validChatName name =
+validUserName : String -> Bool
+validUserName name =
     not <| String.isEmpty name

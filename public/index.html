@@ -15,11 +15,17 @@
         <script src="https://www.gstatic.com/firebasejs/5.11.1/firebase.js"></script>
         <script src="elm.js"></script>
         <script>
+            /*
+            * Elm initialization
+            */
             const el = document.getElementById('elm-root');
             const app = Elm.Main.init({
                 node: el
             });
 
+            /*
+            * Firebase initialization
+            */
             firebase.initializeApp({
                 apiKey: "AIzaSyBv3uq1UCOKbQV7YT_9rITuXQVngVzTBLM",
                 projectId: "elm-chat-app",
@@ -27,122 +33,63 @@
             });
 
             const db = firebase.firestore();
+            const roomRef = db.collection('rooms');
 
-            app.ports.storeUser.subscribe(data => {
-                db.collection('users').doc(data.id).set({
-                    name: data.name
-                });
+            /*
+            * Home page ports
+            */
+           app.ports.checkForUser.subscribe(() => {
+             const user = localStorage.getItem('user');
+             
+             if (user) {
+               app.ports.setUser.send(JSON.parse(user));
+             }
+           });
+
+            app.ports.storeUser.subscribe(user => {
+                roomRef.doc('public')
+                    .collection('users')
+                    .doc(user.id)
+                    .set({
+                        name: user.name
+                    });
+                    
+                localStorage.setItem('user', JSON.stringify({ room: { name: 'public' }, ...user }));
             });
 
-            app.ports.chatPageLoaded.subscribe(chatInit => {
-                db.collection('users').where('name', '==', chatInit.chatName).limit(1).get()
+            /*
+            * Chat page ports
+            */
+            app.ports.chatPageLoaded.subscribe(state => {
+                const messagesRef = roomRef.doc(`${state.room.name}`).collection('messages');
+
+                messagesRef.get()
                     .then(snapshot => {
-                        let chatId = null;
-
-                        snapshot.forEach(doc => {
-                            chatId = doc.id;
-                        })
-                        
-                        app.ports.getUserId.send(chatId);
-                    })
-                    .catch(error => console.error(error));
-
-                fetchRoom(chatInit.roomName);
-
-                db.collection('messages').onSnapshot(snapshot => {
-                    const messages = [];
-
-                    snapshot.forEach(doc => {
-                        messages.push({ id: doc.id, ...doc.data() });
-                    });
-
-                    app.ports.getAllMessages.send(messages);
-                });
+                          snapshot.forEach(doc => {
+                            messages.push({ id: doc.id, ...doc.data() });
+                          });
+                          
+                          app.ports.initialize.send({ userId: user.id, messages: messages });
+                      })
+                      // Elm is expecting a list of Message objects so it's a-okay to send an empty list instead
+                      .catch(() => {
+                          return {
+                              messages: [],
+                              user: state.room.user
+                          }
+                      });
             });
 
             app.ports.storeMessage.subscribe(message => {
-                let msgData = {
-                    body: message.body,
-                    userId: message.userId,
-                    roomId: message.roomId,
-                    chatName: message.chatName,
-                    timeSent: message.timeSent
-                };
+                const messageCollectionRef = roomRef.doc(`${message.room.name}`).collection('messages');
+                const messageRef = messageCollectionRef.doc(`${message.id}`);
 
-                db.collection('messages').doc(message.id).set(msgData);
+                messageRef.set(message);
+
+                messageRef.onSnapshot(doc => {
+                  app.ports.getMessage.send({ id: doc.id, ...doc.data() });
+                });
             });
-
-            function fetchRoom(room) {
-                db.collection('rooms').where('name', '==', room).limit(1).get()
-                    .then(roomSnapshot => {
-                        let roomId = null;
-
-                        roomSnapshot.forEach(doc => {
-                            roomId = doc.id;
-                        });
-
-                        fetchMessages(roomId);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            }
-
-            function fetchMessages(roomId) {
-                db.collection('messages').where('roomId', '==', roomId).get()
-                    .then(snapshot => {
-                        const messages = [];
-
-                        snapshot.forEach(doc => {
-                            const msgData = {
-                                id : doc.id,
-                                userId : doc.data().userId,
-                                body: doc.data().body,
-                                roomId: roomId,
-                                chatName: doc.data().chatName,
-                                timeSent: doc.data().timeSent
-                            };
-
-                            messages.push(msgData);
-                        });
-
-                        app.ports.getAllMessages.send(messages);
-                    })
-                    .catch(() => {
-                        // Elm is expecting a list of objects so it's a-okay to send an empty list here
-                        app.ports.getAllMessages.send([]);
-                    });
-            }
-
-            // function getChatName(msgData) {
-            //     // We need to get the correct user name for each message
-            //     db.collection('users').doc(msgData.userId).get()
-            //         .then(snapshot => {
-            //             msgData.chatName = snapshot.data().name;
-            //             app.ports.getMessage.send(msgData);
-            //         })
-            //         .catch(error => {
-            //             app.ports.getMessage.send(msgData);
-            //             console.error(error);
-            //         });
-            // }
-
-            // function getChatNames(msgs) {
-            //     msgs.forEach(msg => {
-            //     // We need to get the correct user name for each message
-            //         db.collection('users').doc(msgData.userId).get()
-            //             .then(snapshot => {
-            //                 const messages = [];
-
-            //                 msgData.chatName = snapshot.data().name;
-            //                 app.ports.getMessage.send(msgData);
-            //             })
-            //             .catch(error => {
-            //                 app.ports.getMessage.send(msgData);
-            //                 console.error(error);
-            //             });
-            //     });
-            // }
         </script>
     </body>
 </html>
