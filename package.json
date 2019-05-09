@@ -4,6 +4,7 @@
   "description": "A basic chat app written in Elm",
   "main": "server.js",
   "dependencies": {
+    "elm": "^0.19.0-bugfix6",
     "express": "^4.16.4",
     "uglify-js": "^3.5.11"
   },
@@ -12,6 +13,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "build": "elm make src/Main.elm --output public/elm.js & npm run uglify",
     "dev": "node server.js & npm run uglify & npm run watch",
     "watch": "chokidar '**/*.elm' -c 'elm make src/Main.elm --output public/elm.js' --initial",
     "uglify": "uglifyjs public/elm.js --compress 'pure_funcs=[F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9],pure_getters,keep_fargs=false,unsafe_comps,unsafe' | uglifyjs --mangle --output public/elm.js"
