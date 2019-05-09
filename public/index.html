@@ -65,14 +65,16 @@
 
                 messagesRef.get()
                     .then(snapshot => {
+                          const messages = [];
                           snapshot.forEach(doc => {
                             messages.push({ id: doc.id, ...doc.data() });
                           });
                           
-                          app.ports.initialize.send({ userId: user.id, messages: messages });
+                          app.ports.initialize.send({ userId: state.user.id, messages: messages });
                       })
                       // Elm is expecting a list of Message objects so it's a-okay to send an empty list instead
-                      .catch(() => {
+                      .catch(error => {
+                          console.error(error);
                           return {
                               messages: [],
                               user: state.room.user
